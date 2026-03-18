@@ -1,0 +1,19 @@
+aid: eu-open-data-portal
+url: https://raw.githubusercontent.com/api-evangelist/eu-open-data-portal/refs/heads/main/apis.yml
+apis:
+- aid: eu-open-data-portal:eu-open-data-portal-api
+  name: EU Open Data Portal SPARQL API
+  tags:
+  - Government
+  - Open Data
+  - SPARQL
+  - EU
+  - Regulatory
+  image: https://raw.githubusercontent.com/api-evangelist/eu-open-data-portal/refs/heads/main/image.png
+  humanURL: https://data.europa.eu/
+  baseURL: https://data.europa.eu/sparql
+  properties:
+  - url: https://data.europa.eu/
+    type: Documentation
+  description: >-
+    The EU Open Data Portal provides SPARQL and REST APIs for accessing European Union statistical datasets, legislative documents, and institutional data. APIs enable structured queries against linked data endpoints covering economic indicators, environmental metrics, and regulatory information.
