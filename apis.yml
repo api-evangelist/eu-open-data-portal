@@ -1,7 +1,7 @@
 aid: eu-open-data-portal
 url: https://raw.githubusercontent.com/api-evangelist/eu-open-data-portal/refs/heads/main/apis.yml
 apis:
-- aid: eu-open-data-portal:eu-open-data-portal-api
+- aid: eu-open-data-portal:eu-open-data-portal-sparql-api
   name: EU Open Data Portal SPARQL API
   tags:
   - Government
@@ -9,11 +9,65 @@ apis:
   - SPARQL
   - EU
   - Regulatory
+  - Linked Data
   image: https://raw.githubusercontent.com/api-evangelist/eu-open-data-portal/refs/heads/main/image.png
   humanURL: https://data.europa.eu/
   baseURL: https://data.europa.eu/sparql
   properties:
-  - url: https://data.europa.eu/
+  - url: https://data.europa.eu/sparql
+    type: Documentation
+  - url: https://data.europa.eu/sparql
+    type: Reference
+  description: >-
+    The EU Open Data Portal SPARQL endpoint provides structured queries against linked open data from European Union institutions. Based on OpenLink Virtuoso, the endpoint enables querying of RDF datasets using SPARQL with output in HTML, XML, JSON, Turtle, CSV, TSV, and other formats.
+
+- aid: eu-open-data-portal:eu-open-data-portal-search-api
+  name: EU Open Data Portal Search API
+  tags:
+  - Government
+  - Open Data
+  - Search
+  - REST
+  - EU
+  - DCAT-AP
+  image: https://raw.githubusercontent.com/api-evangelist/eu-open-data-portal/refs/heads/main/image.png
+  humanURL: https://data.europa.eu/
+  baseURL: https://data.europa.eu/api/hub/search/
+  properties:
+  - url: https://data.europa.eu/api/hub/search/
+    type: Reference
+  - url: https://dataeuropa.gitlab.io/data-provider-manual/
     type: Documentation
   description: >-
-    The EU Open Data Portal provides SPARQL and REST APIs for accessing European Union statistical datasets, legislative documents, and institutional data. APIs enable structured queries against linked data endpoints covering economic indicators, environmental metrics, and regulatory information.
+    The EU Open Data Portal Search API provides REST access for discovering and querying European open datasets following DCAT-AP metadata standards. The API supports dataset search, filtering, and harvesting workflows for data publishers and consumers.
+
+common:
+  aid: eu-open-data-portal
+  name: EU Open Data Portal
+  description: >-
+    The EU Open Data Portal (data.europa.eu) is the official portal for European Union open data, operated by the Publications Office of the European Union. It provides SPARQL and REST APIs for accessing statistical datasets, legislative documents, and institutional data from EU institutions under open licenses.
+  image: https://raw.githubusercontent.com/api-evangelist/eu-open-data-portal/refs/heads/main/image.png
+  tags:
+  - Government
+  - Open Data
+  - SPARQL
+  - EU
+  - Regulatory
+  - Linked Data
+  properties:
+  - url: https://data.europa.eu/
+    type: Portal
+  - url: https://dataeuropa.gitlab.io/data-provider-manual/
+    type: Documentation
+  - url: https://data.europa.eu/sparql
+    type: Getting Started
+  - url: https://data.europa.eu/en/legal-notice
+    type: Terms of Service
+  - url: https://data.europa.eu/en/legal-notice
+    type: Privacy Policy
+  - url: https://data.europa.eu/
+    type: Website
+maintainer:
+  name: Kin Lane
+  email: kin@apievangelist.com
+modified: '2026-03-18'
