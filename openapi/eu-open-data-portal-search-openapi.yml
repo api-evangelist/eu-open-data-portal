@@ -1,0 +1,456 @@
+openapi: 3.1.0
+info:
+  title: EU Open Data Portal Search API
+  description: >-
+    The EU Open Data Portal Search API (data.europa.eu) provides REST access for
+    discovering, searching, and querying European Union open datasets. The API follows
+    DCAT-AP metadata standards and supports discovery of datasets from EU institutions,
+    member state portals, and federated open data sources. No authentication required.
+  version: 1.0.0
+  contact:
+    name: EU Open Data Portal Support
+    url: https://data.europa.eu/en/contact
+  license:
+    name: Creative Commons Attribution 4.0
+    url: https://creativecommons.org/licenses/by/4.0/
+externalDocs:
+  description: EU Data Provider Manual
+  url: https://dataeuropa.gitlab.io/data-provider-manual/
+
+servers:
+  - url: https://data.europa.eu/api/hub/search
+    description: EU Open Data Portal Search API
+
+tags:
+  - name: Datasets
+    description: Search and retrieve EU open datasets
+  - name: Distributions
+    description: Access dataset distributions and download links
+  - name: Vocabularies
+    description: Controlled vocabularies for DCAT-AP metadata
+  - name: Catalogs
+    description: Federated data catalogs and publishers
+
+paths:
+  /datasets:
+    get:
+      operationId: searchDatasets
+      summary: Search datasets
+      description: >-
+        Search for datasets in the EU Open Data Portal using full-text search and
+        faceted filtering. Returns DCAT-AP compliant metadata for matching datasets
+        including titles, descriptions, keywords, publishers, and distribution links.
+      tags: [Datasets]
+      parameters:
+        - name: q
+          in: query
+          required: false
+          schema:
+            type: string
+          description: Free-text search query
+        - name: page
+          in: query
+          schema:
+            type: integer
+            default: 1
+            minimum: 1
+          description: Page number (1-based)
+        - name: limit
+          in: query
+          schema:
+            type: integer
+            default: 10
+            maximum: 100
+          description: Number of results per page
+        - name: filter
+          in: query
+          schema:
+            type: string
+          description: SOLR filter query (e.g., "publisher.id:http://publications.europa.eu/resource/authority/corporate-body/ESTAT")
+        - name: facets
+          in: query
+          schema:
+            type: string
+          description: Comma-separated list of facet fields to include
+        - name: sort
+          in: query
+          schema:
+            type: string
+            enum: [relevance, modified, issued, title]
+            default: relevance
+        - name: language
+          in: query
+          schema:
+            type: string
+          description: Preferred language for multilingual fields (ISO 639-1, e.g. "en")
+      responses:
+        '200':
+          description: Dataset search results returned
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DatasetSearchResponse'
+        '400':
+          description: Invalid query parameters
+
+  /datasets/{datasetId}:
+    get:
+      operationId: getDataset
+      summary: Get dataset by ID
+      description: Returns full DCAT-AP metadata for a specific dataset including all distributions, publisher information, themes, and temporal coverage.
+      tags: [Datasets]
+      parameters:
+        - name: datasetId
+          in: path
+          required: true
+          schema:
+            type: string
+          description: Unique dataset identifier (URL-encoded URI)
+        - name: language
+          in: query
+          schema:
+            type: string
+          description: Preferred language for multilingual fields
+      responses:
+        '200':
+          description: Dataset metadata returned
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Dataset'
+        '404':
+          description: Dataset not found
+
+  /datasets/{datasetId}/distributions:
+    get:
+      operationId: getDatasetDistributions
+      summary: List dataset distributions
+      description: Returns all available distributions (download files, API endpoints, data services) for a specific dataset with format, size, and access URL information.
+      tags: [Distributions]
+      parameters:
+        - name: datasetId
+          in: path
+          required: true
+          schema:
+            type: string
+          description: Unique dataset identifier
+      responses:
+        '200':
+          description: Distributions returned
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  result:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Distribution'
+
+  /vocabularies:
+    get:
+      operationId: listVocabularies
+      summary: List available controlled vocabularies
+      description: Returns the list of DCAT-AP controlled vocabularies used for metadata classification including themes, formats, licences, and publisher types.
+      tags: [Vocabularies]
+      parameters:
+        - name: language
+          in: query
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Vocabulary list returned
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  result:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Vocabulary'
+
+  /catalogs:
+    get:
+      operationId: listCatalogs
+      summary: List federated catalogs
+      description: Returns the list of data catalogs federated by the EU Open Data Portal including member state portals and institutional catalogs.
+      tags: [Catalogs]
+      parameters:
+        - name: q
+          in: query
+          schema:
+            type: string
+        - name: page
+          in: query
+          schema:
+            type: integer
+            default: 1
+        - name: limit
+          in: query
+          schema:
+            type: integer
+            default: 20
+      responses:
+        '200':
+          description: Catalog list returned
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CatalogListResponse'
+
+components:
+  schemas:
+    DatasetSearchResponse:
+      type: object
+      properties:
+        success:
+          type: boolean
+        result:
+          type: object
+          properties:
+            count:
+              type: integer
+              description: Total number of matching datasets
+            facets:
+              type: object
+              additionalProperties:
+                type: array
+                items:
+                  $ref: '#/components/schemas/FacetValue'
+            results:
+              type: array
+              items:
+                $ref: '#/components/schemas/DatasetSummary'
+
+    DatasetSummary:
+      type: object
+      properties:
+        id:
+          type: string
+          description: Dataset URI
+        title:
+          type: object
+          additionalProperties:
+            type: string
+          description: Multilingual title map (language code to text)
+        description:
+          type: object
+          additionalProperties:
+            type: string
+          description: Multilingual description map
+        issued:
+          type: string
+          format: date-time
+        modified:
+          type: string
+          format: date-time
+        publisher:
+          $ref: '#/components/schemas/Publisher'
+        theme:
+          type: array
+          items:
+            type: string
+          description: Dataset theme URIs from the EU Data Theme vocabulary
+        keyword:
+          type: array
+          items:
+            type: string
+        distributionCount:
+          type: integer
+        license:
+          type: string
+
+    Dataset:
+      type: object
+      properties:
+        id:
+          type: string
+        title:
+          type: object
+          additionalProperties:
+            type: string
+        description:
+          type: object
+          additionalProperties:
+            type: string
+        issued:
+          type: string
+          format: date-time
+        modified:
+          type: string
+          format: date-time
+        publisher:
+          $ref: '#/components/schemas/Publisher'
+        contactPoint:
+          $ref: '#/components/schemas/ContactPoint'
+        theme:
+          type: array
+          items:
+            type: string
+        keyword:
+          type: array
+          items:
+            type: string
+        language:
+          type: array
+          items:
+            type: string
+        spatial:
+          type: array
+          items:
+            type: string
+          description: Geographic coverage URIs
+        temporal:
+          $ref: '#/components/schemas/TemporalCoverage'
+        accrualPeriodicity:
+          type: string
+          description: Update frequency URI (from EU frequency vocabulary)
+        conformsTo:
+          type: array
+          items:
+            type: string
+        distributions:
+          type: array
+          items:
+            $ref: '#/components/schemas/Distribution'
+        license:
+          type: string
+        rights:
+          type: string
+        accessRights:
+          type: string
+
+    Distribution:
+      type: object
+      properties:
+        id:
+          type: string
+        title:
+          type: object
+          additionalProperties:
+            type: string
+        description:
+          type: object
+          additionalProperties:
+            type: string
+        accessURL:
+          type: string
+          format: uri
+        downloadURL:
+          type: string
+          format: uri
+        format:
+          type: string
+          description: File format URI from the EU file type vocabulary
+        mediaType:
+          type: string
+          description: MIME type
+        byteSize:
+          type: integer
+        issued:
+          type: string
+          format: date-time
+        modified:
+          type: string
+          format: date-time
+        license:
+          type: string
+        conformsTo:
+          type: array
+          items:
+            type: string
+
+    Publisher:
+      type: object
+      properties:
+        id:
+          type: string
+          description: Publisher URI from the EU corporate body authority
+        name:
+          type: object
+          additionalProperties:
+            type: string
+          description: Multilingual publisher name
+        type:
+          type: string
+
+    ContactPoint:
+      type: object
+      properties:
+        fn:
+          type: string
+        hasEmail:
+          type: string
+        hasURL:
+          type: string
+          format: uri
+
+    TemporalCoverage:
+      type: object
+      properties:
+        startDate:
+          type: string
+          format: date
+        endDate:
+          type: string
+          format: date
+
+    FacetValue:
+      type: object
+      properties:
+        id:
+          type: string
+        label:
+          type: object
+          additionalProperties:
+            type: string
+        count:
+          type: integer
+
+    Vocabulary:
+      type: object
+      properties:
+        id:
+          type: string
+        name:
+          type: string
+        url:
+          type: string
+          format: uri
+
+    CatalogListResponse:
+      type: object
+      properties:
+        success:
+          type: boolean
+        result:
+          type: object
+          properties:
+            count:
+              type: integer
+            results:
+              type: array
+              items:
+                $ref: '#/components/schemas/Catalog'
+
+    Catalog:
+      type: object
+      properties:
+        id:
+          type: string
+        title:
+          type: object
+          additionalProperties:
+            type: string
+        homepage:
+          type: string
+          format: uri
+        country:
+          type: string
+        datasetCount:
+          type: integer
+        lastHarvested:
+          type: string
+          format: date-time

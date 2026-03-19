@@ -1,0 +1,219 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://api-evangelist.github.io/eu-open-data-portal/json-schema/eu-open-data-portal-dataset-schema.json",
+  "title": "EU Open Data Portal Dataset (DCAT-AP)",
+  "description": "JSON Schema for an EU Open Data Portal dataset following the DCAT-AP 2.1 metadata standard. Used for describing datasets published by EU institutions and member states.",
+  "type": "object",
+  "properties": {
+    "id": {
+      "type": "string",
+      "format": "uri",
+      "description": "Unique dataset URI identifier"
+    },
+    "title": {
+      "type": "object",
+      "additionalProperties": { "type": "string" },
+      "description": "Multilingual title (ISO 639-1 language code to string)",
+      "examples": [{ "en": "EU Budget 2023", "fr": "Budget UE 2023" }]
+    },
+    "description": {
+      "type": "object",
+      "additionalProperties": { "type": "string" },
+      "description": "Multilingual description"
+    },
+    "issued": {
+      "type": "string",
+      "format": "date-time",
+      "description": "Date of formal issuance of the dataset"
+    },
+    "modified": {
+      "type": "string",
+      "format": "date-time",
+      "description": "Most recent date on which the dataset was changed"
+    },
+    "publisher": {
+      "$ref": "#/$defs/Publisher"
+    },
+    "contactPoint": {
+      "$ref": "#/$defs/ContactPoint"
+    },
+    "theme": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "format": "uri"
+      },
+      "description": "Dataset themes from the EU Data Theme vocabulary (http://publications.europa.eu/resource/authority/data-theme/)"
+    },
+    "keyword": {
+      "type": "array",
+      "items": { "type": "string" },
+      "description": "Free-text keywords describing the dataset"
+    },
+    "language": {
+      "type": "array",
+      "items": { "type": "string" },
+      "description": "Language(s) of the dataset content (ISO 639-1)"
+    },
+    "spatial": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "format": "uri"
+      },
+      "description": "Geographic coverage as URIs from EU country/place vocabulary"
+    },
+    "temporal": {
+      "$ref": "#/$defs/TemporalCoverage"
+    },
+    "accrualPeriodicity": {
+      "type": "string",
+      "format": "uri",
+      "description": "Update frequency URI from EU frequency vocabulary"
+    },
+    "license": {
+      "type": "string",
+      "format": "uri",
+      "description": "License under which the dataset is published"
+    },
+    "accessRights": {
+      "type": "string",
+      "enum": ["PUBLIC", "RESTRICTED", "NON_PUBLIC"],
+      "description": "Access rights classification"
+    },
+    "conformsTo": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "format": "uri"
+      },
+      "description": "Standards or specifications the dataset conforms to"
+    },
+    "distributions": {
+      "type": "array",
+      "items": { "$ref": "#/$defs/Distribution" },
+      "description": "Available distributions (download files, API endpoints) for this dataset"
+    }
+  },
+  "required": ["id", "title"],
+  "$defs": {
+    "Publisher": {
+      "type": "object",
+      "description": "Entity responsible for publishing the dataset",
+      "properties": {
+        "id": {
+          "type": "string",
+          "format": "uri",
+          "description": "Publisher URI from the EU corporate body authority table"
+        },
+        "name": {
+          "type": "object",
+          "additionalProperties": { "type": "string" },
+          "description": "Multilingual publisher name"
+        },
+        "type": {
+          "type": "string",
+          "description": "Publisher type URI"
+        }
+      },
+      "required": ["id"]
+    },
+    "ContactPoint": {
+      "type": "object",
+      "description": "Contact information for the dataset (vCard-based)",
+      "properties": {
+        "fn": {
+          "type": "string",
+          "description": "Full name of the contact"
+        },
+        "hasEmail": {
+          "type": "string",
+          "description": "Email address (may be prefixed with 'mailto:')"
+        },
+        "hasURL": {
+          "type": "string",
+          "format": "uri",
+          "description": "Contact web page URL"
+        }
+      }
+    },
+    "TemporalCoverage": {
+      "type": "object",
+      "description": "Temporal period covered by the dataset",
+      "properties": {
+        "startDate": {
+          "type": "string",
+          "format": "date",
+          "description": "Start date of temporal coverage"
+        },
+        "endDate": {
+          "type": "string",
+          "format": "date",
+          "description": "End date of temporal coverage (may be null for ongoing datasets)"
+        }
+      }
+    },
+    "Distribution": {
+      "type": "object",
+      "description": "A specific representation of a dataset (file download, API service, etc.)",
+      "properties": {
+        "id": {
+          "type": "string",
+          "format": "uri"
+        },
+        "title": {
+          "type": "object",
+          "additionalProperties": { "type": "string" }
+        },
+        "description": {
+          "type": "object",
+          "additionalProperties": { "type": "string" }
+        },
+        "accessURL": {
+          "type": "string",
+          "format": "uri",
+          "description": "URL providing access to the distribution"
+        },
+        "downloadURL": {
+          "type": "string",
+          "format": "uri",
+          "description": "Direct download URL for the distribution file"
+        },
+        "format": {
+          "type": "string",
+          "format": "uri",
+          "description": "File format from EU file type vocabulary"
+        },
+        "mediaType": {
+          "type": "string",
+          "description": "IANA media type (e.g., 'text/csv', 'application/json')"
+        },
+        "byteSize": {
+          "type": "integer",
+          "minimum": 0,
+          "description": "File size in bytes"
+        },
+        "issued": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "modified": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "license": {
+          "type": "string",
+          "format": "uri"
+        },
+        "conformsTo": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "format": "uri"
+          }
+        }
+      },
+      "required": ["accessURL"]
+    }
+  }
+}

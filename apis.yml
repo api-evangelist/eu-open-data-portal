@@ -38,6 +38,8 @@ apis:
     type: Reference
   - url: https://dataeuropa.gitlab.io/data-provider-manual/
     type: Documentation
+  - url: openapi/eu-open-data-portal-search-openapi.yml
+    type: OpenAPI
   description: >-
     The EU Open Data Portal Search API provides REST access for discovering and querying European open datasets following DCAT-AP metadata standards. The API supports dataset search, filtering, and harvesting workflows for data publishers and consumers.
 
@@ -67,6 +69,12 @@ common:
     type: Privacy Policy
   - url: https://data.europa.eu/
     type: Website
+  - url: openapi/eu-open-data-portal-search-openapi.yml
+    type: OpenAPI
+  - url: json-schema/eu-open-data-portal-dataset-schema.json
+    type: JSONSchema
+  - url: json-ld/eu-open-data-portal-context.jsonld
+    type: JSONLDContext
 maintainer:
   name: Kin Lane
   email: kin@apievangelist.com
