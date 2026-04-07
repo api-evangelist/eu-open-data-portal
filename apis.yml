@@ -1,18 +1,16 @@
 aid: eu-open-data-portal
-url: 
-  https://raw.githubusercontent.com/api-evangelist/eu-open-data-portal/refs/heads/main/apis.yml
+url: https://raw.githubusercontent.com/api-evangelist/eu-open-data-portal/refs/heads/main/apis.yml
 apis:
   - aid: eu-open-data-portal:eu-open-data-portal-sparql-api
     name: EU Open Data Portal SPARQL API
     tags:
-      - Government
-      - Open Data
-      - SPARQL
       - EU
-      - Regulatory
+      - Government
       - Linked Data
-    image: 
-      https://raw.githubusercontent.com/api-evangelist/eu-open-data-portal/refs/heads/main/image.png
+      - Open Data
+      - Regulatory
+      - SPARQL
+    image: https://raw.githubusercontent.com/api-evangelist/eu-open-data-portal/refs/heads/main/image.png
     humanURL: https://data.europa.eu/
     baseURL: https://data.europa.eu/sparql
     properties:
@@ -29,14 +27,13 @@ apis:
   - aid: eu-open-data-portal:eu-open-data-portal-search-api
     name: EU Open Data Portal Search API
     tags:
+      - DCAT-AP
+      - EU
       - Government
       - Open Data
-      - Search
       - REST
-      - EU
-      - DCAT-AP
-    image: 
-      https://raw.githubusercontent.com/api-evangelist/eu-open-data-portal/refs/heads/main/image.png
+      - Search
+    image: https://raw.githubusercontent.com/api-evangelist/eu-open-data-portal/refs/heads/main/image.png
     humanURL: https://data.europa.eu/
     baseURL: https://data.europa.eu/api/hub/search/
     properties:
@@ -60,8 +57,7 @@ common:
     open data, operated by the Publications Office of the European Union. It provides
     SPARQL and REST APIs for accessing statistical datasets, legislative documents,
     and institutional data from EU institutions under open licenses.
-  image: 
-    https://raw.githubusercontent.com/api-evangelist/eu-open-data-portal/refs/heads/main/image.png
+  image: https://raw.githubusercontent.com/api-evangelist/eu-open-data-portal/refs/heads/main/image.png
   tags:
     - Government
     - Open Data

@@ -22,15 +22,15 @@ servers:
     description: EU Open Data Portal Search API
 
 tags:
+  - name: Catalogs
+    description: Federated data catalogs and publishers
+
   - name: Datasets
     description: Search and retrieve EU open datasets
   - name: Distributions
     description: Access dataset distributions and download links
   - name: Vocabularies
     description: Controlled vocabularies for DCAT-AP metadata
-  - name: Catalogs
-    description: Federated data catalogs and publishers
-
 paths:
   /datasets:
     get:
