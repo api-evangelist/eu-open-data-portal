@@ -1,0 +1,318 @@
+naftiko: 1.0.0-alpha2
+info:
+  label: EU Open Data Portal Search API
+  description: The EU Open Data Portal Search API (data.europa.eu) provides REST access for discovering, searching, and querying
+    European Union open datasets. The API follows DCAT-AP metadata standards and supports discovery of datasets from EU institutions,
+    member state portals, and federated open data sources. No authentication required.
+  tags:
+  - Eu
+  - Open
+  - Data
+  - Portal
+  - API
+  created: '2026-05-06'
+  modified: '2026-05-06'
+capability:
+  consumes:
+  - type: http
+    namespace: eu-open-data-portal
+    baseUri: https://data.europa.eu/api/hub/search
+    description: EU Open Data Portal Search API HTTP API.
+    resources:
+    - name: datasets
+      path: /datasets
+      operations:
+      - name: searchdatasets
+        method: GET
+        description: Search datasets
+        inputParameters:
+        - name: q
+          in: query
+          type: string
+          description: Free-text search query
+        - name: page
+          in: query
+          type: integer
+          description: Page number (1-based)
+        - name: limit
+          in: query
+          type: integer
+          description: Number of results per page
+        - name: filter
+          in: query
+          type: string
+          description: SOLR filter query (e.g., "publisher.id:http://publications.europa.eu/resource/authority/corporate-body/ESTAT")
+        - name: facets
+          in: query
+          type: string
+          description: Comma-separated list of facet fields to include
+        - name: sort
+          in: query
+          type: string
+        - name: language
+          in: query
+          type: string
+          description: Preferred language for multilingual fields (ISO 639-1, e.g. "en")
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+    - name: datasets-datasetid
+      path: /datasets/{datasetId}
+      operations:
+      - name: getdataset
+        method: GET
+        description: Get dataset by ID
+        inputParameters:
+        - name: datasetId
+          in: path
+          type: string
+          required: true
+          description: Unique dataset identifier (URL-encoded URI)
+        - name: language
+          in: query
+          type: string
+          description: Preferred language for multilingual fields
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+    - name: datasets-datasetid-distributions
+      path: /datasets/{datasetId}/distributions
+      operations:
+      - name: getdatasetdistributions
+        method: GET
+        description: List dataset distributions
+        inputParameters:
+        - name: datasetId
+          in: path
+          type: string
+          required: true
+          description: Unique dataset identifier
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+    - name: vocabularies
+      path: /vocabularies
+      operations:
+      - name: listvocabularies
+        method: GET
+        description: List available controlled vocabularies
+        inputParameters:
+        - name: language
+          in: query
+          type: string
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+    - name: catalogs
+      path: /catalogs
+      operations:
+      - name: listcatalogs
+        method: GET
+        description: List federated catalogs
+        inputParameters:
+        - name: q
+          in: query
+          type: string
+        - name: page
+          in: query
+          type: integer
+        - name: limit
+          in: query
+          type: integer
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+  exposes:
+  - type: rest
+    port: 8080
+    namespace: eu-open-data-portal-rest
+    description: REST adapter for EU Open Data Portal Search API.
+    resources:
+    - path: /datasets
+      name: searchdatasets
+      operations:
+      - method: GET
+        name: searchdatasets
+        description: Search datasets
+        call: eu-open-data-portal.searchdatasets
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /datasets/{datasetId}
+      name: getdataset
+      operations:
+      - method: GET
+        name: getdataset
+        description: Get dataset by ID
+        call: eu-open-data-portal.getdataset
+        with:
+          datasetId: rest.datasetId
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /datasets/{datasetId}/distributions
+      name: getdatasetdistributions
+      operations:
+      - method: GET
+        name: getdatasetdistributions
+        description: List dataset distributions
+        call: eu-open-data-portal.getdatasetdistributions
+        with:
+          datasetId: rest.datasetId
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /vocabularies
+      name: listvocabularies
+      operations:
+      - method: GET
+        name: listvocabularies
+        description: List available controlled vocabularies
+        call: eu-open-data-portal.listvocabularies
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /catalogs
+      name: listcatalogs
+      operations:
+      - method: GET
+        name: listcatalogs
+        description: List federated catalogs
+        call: eu-open-data-portal.listcatalogs
+        outputParameters:
+        - type: object
+          mapping: $.
+  - type: mcp
+    port: 9090
+    namespace: eu-open-data-portal-mcp
+    transport: http
+    description: MCP adapter for EU Open Data Portal Search API for AI agent use.
+    tools:
+    - name: searchdatasets
+      description: Search datasets
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: eu-open-data-portal.searchdatasets
+      with:
+        q: tools.q
+        page: tools.page
+        limit: tools.limit
+        filter: tools.filter
+        facets: tools.facets
+        sort: tools.sort
+        language: tools.language
+      inputParameters:
+      - name: q
+        type: string
+        description: Free-text search query
+      - name: page
+        type: integer
+        description: Page number (1-based)
+      - name: limit
+        type: integer
+        description: Number of results per page
+      - name: filter
+        type: string
+        description: SOLR filter query (e.g., "publisher.id:http://publications.europa.eu/resource/authority/corporate-body/ESTAT")
+      - name: facets
+        type: string
+        description: Comma-separated list of facet fields to include
+      - name: sort
+        type: string
+        description: sort
+      - name: language
+        type: string
+        description: Preferred language for multilingual fields (ISO 639-1, e.g. "en")
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: getdataset
+      description: Get dataset by ID
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: eu-open-data-portal.getdataset
+      with:
+        datasetId: tools.datasetId
+        language: tools.language
+      inputParameters:
+      - name: datasetId
+        type: string
+        description: Unique dataset identifier (URL-encoded URI)
+        required: true
+      - name: language
+        type: string
+        description: Preferred language for multilingual fields
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: getdatasetdistributions
+      description: List dataset distributions
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: eu-open-data-portal.getdatasetdistributions
+      with:
+        datasetId: tools.datasetId
+      inputParameters:
+      - name: datasetId
+        type: string
+        description: Unique dataset identifier
+        required: true
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: listvocabularies
+      description: List available controlled vocabularies
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: eu-open-data-portal.listvocabularies
+      with:
+        language: tools.language
+      inputParameters:
+      - name: language
+        type: string
+        description: language
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: listcatalogs
+      description: List federated catalogs
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: eu-open-data-portal.listcatalogs
+      with:
+        q: tools.q
+        page: tools.page
+        limit: tools.limit
+      inputParameters:
+      - name: q
+        type: string
+        description: q
+      - name: page
+        type: integer
+        description: page
+      - name: limit
+        type: integer
+        description: limit
+      outputParameters:
+      - type: object
+        mapping: $.
