@@ -91,3 +91,6 @@ modified: '2026-04-28'
 description: >-
   Discover the single point of access to open data from European countries, EU institutions,
   agencies and bodies and other European countries.
+integrations:
+  - name: EU Sanctions Tracker
+  - name: EU Twinnings
