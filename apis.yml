@@ -71,11 +71,11 @@ common:
     - url: https://dataeuropa.gitlab.io/data-provider-manual/
       type: Documentation
     - url: https://data.europa.eu/sparql
-      type: Getting Started
+      type: GettingStarted
     - url: https://data.europa.eu/en/legal-notice
-      type: Terms of Service
+      type: TermsOfService
     - url: https://data.europa.eu/en/legal-notice
-      type: Privacy Policy
+      type: PrivacyPolicy
     - url: https://data.europa.eu/
       type: Website
     - url: openapi/eu-open-data-portal-search-openapi.yml
