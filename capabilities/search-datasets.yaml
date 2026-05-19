@@ -1,0 +1,159 @@
+naftiko: 1.0.0-alpha2
+info:
+  label: EU Open Data Portal Search API — Datasets
+  description: 'EU Open Data Portal Search API — Datasets. 2 operations. Lead operation: Search datasets. Self-contained Naftiko
+    capability covering one Eu Open Data Portal business surface.'
+  tags:
+  - Eu Open Data Portal
+  - Datasets
+  created: '2026-05-19'
+  modified: '2026-05-19'
+binds:
+- namespace: env
+  keys:
+    EU_OPEN_DATA_PORTAL_API_KEY: EU_OPEN_DATA_PORTAL_API_KEY
+capability:
+  consumes:
+  - type: http
+    namespace: search-datasets
+    baseUri: https://data.europa.eu/api/hub/search
+    description: EU Open Data Portal Search API — Datasets business capability. Self-contained, no shared references.
+    resources:
+    - name: datasets
+      path: /datasets
+      operations:
+      - name: searchdatasets
+        method: GET
+        description: Search datasets
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: q
+          in: query
+          type: string
+          description: Free-text search query
+        - name: page
+          in: query
+          type: integer
+          description: Page number (1-based)
+        - name: limit
+          in: query
+          type: integer
+          description: Number of results per page
+        - name: filter
+          in: query
+          type: string
+          description: SOLR filter query (e.g., "publisher.id:http://publications.europa.eu/resource/authority/corporate-body/ESTAT")
+        - name: facets
+          in: query
+          type: string
+          description: Comma-separated list of facet fields to include
+        - name: sort
+          in: query
+          type: string
+        - name: language
+          in: query
+          type: string
+          description: Preferred language for multilingual fields (ISO 639-1, e.g. "en")
+    - name: datasets-datasetId
+      path: /datasets/{datasetId}
+      operations:
+      - name: getdataset
+        method: GET
+        description: Get dataset by ID
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: datasetId
+          in: path
+          type: string
+          description: Unique dataset identifier (URL-encoded URI)
+          required: true
+        - name: language
+          in: query
+          type: string
+          description: Preferred language for multilingual fields
+  exposes:
+  - type: rest
+    namespace: search-datasets-rest
+    port: 8080
+    description: REST adapter for EU Open Data Portal Search API — Datasets. One Spectral-compliant resource per consumed
+      operation, prefixed with /v1.
+    resources:
+    - path: /v1/datasets
+      name: datasets
+      description: REST surface for datasets.
+      operations:
+      - method: GET
+        name: searchdatasets
+        description: Search datasets
+        call: search-datasets.searchdatasets
+        with:
+          q: rest.q
+          page: rest.page
+          limit: rest.limit
+          filter: rest.filter
+          facets: rest.facets
+          sort: rest.sort
+          language: rest.language
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/datasets/{datasetid}
+      name: datasets-datasetid
+      description: REST surface for datasets-datasetId.
+      operations:
+      - method: GET
+        name: getdataset
+        description: Get dataset by ID
+        call: search-datasets.getdataset
+        with:
+          datasetId: rest.datasetId
+          language: rest.language
+        outputParameters:
+        - type: object
+          mapping: $.
+  - type: mcp
+    namespace: search-datasets-mcp
+    port: 9090
+    transport: http
+    description: MCP adapter for EU Open Data Portal Search API — Datasets. One tool per consumed operation, routed inline
+      through this capability's consumes block.
+    tools:
+    - name: search-datasets
+      description: Search datasets
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: search-datasets.searchdatasets
+      with:
+        q: tools.q
+        page: tools.page
+        limit: tools.limit
+        filter: tools.filter
+        facets: tools.facets
+        sort: tools.sort
+        language: tools.language
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: get-dataset-id
+      description: Get dataset by ID
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: search-datasets.getdataset
+      with:
+        datasetId: tools.datasetId
+        language: tools.language
+      outputParameters:
+      - type: object
+        mapping: $.

@@ -50,6 +50,8 @@ apis:
       and consumers.
 
 common:
+  - type: LinkedIn
+    url: https://www.linkedin.com/company/data-europa-eu
   aid: eu-open-data-portal
   name: EU Open Data Portal
   description: >-

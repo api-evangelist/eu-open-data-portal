@@ -1,0 +1,75 @@
+naftiko: 1.0.0-alpha2
+info:
+  label: EU Open Data Portal Search API — Vocabularies
+  description: 'EU Open Data Portal Search API — Vocabularies. 1 operations. Lead operation: List available controlled vocabularies.
+    Self-contained Naftiko capability covering one Eu Open Data Portal business surface.'
+  tags:
+  - Eu Open Data Portal
+  - Vocabularies
+  created: '2026-05-19'
+  modified: '2026-05-19'
+binds:
+- namespace: env
+  keys:
+    EU_OPEN_DATA_PORTAL_API_KEY: EU_OPEN_DATA_PORTAL_API_KEY
+capability:
+  consumes:
+  - type: http
+    namespace: search-vocabularies
+    baseUri: https://data.europa.eu/api/hub/search
+    description: EU Open Data Portal Search API — Vocabularies business capability. Self-contained, no shared references.
+    resources:
+    - name: vocabularies
+      path: /vocabularies
+      operations:
+      - name: listvocabularies
+        method: GET
+        description: List available controlled vocabularies
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: language
+          in: query
+          type: string
+  exposes:
+  - type: rest
+    namespace: search-vocabularies-rest
+    port: 8080
+    description: REST adapter for EU Open Data Portal Search API — Vocabularies. One Spectral-compliant resource per consumed
+      operation, prefixed with /v1.
+    resources:
+    - path: /v1/vocabularies
+      name: vocabularies
+      description: REST surface for vocabularies.
+      operations:
+      - method: GET
+        name: listvocabularies
+        description: List available controlled vocabularies
+        call: search-vocabularies.listvocabularies
+        with:
+          language: rest.language
+        outputParameters:
+        - type: object
+          mapping: $.
+  - type: mcp
+    namespace: search-vocabularies-mcp
+    port: 9090
+    transport: http
+    description: MCP adapter for EU Open Data Portal Search API — Vocabularies. One tool per consumed operation, routed inline
+      through this capability's consumes block.
+    tools:
+    - name: list-available-controlled-vocabularies
+      description: List available controlled vocabularies
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: search-vocabularies.listvocabularies
+      with:
+        language: tools.language
+      outputParameters:
+      - type: object
+        mapping: $.

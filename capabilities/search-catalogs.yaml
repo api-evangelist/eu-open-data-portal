@@ -1,0 +1,85 @@
+naftiko: 1.0.0-alpha2
+info:
+  label: EU Open Data Portal Search API — Catalogs
+  description: 'EU Open Data Portal Search API — Catalogs. 1 operations. Lead operation: List federated catalogs. Self-contained
+    Naftiko capability covering one Eu Open Data Portal business surface.'
+  tags:
+  - Eu Open Data Portal
+  - Catalogs
+  created: '2026-05-19'
+  modified: '2026-05-19'
+binds:
+- namespace: env
+  keys:
+    EU_OPEN_DATA_PORTAL_API_KEY: EU_OPEN_DATA_PORTAL_API_KEY
+capability:
+  consumes:
+  - type: http
+    namespace: search-catalogs
+    baseUri: https://data.europa.eu/api/hub/search
+    description: EU Open Data Portal Search API — Catalogs business capability. Self-contained, no shared references.
+    resources:
+    - name: catalogs
+      path: /catalogs
+      operations:
+      - name: listcatalogs
+        method: GET
+        description: List federated catalogs
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: q
+          in: query
+          type: string
+        - name: page
+          in: query
+          type: integer
+        - name: limit
+          in: query
+          type: integer
+  exposes:
+  - type: rest
+    namespace: search-catalogs-rest
+    port: 8080
+    description: REST adapter for EU Open Data Portal Search API — Catalogs. One Spectral-compliant resource per consumed
+      operation, prefixed with /v1.
+    resources:
+    - path: /v1/catalogs
+      name: catalogs
+      description: REST surface for catalogs.
+      operations:
+      - method: GET
+        name: listcatalogs
+        description: List federated catalogs
+        call: search-catalogs.listcatalogs
+        with:
+          q: rest.q
+          page: rest.page
+          limit: rest.limit
+        outputParameters:
+        - type: object
+          mapping: $.
+  - type: mcp
+    namespace: search-catalogs-mcp
+    port: 9090
+    transport: http
+    description: MCP adapter for EU Open Data Portal Search API — Catalogs. One tool per consumed operation, routed inline
+      through this capability's consumes block.
+    tools:
+    - name: list-federated-catalogs
+      description: List federated catalogs
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: search-catalogs.listcatalogs
+      with:
+        q: tools.q
+        page: tools.page
+        limit: tools.limit
+      outputParameters:
+      - type: object
+        mapping: $.
