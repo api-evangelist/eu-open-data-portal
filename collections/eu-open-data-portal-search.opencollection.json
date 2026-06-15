@@ -1,0 +1,186 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "EU Open Data Portal Search API",
+    "version": "1.0.0"
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Datasets",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Search datasets",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://data.europa.eu/api/hub/search/datasets",
+            "params": [
+              {
+                "name": "q",
+                "value": "",
+                "type": "query",
+                "description": "Free-text search query"
+              },
+              {
+                "name": "page",
+                "value": "",
+                "type": "query",
+                "description": "Page number (1-based)"
+              },
+              {
+                "name": "limit",
+                "value": "",
+                "type": "query",
+                "description": "Number of results per page"
+              },
+              {
+                "name": "filter",
+                "value": "",
+                "type": "query",
+                "description": "SOLR filter query (e.g., \"publisher.id:http://publications.europa.eu/resource/authority/corporate-body/ESTAT\")"
+              },
+              {
+                "name": "facets",
+                "value": "",
+                "type": "query",
+                "description": "Comma-separated list of facet fields to include"
+              },
+              {
+                "name": "sort",
+                "value": "",
+                "type": "query"
+              },
+              {
+                "name": "language",
+                "value": "",
+                "type": "query",
+                "description": "Preferred language for multilingual fields (ISO 639-1, e.g. \"en\")"
+              }
+            ]
+          },
+          "docs": "Search for datasets in the EU Open Data Portal using full-text search and faceted filtering. Returns DCAT-AP compliant metadata for matching datasets including titles, descriptions, keywords, publishers, and distribution links."
+        },
+        {
+          "info": {
+            "name": "Get dataset by ID",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://data.europa.eu/api/hub/search/datasets/:datasetId",
+            "params": [
+              {
+                "name": "datasetId",
+                "value": "",
+                "type": "path",
+                "description": "Unique dataset identifier (URL-encoded URI)"
+              },
+              {
+                "name": "language",
+                "value": "",
+                "type": "query",
+                "description": "Preferred language for multilingual fields"
+              }
+            ]
+          },
+          "docs": "Returns full DCAT-AP metadata for a specific dataset including all distributions, publisher information, themes, and temporal coverage."
+        }
+      ]
+    },
+    {
+      "info": {
+        "name": "Distributions",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "List dataset distributions",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://data.europa.eu/api/hub/search/datasets/:datasetId/distributions",
+            "params": [
+              {
+                "name": "datasetId",
+                "value": "",
+                "type": "path",
+                "description": "Unique dataset identifier"
+              }
+            ]
+          },
+          "docs": "Returns all available distributions (download files, API endpoints, data services) for a specific dataset with format, size, and access URL information."
+        }
+      ]
+    },
+    {
+      "info": {
+        "name": "Vocabularies",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "List available controlled vocabularies",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://data.europa.eu/api/hub/search/vocabularies",
+            "params": [
+              {
+                "name": "language",
+                "value": "",
+                "type": "query"
+              }
+            ]
+          },
+          "docs": "Returns the list of DCAT-AP controlled vocabularies used for metadata classification including themes, formats, licences, and publisher types."
+        }
+      ]
+    },
+    {
+      "info": {
+        "name": "Catalogs",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "List federated catalogs",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://data.europa.eu/api/hub/search/catalogs",
+            "params": [
+              {
+                "name": "q",
+                "value": "",
+                "type": "query"
+              },
+              {
+                "name": "page",
+                "value": "",
+                "type": "query"
+              },
+              {
+                "name": "limit",
+                "value": "",
+                "type": "query"
+              }
+            ]
+          },
+          "docs": "Returns the list of data catalogs federated by the EU Open Data Portal including member state portals and institutional catalogs."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

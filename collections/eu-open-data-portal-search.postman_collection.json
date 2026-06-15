@@ -1,0 +1,677 @@
+{
+  "item": [
+    {
+      "id": "19258500-1a14-4c26-9319-022ad4d0b2c2",
+      "name": "Catalogs",
+      "description": {
+        "content": "Federated data catalogs and publishers",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "e4b11fd5-b7c2-40ef-8439-8811606886ec",
+          "name": "List federated catalogs",
+          "request": {
+            "name": "List federated catalogs",
+            "description": {
+              "content": "Returns the list of data catalogs federated by the EU Open Data Portal including member state portals and institutional catalogs.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "catalogs"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "q",
+                  "value": "<string>"
+                },
+                {
+                  "disabled": false,
+                  "key": "page",
+                  "value": "1"
+                },
+                {
+                  "disabled": false,
+                  "key": "limit",
+                  "value": "20"
+                }
+              ],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "35a50cc3-8197-4c81-9a75-f5d81455a888",
+              "name": "Catalog list returned",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "catalogs"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "q",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "page",
+                      "value": "1"
+                    },
+                    {
+                      "key": "limit",
+                      "value": "20"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"success\": true,\n  \"result\": {\n    \"count\": 2105,\n    \"results\": [\n      {\n        \"id\": \"string\",\n        \"title\": {\n          \"key_0\": \"string\"\n        },\n        \"homepage\": \"https://nRoCMWzEqWJngJBFyJwQYMGNoDyQ.muclSPSf9WU,3PmzAAvDpdn6kbzELc,mX3YfK30BmhwYzOXM+tUI3Bdrfa6Rcxfxb7+Xdm5-Qkt3r\",\n        \"country\": \"string\",\n        \"datasetCount\": 969,\n        \"lastHarvested\": \"1982-04-06T17:06:01.560Z\"\n      },\n      {\n        \"id\": \"string\",\n        \"title\": {\n          \"key_0\": \"string\",\n          \"key_1\": \"string\",\n          \"key_2\": \"string\"\n        },\n        \"homepage\": \"http://IWdeWJaRImEifzRFzwWrqZgcLulItnsop.fcLx5ZP41MlFRRU3Ob-N9D-Mr\",\n        \"country\": \"string\",\n        \"datasetCount\": 4342,\n        \"lastHarvested\": \"1966-09-03T03:44:58.549Z\"\n      }\n    ]\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    },
+    {
+      "id": "3d1e53bd-d32e-440d-a8b1-50bb45f6e337",
+      "name": "Datasets",
+      "description": {
+        "content": "Search and retrieve EU open datasets",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "328fbe0a-889d-4029-8856-b62e8eee1a5d",
+          "name": "Search datasets",
+          "request": {
+            "name": "Search datasets",
+            "description": {
+              "content": "Search for datasets in the EU Open Data Portal using full-text search and faceted filtering. Returns DCAT-AP compliant metadata for matching datasets including titles, descriptions, keywords, publishers, and distribution links.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "datasets"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "q",
+                  "value": "<string>",
+                  "description": "Free-text search query"
+                },
+                {
+                  "disabled": false,
+                  "key": "page",
+                  "value": "1",
+                  "description": "Page number (1-based)"
+                },
+                {
+                  "disabled": false,
+                  "key": "limit",
+                  "value": "10",
+                  "description": "Number of results per page"
+                },
+                {
+                  "disabled": false,
+                  "key": "filter",
+                  "value": "<string>",
+                  "description": "SOLR filter query (e.g., \"publisher.id:http://publications.europa.eu/resource/authority/corporate-body/ESTAT\")"
+                },
+                {
+                  "disabled": false,
+                  "key": "facets",
+                  "value": "<string>",
+                  "description": "Comma-separated list of facet fields to include"
+                },
+                {
+                  "disabled": false,
+                  "key": "sort",
+                  "value": "relevance"
+                },
+                {
+                  "disabled": false,
+                  "key": "language",
+                  "value": "<string>",
+                  "description": "Preferred language for multilingual fields (ISO 639-1, e.g. \"en\")"
+                }
+              ],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "64739727-e4aa-479e-bd4f-e0d0c5198d10",
+              "name": "Dataset search results returned",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "datasets"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "q",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "page",
+                      "value": "1"
+                    },
+                    {
+                      "key": "limit",
+                      "value": "10"
+                    },
+                    {
+                      "key": "filter",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "facets",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "sort",
+                      "value": "relevance"
+                    },
+                    {
+                      "key": "language",
+                      "value": "<string>"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"success\": false,\n  \"result\": {\n    \"count\": 3245,\n    \"facets\": {\n      \"key_0\": [\n        {\n          \"id\": \"string\",\n          \"label\": {\n            \"key_0\": \"string\",\n            \"key_1\": \"string\",\n            \"key_2\": \"string\",\n            \"key_3\": \"string\",\n            \"key_4\": \"string\"\n          },\n          \"count\": 672\n        },\n        {\n          \"id\": \"string\",\n          \"label\": {\n            \"key_0\": \"string\",\n            \"key_1\": \"string\",\n            \"key_2\": \"string\",\n            \"key_3\": \"string\"\n          },\n          \"count\": 7108\n        }\n      ]\n    },\n    \"results\": [\n      {\n        \"id\": \"string\",\n        \"title\": {\n          \"key_0\": \"string\",\n          \"key_1\": \"string\"\n        },\n        \"description\": {\n          \"key_0\": \"string\",\n          \"key_1\": \"string\"\n        },\n        \"issued\": \"1954-04-18T19:23:08.439Z\",\n        \"modified\": \"1985-07-19T15:53:48.561Z\",\n        \"publisher\": {\n          \"id\": \"string\",\n          \"name\": {\n            \"key_0\": \"string\"\n          },\n          \"type\": \"string\"\n        },\n        \"theme\": [\n          \"string\",\n          \"string\"\n        ],\n        \"keyword\": [\n          \"string\",\n          \"string\"\n        ],\n        \"distributionCount\": 8021,\n        \"license\": \"string\"\n      },\n      {\n        \"id\": \"string\",\n        \"title\": {\n          \"key_0\": \"string\",\n          \"key_1\": \"string\"\n        },\n        \"description\": {\n          \"key_0\": \"string\",\n          \"key_1\": \"string\"\n        },\n        \"issued\": \"2013-02-02T01:39:28.536Z\",\n        \"modified\": \"1997-10-21T09:10:55.043Z\",\n        \"publisher\": {\n          \"id\": \"string\",\n          \"name\": {\n            \"key_0\": \"string\"\n          },\n          \"type\": \"string\"\n        },\n        \"theme\": [\n          \"string\",\n          \"string\"\n        ],\n        \"keyword\": [\n          \"string\",\n          \"string\"\n        ],\n        \"distributionCount\": 5083,\n        \"license\": \"string\"\n      }\n    ]\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "6fb3ed22-960f-4d8f-adf6-390e6fe07305",
+              "name": "Invalid query parameters",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "datasets"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "q",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "page",
+                      "value": "1"
+                    },
+                    {
+                      "key": "limit",
+                      "value": "10"
+                    },
+                    {
+                      "key": "filter",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "facets",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "sort",
+                      "value": "relevance"
+                    },
+                    {
+                      "key": "language",
+                      "value": "<string>"
+                    }
+                  ],
+                  "variable": []
+                },
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "08d6b02c-7e81-4d96-b1a0-e68f963a1d17",
+          "name": "Get dataset by ID",
+          "request": {
+            "name": "Get dataset by ID",
+            "description": {
+              "content": "Returns full DCAT-AP metadata for a specific dataset including all distributions, publisher information, themes, and temporal coverage.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "datasets",
+                ":datasetId"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "language",
+                  "value": "<string>",
+                  "description": "Preferred language for multilingual fields"
+                }
+              ],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "datasetId",
+                  "description": "(Required) Unique dataset identifier (URL-encoded URI)"
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "ba53b8fb-ca21-49b7-a3dc-fd3e295a3b32",
+              "name": "Dataset metadata returned",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "datasets",
+                    ":datasetId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "language",
+                      "value": "<string>"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "datasetId",
+                      "description": "(Required) Unique dataset identifier (URL-encoded URI)"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"id\": \"string\",\n  \"title\": {\n    \"key_0\": \"string\",\n    \"key_1\": \"string\",\n    \"key_2\": \"string\",\n    \"key_3\": \"string\"\n  },\n  \"description\": {\n    \"key_0\": \"string\"\n  },\n  \"issued\": \"2013-08-19T08:01:43.598Z\",\n  \"modified\": \"1953-12-12T11:22:34.987Z\",\n  \"publisher\": {\n    \"id\": \"string\",\n    \"name\": {\n      \"key_0\": \"string\",\n      \"key_1\": \"string\"\n    },\n    \"type\": \"string\"\n  },\n  \"contactPoint\": {\n    \"fn\": \"string\",\n    \"hasEmail\": \"string\",\n    \"hasURL\": \"http://IF.hhskmq-blsl5O.inEax2.lCvOsTY-rUmfO8-OHlFM3M,mrfS1ItXOY,Nl,NNV4,NnurXqdNAl1QTJ.wg4Or\"\n  },\n  \"theme\": [\n    \"string\",\n    \"string\"\n  ],\n  \"keyword\": [\n    \"string\",\n    \"string\"\n  ],\n  \"language\": [\n    \"string\",\n    \"string\"\n  ],\n  \"spatial\": [\n    \"string\",\n    \"string\"\n  ],\n  \"temporal\": {\n    \"startDate\": \"2007-11-08\",\n    \"endDate\": \"1988-06-05\"\n  },\n  \"accrualPeriodicity\": \"string\",\n  \"conformsTo\": [\n    \"string\",\n    \"string\"\n  ],\n  \"distributions\": [\n    {\n      \"id\": \"string\",\n      \"title\": {\n        \"key_0\": \"string\",\n        \"key_1\": \"string\"\n      },\n      \"description\": {\n        \"key_0\": \"string\"\n      },\n      \"accessURL\": \"https://UhWjg.msu3irQht3EwH8IvAUno2XPjBB0\",\n      \"downloadURL\": \"http://PGsmorpEyLCyqdGXQTmFgwnInVTrqhZh.usfdwD12rlU1S7BOzW.1OLAmj3mt7+lxAFVBwzmB0w\",\n      \"format\": \"string\",\n      \"mediaType\": \"string\",\n      \"byteSize\": 9712,\n      \"issued\": \"1980-08-19T16:13:42.049Z\",\n      \"modified\": \"2013-09-10T22:30:13.489Z\",\n      \"license\": \"string\",\n      \"conformsTo\": [\n        \"string\",\n        \"string\"\n      ]\n    },\n    {\n      \"id\": \"string\",\n      \"title\": {\n        \"key_0\": \"string\"\n      },\n      \"description\": {\n        \"key_0\": \"string\",\n        \"key_1\": \"string\",\n        \"key_2\": \"string\"\n      },\n      \"accessURL\": \"http://kMiMUoRAKOTzO.diddAV+Et2qCHlyFMQEM+0jZnoI6n8+g67drJK8y99C42aKSfbcqse\",\n      \"downloadURL\": \"http://PuNCHOvvppGdpSkH.fxfD7L.UCQ7gnTZ90RWVXfA-o4w1yX,Y9TnW.g,C,4R,f\",\n      \"format\": \"string\",\n      \"mediaType\": \"string\",\n      \"byteSize\": 9706,\n      \"issued\": \"2018-04-06T17:08:57.659Z\",\n      \"modified\": \"1976-11-24T13:24:28.008Z\",\n      \"license\": \"string\",\n      \"conformsTo\": [\n        \"string\",\n        \"string\"\n      ]\n    }\n  ],\n  \"license\": \"string\",\n  \"rights\": \"string\",\n  \"accessRights\": \"string\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "db0ba713-7232-4b67-b24b-61933492eed9",
+              "name": "Dataset not found",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "datasets",
+                    ":datasetId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "language",
+                      "value": "<string>"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "datasetId",
+                      "description": "(Required) Unique dataset identifier (URL-encoded URI)"
+                    }
+                  ]
+                },
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    },
+    {
+      "id": "6c33e91d-b01c-42f1-911a-3843890ac50b",
+      "name": "Distributions",
+      "description": {
+        "content": "Access dataset distributions and download links",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "db28cb0b-59ca-48b6-aa9c-2ea1b3376c8f",
+          "name": "List dataset distributions",
+          "request": {
+            "name": "List dataset distributions",
+            "description": {
+              "content": "Returns all available distributions (download files, API endpoints, data services) for a specific dataset with format, size, and access URL information.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "datasets",
+                ":datasetId",
+                "distributions"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "datasetId",
+                  "description": "(Required) Unique dataset identifier"
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "af7d8851-a604-4ed9-8436-e9462fc49e90",
+              "name": "Distributions returned",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "datasets",
+                    ":datasetId",
+                    "distributions"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "datasetId",
+                      "description": "(Required) Unique dataset identifier"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"result\": [\n    {\n      \"id\": \"string\",\n      \"title\": {\n        \"key_0\": \"string\",\n        \"key_1\": \"string\",\n        \"key_2\": \"string\"\n      },\n      \"description\": {\n        \"key_0\": \"string\"\n      },\n      \"accessURL\": \"https://MPCUZemhmvDcwOvascuisjPE.upum6h2EkJ7Bxs\",\n      \"downloadURL\": \"http://ZwDMxyqxTqXSOxSIWBzwEyFnR.euyfOpSZP6s-L1oo1j0DV\",\n      \"format\": \"string\",\n      \"mediaType\": \"string\",\n      \"byteSize\": 5312,\n      \"issued\": \"1947-07-29T12:44:16.346Z\",\n      \"modified\": \"1970-01-02T04:13:41.724Z\",\n      \"license\": \"string\",\n      \"conformsTo\": [\n        \"string\",\n        \"string\"\n      ]\n    },\n    {\n      \"id\": \"string\",\n      \"title\": {\n        \"key_0\": \"string\",\n        \"key_1\": \"string\",\n        \"key_2\": \"string\"\n      },\n      \"description\": {\n        \"key_0\": \"string\",\n        \"key_1\": \"string\"\n      },\n      \"accessURL\": \"http://dTzUOLnxSCAQWLUOG.jtP,-JNSmU2TVZju7gldo5aGmKVK6SDIO2H2kHzAt-eAjn.+k\",\n      \"downloadURL\": \"https://EuDGsIdrAMUTGletNDmCExBGLNq.thbK3ex3oOXmlmd1LnwEuS0J1XfYJFAgTaWsRjqe.q4k9ZJYxoG2m-IV6ajK,0f\",\n      \"format\": \"string\",\n      \"mediaType\": \"string\",\n      \"byteSize\": 5817,\n      \"issued\": \"2008-08-07T19:49:16.784Z\",\n      \"modified\": \"1991-05-10T09:18:32.339Z\",\n      \"license\": \"string\",\n      \"conformsTo\": [\n        \"string\",\n        \"string\"\n      ]\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    },
+    {
+      "id": "a9397fdb-ab15-40a0-b05b-b2e2ff346fc5",
+      "name": "Vocabularies",
+      "description": {
+        "content": "Controlled vocabularies for DCAT-AP metadata",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "3541f9e9-05e7-4efd-ba00-1b4144a511e2",
+          "name": "List available controlled vocabularies",
+          "request": {
+            "name": "List available controlled vocabularies",
+            "description": {
+              "content": "Returns the list of DCAT-AP controlled vocabularies used for metadata classification including themes, formats, licences, and publisher types.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "vocabularies"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "language",
+                  "value": "<string>"
+                }
+              ],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "10c307f5-d8fc-4f97-acfe-a7908d13ea65",
+              "name": "Vocabulary list returned",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "vocabularies"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "language",
+                      "value": "<string>"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"result\": [\n    {\n      \"id\": \"string\",\n      \"name\": \"string\",\n      \"url\": \"https://AMuXFFENqSdQNGrKFLyZIHmoxeKyVUOo.ymrnxn-ryKpOkotIc.K.86begyD,Cr2YIPhYTJndl.zlHJZ6YAib2X9SeVoO7+si3t\"\n    },\n    {\n      \"id\": \"string\",\n      \"name\": \"string\",\n      \"url\": \"http://PdIFApfUOJFUFmBnkQIfrT.rsgaZKpBIACF1OqQbzahqd58nL4QXIiqvDtrw8sUKECXThnuP3qTPatmCNa.\"\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    }
+  ],
+  "event": [],
+  "variable": [
+    {
+      "type": "string",
+      "value": "https://data.europa.eu/api/hub/search",
+      "key": "baseUrl"
+    }
+  ],
+  "info": {
+    "_postman_id": "c5735595-1089-4a2f-9ed6-958dab0c927a",
+    "name": "EU Open Data Portal Search API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": {
+      "content": "The EU Open Data Portal Search API (data.europa.eu) provides REST access for discovering, searching, and querying European Union open datasets. The API follows DCAT-AP metadata standards and supports discovery of datasets from EU institutions, member state portals, and federated open data sources. No authentication required.\n\nContact Support:\n Name: EU Open Data Portal Support",
+      "type": "text/plain"
+    }
+  }
+}
