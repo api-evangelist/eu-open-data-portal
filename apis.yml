@@ -50,8 +50,12 @@ apis:
     and consumers.
 
 common:
+- type: DomainSecurity
+  url: security/eu-open-data-portal-domain-security.yml
 - type: LinkedIn
   url: https://www.linkedin.com/company/data-europa-eu
+- type: Blog
+  url: https://data.europa.eu/en/news-events/news
 name: EU Open Data Portal
 description: >-
   The EU Open Data Portal (data.europa.eu) is the official portal for European Union
