@@ -1,0 +1,18 @@
+{
+  "repo": "eu-open-data-portal",
+  "feeds": [
+    {
+      "source": "https://data.europa.eu/en/news-events/news",
+      "feed_url": "https://data.europa.eu/en/news-events/news",
+      "title": "",
+      "saved": 0,
+      "method": "none"
+    },
+    {
+      "source": "https://www.linkedin.com/company/data-europa-eu",
+      "error": "HTTPError"
+    }
+  ],
+  "fetched": "2026-07-11T11:50:51Z",
+  "post_count": 10
+}
