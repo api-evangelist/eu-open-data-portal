@@ -50,6 +50,8 @@ apis:
     and consumers.
 
 common:
+- type: AgenticAccess
+  url: agentic-access/eu-open-data-portal-agentic-access.yml
 - type: DomainSecurity
   url: security/eu-open-data-portal-domain-security.yml
 - type: LinkedIn
