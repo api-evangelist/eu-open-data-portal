@@ -1,0 +1,85 @@
+openapi: 3.1.0
+info:
+  title: EU Open Data Portal Search Catalogs API
+  description: The EU Open Data Portal Search API (data.europa.eu) provides REST access for discovering, searching, and querying European Union open datasets. The API follows DCAT-AP metadata standards and supports discovery of datasets from EU institutions, member state portals, and federated open data sources. No authentication required.
+  version: 1.0.0
+  contact:
+    name: EU Open Data Portal Support
+    url: https://data.europa.eu/en/contact
+  license:
+    name: Creative Commons Attribution 4.0
+    url: https://creativecommons.org/licenses/by/4.0/
+servers:
+- url: https://data.europa.eu/api/hub/search
+  description: EU Open Data Portal Search API
+tags:
+- name: Catalogs
+  description: Federated data catalogs and publishers
+paths:
+  /catalogs:
+    get:
+      operationId: listCatalogs
+      summary: List federated catalogs
+      description: Returns the list of data catalogs federated by the EU Open Data Portal including member state portals and institutional catalogs.
+      tags:
+      - Catalogs
+      parameters:
+      - name: q
+        in: query
+        schema:
+          type: string
+      - name: page
+        in: query
+        schema:
+          type: integer
+          default: 1
+      - name: limit
+        in: query
+        schema:
+          type: integer
+          default: 20
+      responses:
+        '200':
+          description: Catalog list returned
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CatalogListResponse'
+components:
+  schemas:
+    Catalog:
+      type: object
+      properties:
+        id:
+          type: string
+        title:
+          type: object
+          additionalProperties:
+            type: string
+        homepage:
+          type: string
+          format: uri
+        country:
+          type: string
+        datasetCount:
+          type: integer
+        lastHarvested:
+          type: string
+          format: date-time
+    CatalogListResponse:
+      type: object
+      properties:
+        success:
+          type: boolean
+        result:
+          type: object
+          properties:
+            count:
+              type: integer
+            results:
+              type: array
+              items:
+                $ref: '#/components/schemas/Catalog'
+externalDocs:
+  description: EU Data Provider Manual
+  url: https://dataeuropa.gitlab.io/data-provider-manual/

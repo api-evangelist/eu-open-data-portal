@@ -1,0 +1,57 @@
+openapi: 3.1.0
+info:
+  title: EU Open Data Portal Search Catalogs Vocabularies API
+  description: The EU Open Data Portal Search API (data.europa.eu) provides REST access for discovering, searching, and querying European Union open datasets. The API follows DCAT-AP metadata standards and supports discovery of datasets from EU institutions, member state portals, and federated open data sources. No authentication required.
+  version: 1.0.0
+  contact:
+    name: EU Open Data Portal Support
+    url: https://data.europa.eu/en/contact
+  license:
+    name: Creative Commons Attribution 4.0
+    url: https://creativecommons.org/licenses/by/4.0/
+servers:
+- url: https://data.europa.eu/api/hub/search
+  description: EU Open Data Portal Search API
+tags:
+- name: Vocabularies
+  description: Controlled vocabularies for DCAT-AP metadata
+paths:
+  /vocabularies:
+    get:
+      operationId: listVocabularies
+      summary: List available controlled vocabularies
+      description: Returns the list of DCAT-AP controlled vocabularies used for metadata classification including themes, formats, licences, and publisher types.
+      tags:
+      - Vocabularies
+      parameters:
+      - name: language
+        in: query
+        schema:
+          type: string
+      responses:
+        '200':
+          description: Vocabulary list returned
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  result:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Vocabulary'
+components:
+  schemas:
+    Vocabulary:
+      type: object
+      properties:
+        id:
+          type: string
+        name:
+          type: string
+        url:
+          type: string
+          format: uri
+externalDocs:
+  description: EU Data Provider Manual
+  url: https://dataeuropa.gitlab.io/data-provider-manual/

@@ -1,0 +1,88 @@
+openapi: 3.1.0
+info:
+  title: EU Open Data Portal Search Catalogs Distributions API
+  description: The EU Open Data Portal Search API (data.europa.eu) provides REST access for discovering, searching, and querying European Union open datasets. The API follows DCAT-AP metadata standards and supports discovery of datasets from EU institutions, member state portals, and federated open data sources. No authentication required.
+  version: 1.0.0
+  contact:
+    name: EU Open Data Portal Support
+    url: https://data.europa.eu/en/contact
+  license:
+    name: Creative Commons Attribution 4.0
+    url: https://creativecommons.org/licenses/by/4.0/
+servers:
+- url: https://data.europa.eu/api/hub/search
+  description: EU Open Data Portal Search API
+tags:
+- name: Distributions
+  description: Access dataset distributions and download links
+paths:
+  /datasets/{datasetId}/distributions:
+    get:
+      operationId: getDatasetDistributions
+      summary: List dataset distributions
+      description: Returns all available distributions (download files, API endpoints, data services) for a specific dataset with format, size, and access URL information.
+      tags:
+      - Distributions
+      parameters:
+      - name: datasetId
+        in: path
+        required: true
+        schema:
+          type: string
+        description: Unique dataset identifier
+      responses:
+        '200':
+          description: Distributions returned
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  result:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Distribution'
+components:
+  schemas:
+    Distribution:
+      type: object
+      properties:
+        id:
+          type: string
+        title:
+          type: object
+          additionalProperties:
+            type: string
+        description:
+          type: object
+          additionalProperties:
+            type: string
+        accessURL:
+          type: string
+          format: uri
+        downloadURL:
+          type: string
+          format: uri
+        format:
+          type: string
+          description: File format URI from the EU file type vocabulary
+        mediaType:
+          type: string
+          description: MIME type
+        byteSize:
+          type: integer
+        issued:
+          type: string
+          format: date-time
+        modified:
+          type: string
+          format: date-time
+        license:
+          type: string
+        conformsTo:
+          type: array
+          items:
+            type: string
+externalDocs:
+  description: EU Data Provider Manual
+  url: https://dataeuropa.gitlab.io/data-provider-manual/
