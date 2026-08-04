@@ -1,0 +1,20 @@
+{
+  "provider": "eu-open-data-portal",
+  "sources": [
+    "eu-open-data-portal-catalogs-api-openapi.yml",
+    "eu-open-data-portal-datasets-api-openapi.yml",
+    "eu-open-data-portal-distributions-api-openapi.yml",
+    "eu-open-data-portal-vocabularies-api-openapi.yml"
+  ],
+  "outputs": [
+    "eu-open-data-portal-catalogs-api-openapi.yml",
+    "eu-open-data-portal-datasets-api-openapi.yml",
+    "eu-open-data-portal-distributions-api-openapi.yml",
+    "eu-open-data-portal-vocabularies-api-openapi.yml"
+  ],
+  "archived": [],
+  "errors": [],
+  "warnings": [],
+  "notes": [],
+  "skipped": []
+}
