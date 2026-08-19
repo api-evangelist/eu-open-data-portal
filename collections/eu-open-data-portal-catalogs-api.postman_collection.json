@@ -1,0 +1,131 @@
+{
+  "item": [
+    {
+      "id": "cbb616a3-d6f0-4f02-8296-977f18c0d30c",
+      "name": "Catalogs",
+      "description": {
+        "content": "Federated data catalogs and publishers",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "0b247d63-5924-4196-9db7-14d17070e1fd",
+          "name": "List federated catalogs",
+          "request": {
+            "name": "List federated catalogs",
+            "description": {
+              "content": "Returns the list of data catalogs federated by the EU Open Data Portal including member state portals and institutional catalogs.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "catalogs"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "q",
+                  "value": "<string>"
+                },
+                {
+                  "disabled": false,
+                  "key": "page",
+                  "value": "1"
+                },
+                {
+                  "disabled": false,
+                  "key": "limit",
+                  "value": "20"
+                }
+              ],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "f34deb01-940c-4fec-81f3-dff007fdab65",
+              "name": "Catalog list returned",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "catalogs"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "q",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "page",
+                      "value": "1"
+                    },
+                    {
+                      "key": "limit",
+                      "value": "20"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"success\": true,\n  \"result\": {\n    \"count\": 6769,\n    \"results\": [\n      {\n        \"id\": \"string\",\n        \"title\": {\n          \"key_0\": \"string\",\n          \"key_1\": \"string\"\n        },\n        \"homepage\": \"https://XaZWWYWGOkJerQosFxLYBPrbsZDl.agvfbp.rhsDejdMubMfx.ByNdP-ECRsk\",\n        \"country\": \"string\",\n        \"datasetCount\": 3550,\n        \"lastHarvested\": \"2006-12-03T08:14:00.124Z\"\n      },\n      {\n        \"id\": \"string\",\n        \"title\": {\n          \"key_0\": \"string\",\n          \"key_1\": \"string\"\n        },\n        \"homepage\": \"https://hPAWGCmbYNNQE.zdpiHw-esJNGWB4nW7sflfIUBPunrOrqNnC6Ujq+atRMKksGQlwFj3MY\",\n        \"country\": \"string\",\n        \"datasetCount\": 8886,\n        \"lastHarvested\": \"2012-03-17T05:40:58.203Z\"\n      }\n    ]\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    }
+  ],
+  "event": [],
+  "variable": [
+    {
+      "type": "string",
+      "value": "https://data.europa.eu/api/hub/search",
+      "key": "baseUrl"
+    }
+  ],
+  "info": {
+    "_postman_id": "56d3ca06-ccc1-4360-bd69-b4c2a00968d8",
+    "name": "EU Open Data Portal Search Catalogs API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": {
+      "content": "The EU Open Data Portal Search API (data.europa.eu) provides REST access for discovering, searching, and querying European Union open datasets. The API follows DCAT-AP metadata standards and supports discovery of datasets from EU institutions, member state portals, and federated open data sources. No authentication required.\n\nContact Support:\n Name: EU Open Data Portal Support",
+      "type": "text/plain"
+    }
+  }
+}

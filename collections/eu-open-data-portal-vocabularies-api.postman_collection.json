@@ -1,0 +1,113 @@
+{
+  "item": [
+    {
+      "id": "b00d8771-8162-4041-8a19-f313bbc80457",
+      "name": "Vocabularies",
+      "description": {
+        "content": "Controlled vocabularies for DCAT-AP metadata",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "8abc4a02-eb62-460f-9dda-090569b6401c",
+          "name": "List available controlled vocabularies",
+          "request": {
+            "name": "List available controlled vocabularies",
+            "description": {
+              "content": "Returns the list of DCAT-AP controlled vocabularies used for metadata classification including themes, formats, licences, and publisher types.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "vocabularies"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "language",
+                  "value": "<string>"
+                }
+              ],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "aa009574-8202-4dea-9e9a-b1afb711af00",
+              "name": "Vocabulary list returned",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "vocabularies"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "language",
+                      "value": "<string>"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"result\": [\n    {\n      \"id\": \"string\",\n      \"name\": \"string\",\n      \"url\": \"https://XiZkbwWlfQHrdtKzSgAzOvQEPHV.jjyl0ONw9JAnX9jldW6oj.jaigna02R-I\"\n    },\n    {\n      \"id\": \"string\",\n      \"name\": \"string\",\n      \"url\": \"http://xPgTdOoh.pakZEOnQrX21klOVXv3RtYb\"\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    }
+  ],
+  "event": [],
+  "variable": [
+    {
+      "type": "string",
+      "value": "https://data.europa.eu/api/hub/search",
+      "key": "baseUrl"
+    }
+  ],
+  "info": {
+    "_postman_id": "a64bfe7e-36f9-414e-a61f-645dc1659d16",
+    "name": "EU Open Data Portal Search Catalogs Vocabularies API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": {
+      "content": "The EU Open Data Portal Search API (data.europa.eu) provides REST access for discovering, searching, and querying European Union open datasets. The API follows DCAT-AP metadata standards and supports discovery of datasets from EU institutions, member state portals, and federated open data sources. No authentication required.\n\nContact Support:\n Name: EU Open Data Portal Support",
+      "type": "text/plain"
+    }
+  }
+}

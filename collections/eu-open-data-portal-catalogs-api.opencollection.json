@@ -1,0 +1,46 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "EU Open Data Portal Search Catalogs API",
+    "version": "1.0.0"
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Catalogs",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "List federated catalogs",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://data.europa.eu/api/hub/search/catalogs",
+            "params": [
+              {
+                "name": "q",
+                "value": "",
+                "type": "query"
+              },
+              {
+                "name": "page",
+                "value": "",
+                "type": "query"
+              },
+              {
+                "name": "limit",
+                "value": "",
+                "type": "query"
+              }
+            ]
+          },
+          "docs": "Returns the list of data catalogs federated by the EU Open Data Portal including member state portals and institutional catalogs."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

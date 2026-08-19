@@ -1,0 +1,37 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "EU Open Data Portal Search Catalogs Distributions API",
+    "version": "1.0.0"
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Distributions",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "List dataset distributions",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://data.europa.eu/api/hub/search/datasets/:datasetId/distributions",
+            "params": [
+              {
+                "name": "datasetId",
+                "value": "",
+                "type": "path",
+                "description": "Unique dataset identifier"
+              }
+            ]
+          },
+          "docs": "Returns all available distributions (download files, API endpoints, data services) for a specific dataset with format, size, and access URL information."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

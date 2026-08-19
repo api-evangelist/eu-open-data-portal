@@ -1,0 +1,36 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "EU Open Data Portal Search Catalogs Vocabularies API",
+    "version": "1.0.0"
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Vocabularies",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "List available controlled vocabularies",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://data.europa.eu/api/hub/search/vocabularies",
+            "params": [
+              {
+                "name": "language",
+                "value": "",
+                "type": "query"
+              }
+            ]
+          },
+          "docs": "Returns the list of DCAT-AP controlled vocabularies used for metadata classification including themes, formats, licences, and publisher types."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

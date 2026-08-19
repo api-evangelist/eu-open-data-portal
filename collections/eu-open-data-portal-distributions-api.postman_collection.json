@@ -1,0 +1,122 @@
+{
+  "item": [
+    {
+      "id": "acea4c4e-6c24-4ff4-be39-09b6ede7cd4e",
+      "name": "Distributions",
+      "description": {
+        "content": "Access dataset distributions and download links",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "79861376-418d-425c-a93f-3327ff9ecd3a",
+          "name": "List dataset distributions",
+          "request": {
+            "name": "List dataset distributions",
+            "description": {
+              "content": "Returns all available distributions (download files, API endpoints, data services) for a specific dataset with format, size, and access URL information.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "datasets",
+                ":datasetId",
+                "distributions"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "datasetId",
+                  "description": "(Required) Unique dataset identifier"
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "a8f1320f-630d-4ce7-8116-08b99d53196e",
+              "name": "Distributions returned",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "datasets",
+                    ":datasetId",
+                    "distributions"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "datasetId",
+                      "description": "(Required) Unique dataset identifier"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"result\": [\n    {\n      \"id\": \"string\",\n      \"title\": {\n        \"key_0\": \"string\"\n      },\n      \"description\": {\n        \"key_0\": \"string\",\n        \"key_1\": \"string\",\n        \"key_2\": \"string\",\n        \"key_3\": \"string\"\n      },\n      \"accessURL\": \"https://yTAktYaE.jacbV1ojJlU43kF1nw\",\n      \"downloadURL\": \"http://ndtucKgtFCFBzcQCgcFAlOTyoxDantVn.llvPwOVgRUSWEASiV1HsKpxyyC45yxh2KZi22X0Ufgt2ecBySN0w3G1\",\n      \"format\": \"string\",\n      \"mediaType\": \"string\",\n      \"byteSize\": 4720,\n      \"issued\": \"1968-09-09T02:45:03.146Z\",\n      \"modified\": \"2008-08-29T16:00:05.072Z\",\n      \"license\": \"string\",\n      \"conformsTo\": [\n        \"string\",\n        \"string\"\n      ]\n    },\n    {\n      \"id\": \"string\",\n      \"title\": {\n        \"key_0\": \"string\",\n        \"key_1\": \"string\"\n      },\n      \"description\": {\n        \"key_0\": \"string\",\n        \"key_1\": \"string\"\n      },\n      \"accessURL\": \"https://UuTfNMgmoEcHwsgYhKJkyrSEbpAAzf.eoj9qYHYZ6PGWtb1YSOuT20e8LhBEFhrHA-ZVX1eiIacHb\",\n      \"downloadURL\": \"https://qhnefraWdEdMeCXqckvDJQH.ufSIwwko8Lv3rDjqJGuBLQoz4F,8mRy5u+ZEjkH+Eb49f,3cFJFo5i5QzSTiK52Qqi+CaNk\",\n      \"format\": \"string\",\n      \"mediaType\": \"string\",\n      \"byteSize\": 5985,\n      \"issued\": \"2019-09-07T08:04:35.365Z\",\n      \"modified\": \"1977-06-02T17:42:53.026Z\",\n      \"license\": \"string\",\n      \"conformsTo\": [\n        \"string\",\n        \"string\"\n      ]\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    }
+  ],
+  "event": [],
+  "variable": [
+    {
+      "type": "string",
+      "value": "https://data.europa.eu/api/hub/search",
+      "key": "baseUrl"
+    }
+  ],
+  "info": {
+    "_postman_id": "dce5c9c6-6142-4108-9c46-6f35ff19d952",
+    "name": "EU Open Data Portal Search Catalogs Distributions API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": {
+      "content": "The EU Open Data Portal Search API (data.europa.eu) provides REST access for discovering, searching, and querying European Union open datasets. The API follows DCAT-AP metadata standards and supports discovery of datasets from EU institutions, member state portals, and federated open data sources. No authentication required.\n\nContact Support:\n Name: EU Open Data Portal Support",
+      "type": "text/plain"
+    }
+  }
+}
