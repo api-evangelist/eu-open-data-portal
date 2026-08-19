@@ -1,5 +1,6 @@
 aid: eu-open-data-portal
 url: https://raw.githubusercontent.com/api-evangelist/eu-open-data-portal/refs/heads/main/apis.yml
+specificationVersion: '0.23'
 apis:
 - aid: eu-open-data-portal:eu-open-data-portal-sparql-api
   name: EU Open Data Portal SPARQL API
