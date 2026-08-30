@@ -22,8 +22,6 @@ apis:
   - Open Data
   - Regulatory
   - SPARQL
-  image: >-
-    https://raw.githubusercontent.com/api-evangelist/eu-open-data-portal/refs/heads/main/image.png
   humanURL: https://data.europa.eu/
   baseURL: https://data.europa.eu/sparql
   properties:
@@ -118,7 +116,6 @@ accessModel:
   - plans
   generated: '2026-07-22'
   method: derived
-image: https://raw.githubusercontent.com/api-evangelist/eu-open-data-portal/refs/heads/main/image.png
 tags:
 - Government
 - Open Data
