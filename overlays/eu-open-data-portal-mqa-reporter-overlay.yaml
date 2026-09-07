@@ -1,0 +1,22 @@
+overlay: 1.0.0
+info:
+  title: API Evangelist enhancements for EU Open Data Portal MQA Metrics Reporter API
+  version: 1.0.0
+extends: openapi/_original/eu-open-data-portal-mqa-reporter-openapi.yaml
+x-generated: '2026-09-07'
+x-method: generated
+x-source: API Evangelist enrichment pipeline — records our enhancements over the harvested contract without mutating
+  it
+actions:
+- target: $.servers
+  description: 'The published contract ships servers: [{url: ""}] (or omits servers entirely) — a ReDoc workaround
+    that leaves the document with no callable host. This overlay records the real base URL, taken from the path
+    the contract is served at and confirmed live on 2026-09-07.'
+  update:
+  - url: https://data.europa.eu/api/mqa/reporter
+    description: EU Open Data Portal MQA Metrics Reporter API
+- target: $.info
+  description: info.version is published as the literal unresolved Maven placeholder ${project.version}. Not corrected
+    here — an overlay must not invent a version the provider has not stated; recorded as a finding.
+  update:
+    x-api-evangelist-note: info.version is an unresolved ${project.version} placeholder in the published contract

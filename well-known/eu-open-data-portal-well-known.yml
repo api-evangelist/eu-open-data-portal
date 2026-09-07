@@ -1,0 +1,145 @@
+generated: '2026-09-07'
+method: probed
+source: direct HTTPS GET of each named /.well-known/ path on every host this record knows (36 probes)
+provider: eu-open-data-portal
+summary:
+  hosts_probed: 4
+  paths_probed_per_host: 9
+  documents_found: 0
+  note: 'No /.well-known/ discovery document is served on any host. The portal DOES run a Keycloak realm at https://data.europa.eu/auth/realms/DEU
+    — the data provider manual documents obtaining OIDC tokens and UMA party tokens from it — but its discovery document
+    at https://data.europa.eu/auth/realms/DEU/.well-known/openid-configuration is blocked at the edge with 403, so the
+    one discovery document this provider genuinely has is not anonymously readable. No WellKnown, SecurityTxt or AgentCard
+    pointer is emitted in apis.yml: this file records an absence, not a surface.'
+hosts:
+- host: data.europa.eu
+  note: nginx 404 for every path; /.well-known/security.txt answers 403, the same code the edge returns for /llms.txt
+  documents:
+  - path: /.well-known/security.txt
+    status: 403
+    file: null
+  - path: /.well-known/openid-configuration
+    status: 404
+    file: null
+  - path: /.well-known/oauth-authorization-server
+    status: 404
+    file: null
+  - path: /.well-known/oauth-protected-resource
+    status: 404
+    file: null
+  - path: /.well-known/api-catalog
+    status: 404
+    file: null
+  - path: /.well-known/ai-plugin.json
+    status: 404
+    file: null
+  - path: /.well-known/agent-card.json
+    status: 404
+    file: null
+  - path: /.well-known/agent.json
+    status: 404
+    file: null
+  - path: /.well-known/aauth-resource.json
+    status: 404
+    file: null
+- host: www.data.europa.eu
+  note: identical edge behaviour to the apex host
+  documents:
+  - path: /.well-known/security.txt
+    status: 403
+    file: null
+  - path: /.well-known/openid-configuration
+    status: 404
+    file: null
+  - path: /.well-known/oauth-authorization-server
+    status: 404
+    file: null
+  - path: /.well-known/oauth-protected-resource
+    status: 404
+    file: null
+  - path: /.well-known/api-catalog
+    status: 404
+    file: null
+  - path: /.well-known/ai-plugin.json
+    status: 404
+    file: null
+  - path: /.well-known/agent-card.json
+    status: 404
+    file: null
+  - path: /.well-known/agent.json
+    status: 404
+    file: null
+  - path: /.well-known/aauth-resource.json
+    status: 404
+    file: null
+- host: europa.eu
+  note: the EU-wide corporate host answers a 404 HTML page for all nine paths
+  documents:
+  - path: /.well-known/security.txt
+    status: 404
+    file: null
+  - path: /.well-known/openid-configuration
+    status: 404
+    file: null
+  - path: /.well-known/oauth-authorization-server
+    status: 404
+    file: null
+  - path: /.well-known/oauth-protected-resource
+    status: 404
+    file: null
+  - path: /.well-known/api-catalog
+    status: 404
+    file: null
+  - path: /.well-known/ai-plugin.json
+    status: 404
+    file: null
+  - path: /.well-known/agent-card.json
+    status: 404
+    file: null
+  - path: /.well-known/agent.json
+    status: 404
+    file: null
+  - path: /.well-known/aauth-resource.json
+    status: 404
+    file: null
+- host: dataeuropa.gitlab.io
+  note: docs host is behind a Cloudflare interstitial that returns 403 (bot challenge) to every path — not a provider
+    decision about these documents
+  documents:
+  - path: /.well-known/security.txt
+    status: 403
+    file: null
+  - path: /.well-known/openid-configuration
+    status: 403
+    file: null
+  - path: /.well-known/oauth-authorization-server
+    status: 403
+    file: null
+  - path: /.well-known/oauth-protected-resource
+    status: 403
+    file: null
+  - path: /.well-known/api-catalog
+    status: 403
+    file: null
+  - path: /.well-known/ai-plugin.json
+    status: 403
+    file: null
+  - path: /.well-known/agent-card.json
+    status: 403
+    file: null
+  - path: /.well-known/agent.json
+    status: 403
+    file: null
+  - path: /.well-known/aauth-resource.json
+    status: 403
+    file: null
+additional_probes:
+- url: https://data.europa.eu/auth/realms/DEU/.well-known/openid-configuration
+  status: 403
+  note: Keycloak realm DEU is real and documented; discovery document edge-blocked
+- url: https://data.europa.eu/llms.txt
+  status: 403
+  note: no llms.txt
+- url: https://data.europa.eu/robots.txt
+  status: 200
+  note: served

@@ -1,0 +1,126 @@
+openapi: 3.1.2
+info:
+  version: 4.4.4
+  title: Validation service for RDF based on SHACL
+  x-logo:
+    url: images/logo
+paths:
+  /validation/report:
+    post:
+      description: Create and returns a shacl report for a given dcat-ap graph
+      summary: SHACL based validation and report creation
+      operationId: validationReport
+      parameters:
+      - name: customized
+        in: query
+        description: "Combine several aspects by your own. This requires the `customized` value for the\
+          \ shapeModel, otherwise it\nwill be ignored. Customized models are always based on the latest\
+          \ DCAT-AP SHACL shapes version. \n * `range` means it evaluates the range (class) of resources\n\
+          \ * `recommended` gives you warnings about missing recommended fields\n * `vocabularies` checks\
+          \ the proper use of controlled vocabularies"
+        required: false
+        explode: false
+        schema:
+          type: array
+          items:
+            type: string
+            enum:
+            - range
+            - recommended
+            - vocabularies
+      - name: shapeModel
+        in: query
+        description: "DCAT-AP SHACL shape version to use. `customized` allows you to combine your own\
+          \ set of shapes via the \n`customized` query parameter. Customized shapes are always based on\
+          \ the latest DCAT-AP SHACL shape version."
+        required: false
+        schema:
+          type: string
+          enum:
+          - customized
+          - dcatap301level1
+          - dcatap301level2
+          - dcatap301level3
+          - dcatap301
+          - dcatap300level1
+          - dcatap300level2
+          - dcatap300level3
+          - dcatap300
+          - dcatap211level1
+          - dcatap211level2
+          - dcatap211level3
+          - dcatap211
+          - dcatap210level1
+          - dcatap210
+          - dcatap201
+          - dcatap200
+          - dcatap121
+          - dcatap121orig
+          - dcatap12
+          - dcatap11
+          - dcatap11orig
+          - dcatapde102
+          - dcatapde20
+          - dcatapde20conventions
+          default: dcatap301level1
+      requestBody:
+        description: The content to validate
+        required: true
+        content:
+          application/rdf+xml:
+            schema:
+              type: string
+              format: binary
+          application/ld+json:
+            schema:
+              type: object
+              format: binary
+          application/n-triples:
+            schema:
+              type: string
+              format: binary
+          application/trig:
+            schema:
+              type: string
+              format: binary
+          text/turtle:
+            schema:
+              type: string
+              format: binary
+          text/n3:
+            schema:
+              type: string
+              format: binary
+      responses:
+        '200':
+          description: Successfully validated the input and created a report.
+          content:
+            text/turtle:
+              schema:
+                type: string
+                format: binary
+            application/rdf+xml:
+              schema:
+                type: string
+                format: binary
+            application/ld+json:
+              schema:
+                type: string
+                format: binary
+            application/n-triples:
+              schema:
+                type: string
+                format: binary
+            application/trig:
+              schema:
+                type: string
+                format: binary
+            text/n3:
+              schema:
+                type: string
+                format: binary
+        '400':
+          description: Bad request
+servers:
+- url: https://data.europa.eu/api/mqa/shacl
+  description: SHACL validation service for DCAT-AP RDF

@@ -1,48 +1,1465 @@
-generated: '2026-07-15'
+generated: '2026-09-07'
 method: generated
-source: openapi/eu-open-data-portal-search-openapi.yml
-description: Recommended x-agentic-access execution contracts, classified heuristically from
-  the OpenAPI. A governance starting point for exposing this API to AI agents — review and bind
-  audience per deployment. See research/curity/agentic-governance/.
+source: openapi/ — the six first-party contracts harvested from data.europa.eu on 2026-09-07
+description: 'Recommended x-agentic-access execution contracts, classified from the published OpenAPI. Reads are anonymous
+  and safe to automate. Every write in this catalogue mutates the European Union''s public metadata record and is marked
+  human-in-the-loop: there is no idempotency key, no published restore window, and tokens live 300 seconds. Review and
+  bind audience per deployment.'
 summary:
-  operations: 5
-  by_action_class:
-    connected: 5
+  operations: 154
   by_consequence:
-    read: 5
-  human_in_the_loop_required: 0
+    read: 80
+    write: 51
+    delete: 23
+  by_action_class:
+    connected: 154
+  human_in_the_loop_required: 74
 operations:
-- path: /datasets
+- api: search-api
+  path: /search
   method: get
-  operationId: searchDatasets
+  operationId: searchGet
   x-agentic-access:
     action-class: connected
     consequence: read
     subject: optional
     token:
       max-ttl: 3600
+      audience: null
+    human-in-the-loop: false
     audit: none
-- path: /datasets/{datasetId}
+- api: search-api
+  path: /search
+  method: post
+  operationId: searchPost
+  x-agentic-access:
+    action-class: connected
+    consequence: write
+    subject: optional
+    token:
+      max-ttl: 3600
+      audience: null
+    human-in-the-loop: true
+    audit: required
+- api: search-api
+  path: /scroll
+  method: get
+  operationId: scrollGet
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    token:
+      max-ttl: 3600
+      audience: null
+    human-in-the-loop: false
+    audit: none
+- api: search-api
+  path: /{lang}/feeds/datasets.atom
+  method: get
+  operationId: datasets.atom
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    token:
+      max-ttl: 3600
+      audience: null
+    human-in-the-loop: false
+    audit: none
+- api: search-api
+  path: /{lang}/feeds/datasets.rss
+  method: get
+  operationId: datasets.rss
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    token:
+      max-ttl: 3600
+      audience: null
+    human-in-the-loop: false
+    audit: none
+- api: search-api
+  path: /{lang}/feeds/datasets/{id}
+  method: get
+  operationId: datasetrevisions.rss
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    token:
+      max-ttl: 3600
+      audience: null
+    human-in-the-loop: false
+    audit: none
+- api: search-api
+  path: /sitemap
+  method: get
+  operationId: readSitemapIndex
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    token:
+      max-ttl: 3600
+      audience: null
+    human-in-the-loop: false
+    audit: none
+- api: search-api
+  path: /sitemap/{id}
+  method: get
+  operationId: readSitemap
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    token:
+      max-ttl: 3600
+      audience: null
+    human-in-the-loop: false
+    audit: none
+- api: search-api
+  path: /datasets
+  method: get
+  operationId: listDatasets
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: required
+    token:
+      max-ttl: 300
+      audience: null
+    human-in-the-loop: false
+    audit: none
+- api: search-api
+  path: /datasets
+  method: post
+  operationId: createDataset
+  x-agentic-access:
+    action-class: connected
+    consequence: write
+    subject: required
+    token:
+      max-ttl: 300
+      audience: null
+    human-in-the-loop: true
+    audit: required
+- api: search-api
+  path: /datasets/{id}
+  method: get
+  operationId: readDataset
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: required
+    token:
+      max-ttl: 300
+      audience: null
+    human-in-the-loop: false
+    audit: none
+- api: search-api
+  path: /datasets/{id}
+  method: put
+  operationId: createOrUpdateDataset
+  x-agentic-access:
+    action-class: connected
+    consequence: write
+    subject: required
+    token:
+      max-ttl: 300
+      audience: null
+    human-in-the-loop: true
+    audit: required
+- api: search-api
+  path: /datasets/{id}
+  method: patch
+  operationId: modifyDataset
+  x-agentic-access:
+    action-class: connected
+    consequence: write
+    subject: required
+    token:
+      max-ttl: 300
+      audience: null
+    human-in-the-loop: true
+    audit: required
+- api: search-api
+  path: /datasets/{id}
+  method: delete
+  operationId: deleteDataset
+  x-agentic-access:
+    action-class: connected
+    consequence: delete
+    subject: required
+    token:
+      max-ttl: 300
+      audience: null
+    human-in-the-loop: true
+    audit: required
+- api: search-api
+  path: /datasets/{id}/{revision}
+  method: get
+  operationId: readDatasetRevision
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    token:
+      max-ttl: 3600
+      audience: null
+    human-in-the-loop: false
+    audit: none
+    deprecated: true
+- api: search-api
+  path: /datasets/{id}/revisions/{revisionId}
+  method: put
+  operationId: createDatasetRevision
+  x-agentic-access:
+    action-class: connected
+    consequence: write
+    subject: required
+    token:
+      max-ttl: 300
+      audience: null
+    human-in-the-loop: true
+    audit: required
+- api: search-api
+  path: /datasets/{id}/revisions/{revisionId}
+  method: get
+  operationId: readDatasetRevisionByRevisionId
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    token:
+      max-ttl: 3600
+      audience: null
+    human-in-the-loop: false
+    audit: none
+- api: search-api
+  path: /datasets/{id}/revisions/{revisionId}
+  method: delete
+  operationId: deleteDatasetRevision
+  x-agentic-access:
+    action-class: connected
+    consequence: delete
+    subject: required
+    token:
+      max-ttl: 300
+      audience: null
+    human-in-the-loop: true
+    audit: required
+- api: search-api
+  path: /bulk/datasets
+  method: put
+  operationId: createOrUpdateDatasetBulk
+  x-agentic-access:
+    action-class: connected
+    consequence: write
+    subject: required
+    token:
+      max-ttl: 300
+      audience: null
+    human-in-the-loop: true
+    audit: required
+- api: search-api
+  path: /dataservices/{id}
+  method: get
+  operationId: getDataService
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    token:
+      max-ttl: 3600
+      audience: null
+    human-in-the-loop: false
+    audit: none
+- api: search-api
+  path: /dataservices/{id}
+  method: put
+  operationId: putDataService
+  x-agentic-access:
+    action-class: connected
+    consequence: write
+    subject: required
+    token:
+      max-ttl: 300
+      audience: null
+    human-in-the-loop: true
+    audit: required
+- api: search-api
+  path: /dataservices/{id}
+  method: delete
+  operationId: deleteDataService
+  x-agentic-access:
+    action-class: connected
+    consequence: delete
+    subject: required
+    token:
+      max-ttl: 300
+      audience: null
+    human-in-the-loop: true
+    audit: required
+- api: search-api
+  path: /datasetseries/{id}
+  method: get
+  operationId: getSeries
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    token:
+      max-ttl: 3600
+      audience: null
+    human-in-the-loop: false
+    audit: none
+- api: search-api
+  path: /datasetseries/{id}
+  method: put
+  operationId: putSeries
+  x-agentic-access:
+    action-class: connected
+    consequence: write
+    subject: required
+    token:
+      max-ttl: 300
+      audience: null
+    human-in-the-loop: true
+    audit: required
+- api: search-api
+  path: /datasetseries/{id}
+  method: delete
+  operationId: deleteSeries
+  x-agentic-access:
+    action-class: connected
+    consequence: delete
+    subject: required
+    token:
+      max-ttl: 300
+      audience: null
+    human-in-the-loop: true
+    audit: required
+- api: search-api
+  path: /catalogues
+  method: get
+  operationId: listCatalogues
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    token:
+      max-ttl: 3600
+      audience: null
+    human-in-the-loop: false
+    audit: none
+- api: search-api
+  path: /catalogues
+  method: post
+  operationId: createCatalogue
+  x-agentic-access:
+    action-class: connected
+    consequence: write
+    subject: required
+    token:
+      max-ttl: 300
+      audience: null
+    human-in-the-loop: true
+    audit: required
+- api: search-api
+  path: /catalogues/{id}
+  method: get
+  operationId: readCatalogue
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    token:
+      max-ttl: 3600
+      audience: null
+    human-in-the-loop: false
+    audit: none
+- api: search-api
+  path: /catalogues/{id}
+  method: put
+  operationId: createOrUpdateCatalogue
+  x-agentic-access:
+    action-class: connected
+    consequence: write
+    subject: required
+    token:
+      max-ttl: 300
+      audience: null
+    human-in-the-loop: true
+    audit: required
+- api: search-api
+  path: /catalogues/{id}
+  method: patch
+  operationId: modifyCatalogue
+  x-agentic-access:
+    action-class: connected
+    consequence: write
+    subject: required
+    token:
+      max-ttl: 300
+      audience: null
+    human-in-the-loop: true
+    audit: required
+- api: search-api
+  path: /catalogues/{id}
+  method: delete
+  operationId: deleteCatalogue
+  x-agentic-access:
+    action-class: connected
+    consequence: delete
+    subject: required
+    token:
+      max-ttl: 300
+      audience: null
+    human-in-the-loop: true
+    audit: required
+- api: search-api
+  path: /vocabularies
+  method: get
+  operationId: readVocabularies
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    token:
+      max-ttl: 3600
+      audience: null
+    human-in-the-loop: false
+    audit: none
+- api: search-api
+  path: /vocabularies/{vocabulary}
+  method: get
+  operationId: readVocabulary
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    token:
+      max-ttl: 3600
+      audience: null
+    human-in-the-loop: false
+    audit: none
+- api: search-api
+  path: /vocabularies/{vocabulary}
+  method: put
+  operationId: createOrUpdateVocabulary
+  x-agentic-access:
+    action-class: connected
+    consequence: write
+    subject: required
+    token:
+      max-ttl: 300
+      audience: null
+    human-in-the-loop: true
+    audit: required
+- api: search-api
+  path: /vocabularies/{vocabulary}
+  method: delete
+  operationId: deleteVocabulary
+  x-agentic-access:
+    action-class: connected
+    consequence: delete
+    subject: required
+    token:
+      max-ttl: 300
+      audience: null
+    human-in-the-loop: true
+    audit: required
+- api: search-api
+  path: /vocabularies/{vocabulary}
+  method: post
+  operationId: createVocable
+  x-agentic-access:
+    action-class: connected
+    consequence: write
+    subject: required
+    token:
+      max-ttl: 300
+      audience: null
+    human-in-the-loop: true
+    audit: required
+- api: search-api
+  path: /vocabularies/{vocabulary}/vocable
+  method: get
+  operationId: readVocableByResource
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    token:
+      max-ttl: 3600
+      audience: null
+    human-in-the-loop: false
+    audit: none
+- api: search-api
+  path: /vocabularies/{vocabulary}/{id}
+  method: get
+  operationId: readVocable
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    token:
+      max-ttl: 3600
+      audience: null
+    human-in-the-loop: false
+    audit: none
+- api: search-api
+  path: /vocabularies/{vocabulary}/{id}
+  method: put
+  operationId: createOrUpdateVocable
+  x-agentic-access:
+    action-class: connected
+    consequence: write
+    subject: required
+    token:
+      max-ttl: 300
+      audience: null
+    human-in-the-loop: true
+    audit: required
+- api: search-api
+  path: /vocabularies/{vocabulary}/{id}
+  method: patch
+  operationId: modifyVocable
+  x-agentic-access:
+    action-class: connected
+    consequence: write
+    subject: required
+    token:
+      max-ttl: 300
+      audience: null
+    human-in-the-loop: true
+    audit: required
+- api: search-api
+  path: /vocabularies/{vocabulary}/{id}
+  method: delete
+  operationId: deleteVocable
+  x-agentic-access:
+    action-class: connected
+    consequence: delete
+    subject: required
+    token:
+      max-ttl: 300
+      audience: null
+    human-in-the-loop: true
+    audit: required
+- api: search-api
+  path: /gazetteer/autocomplete
+  method: get
+  operationId: gazetteerAutocomplete
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    token:
+      max-ttl: 3600
+      audience: null
+    human-in-the-loop: false
+    audit: none
+- api: search-api
+  path: /ckan/package_list
+  method: get
+  operationId: ckanPackageList
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    token:
+      max-ttl: 3600
+      audience: null
+    human-in-the-loop: false
+    audit: none
+- api: search-api
+  path: /ckan/package_search
+  method: get
+  operationId: ckanPackageSearch
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    token:
+      max-ttl: 3600
+      audience: null
+    human-in-the-loop: false
+    audit: none
+- api: search-api
+  path: /ckan/package_show
+  method: get
+  operationId: ckanPackageShow
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    token:
+      max-ttl: 3600
+      audience: null
+    human-in-the-loop: false
+    audit: none
+- api: search-api
+  path: /organizations
+  method: get
+  operationId: listOrganizations
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    token:
+      max-ttl: 3600
+      audience: null
+    human-in-the-loop: false
+    audit: none
+- api: search-api
+  path: /organizations
+  method: post
+  operationId: postOrganization
+  x-agentic-access:
+    action-class: connected
+    consequence: write
+    subject: required
+    token:
+      max-ttl: 300
+      audience: null
+    human-in-the-loop: true
+    audit: required
+- api: search-api
+  path: /organizations/{id}
+  method: get
+  operationId: readOrganization
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    token:
+      max-ttl: 3600
+      audience: null
+    human-in-the-loop: false
+    audit: none
+- api: search-api
+  path: /organizations/{id}
+  method: put
+  operationId: putOrganization
+  x-agentic-access:
+    action-class: connected
+    consequence: write
+    subject: required
+    token:
+      max-ttl: 300
+      audience: null
+    human-in-the-loop: true
+    audit: required
+- api: search-api
+  path: /organizations/{id}
+  method: delete
+  operationId: deleteOrganization
+  x-agentic-access:
+    action-class: connected
+    consequence: delete
+    subject: required
+    token:
+      max-ttl: 300
+      audience: null
+    human-in-the-loop: true
+    audit: required
+- api: search-api
+  path: /resources
+  method: get
+  operationId: listResourceTypes
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    token:
+      max-ttl: 3600
+      audience: null
+    human-in-the-loop: false
+    audit: none
+- api: search-api
+  path: /resources/editorial-content
+  method: get
+  operationId: listEditorialContent
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: required
+    token:
+      max-ttl: 300
+      audience: null
+    human-in-the-loop: false
+    audit: none
+- api: search-api
+  path: /resources/editorial-content/{id}
+  method: get
+  operationId: readEditorialContent
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: required
+    token:
+      max-ttl: 300
+      audience: null
+    human-in-the-loop: false
+    audit: none
+- api: search-api
+  path: /resources/editorial-content/{id}
+  method: delete
+  operationId: deleteEditorialContent
+  x-agentic-access:
+    action-class: connected
+    consequence: delete
+    subject: required
+    token:
+      max-ttl: 300
+      audience: null
+    human-in-the-loop: true
+    audit: required
+- api: search-api
+  path: /resources/editorial-content/{id}
+  method: put
+  operationId: createOrUpdateEditorialContent
+  x-agentic-access:
+    action-class: connected
+    consequence: write
+    subject: required
+    token:
+      max-ttl: 300
+      audience: null
+    human-in-the-loop: true
+    audit: required
+- api: search-api
+  path: /bulk/resources/editorial-content
+  method: put
+  operationId: createOrUpdateBulkEditorialContent
+  x-agentic-access:
+    action-class: connected
+    consequence: write
+    subject: required
+    token:
+      max-ttl: 300
+      audience: null
+    human-in-the-loop: true
+    audit: required
+- api: registry-api
+  path: /organizations
+  method: get
+  operationId: listOrganizations
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    token:
+      max-ttl: 3600
+      audience: null
+    human-in-the-loop: false
+    audit: none
+- api: registry-api
+  path: /organizations/{organizationId}
+  method: get
+  operationId: getOrganization
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    token:
+      max-ttl: 3600
+      audience: null
+    human-in-the-loop: false
+    audit: none
+- api: registry-api
+  path: /organizations/{organizationId}
+  method: put
+  operationId: putOrganization
+  x-agentic-access:
+    action-class: connected
+    consequence: write
+    subject: required
+    token:
+      max-ttl: 300
+      audience: piveau-hub-repo
+    human-in-the-loop: true
+    audit: required
+- api: registry-api
+  path: /organizations/{organizationId}
+  method: delete
+  operationId: deleteOrganization
+  x-agentic-access:
+    action-class: connected
+    consequence: delete
+    subject: required
+    token:
+      max-ttl: 300
+      audience: piveau-hub-repo
+    human-in-the-loop: true
+    audit: required
+- api: registry-api
+  path: /catalogues
+  method: get
+  operationId: listCatalogues
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    token:
+      max-ttl: 3600
+      audience: null
+    human-in-the-loop: false
+    audit: none
+- api: registry-api
+  path: /catalogues/{catalogueId}
+  method: get
+  operationId: getCatalogue
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    token:
+      max-ttl: 3600
+      audience: null
+    human-in-the-loop: false
+    audit: none
+- api: registry-api
+  path: /catalogues/{catalogueId}
+  method: put
+  operationId: putCatalogue
+  x-agentic-access:
+    action-class: connected
+    consequence: write
+    subject: required
+    token:
+      max-ttl: 300
+      audience: piveau-hub-repo
+    human-in-the-loop: true
+    audit: required
+- api: registry-api
+  path: /catalogues/{catalogueId}
+  method: delete
+  operationId: deleteCatalogue
+  x-agentic-access:
+    action-class: connected
+    consequence: delete
+    subject: required
+    token:
+      max-ttl: 300
+      audience: piveau-hub-repo
+    human-in-the-loop: true
+    audit: required
+- api: registry-api
+  path: /catalogues/{catalogueId}/datasets
+  method: get
+  operationId: listCatalogueDatasets
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: required
+    token:
+      max-ttl: 300
+      audience: piveau-hub-repo
+    human-in-the-loop: false
+    audit: none
+    deprecated: true
+- api: registry-api
+  path: /catalogues/{catalogueId}/datasets
+  method: post
+  operationId: postCatalogueDataset
+  x-agentic-access:
+    action-class: connected
+    consequence: write
+    subject: required
+    token:
+      max-ttl: 300
+      audience: piveau-hub-repo
+    human-in-the-loop: true
+    audit: required
+    deprecated: true
+- api: registry-api
+  path: /catalogues/{catalogueId}/datasets/origin
+  method: get
+  operationId: getCatalogueDatasetsOrigin
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: required
+    token:
+      max-ttl: 300
+      audience: piveau-hub-repo
+    human-in-the-loop: false
+    audit: none
+    deprecated: true
+- api: registry-api
+  path: /catalogues/{catalogueId}/datasets/origin
+  method: put
+  operationId: putCatalogueDatasetsOrigin
+  x-agentic-access:
+    action-class: connected
+    consequence: write
+    subject: required
+    token:
+      max-ttl: 300
+      audience: piveau-hub-repo
+    human-in-the-loop: true
+    audit: required
+    deprecated: true
+- api: registry-api
+  path: /catalogues/{catalogueId}/datasets/origin
+  method: delete
+  operationId: deleteCatalogueDatasetsOrigin
+  x-agentic-access:
+    action-class: connected
+    consequence: delete
+    subject: required
+    token:
+      max-ttl: 300
+      audience: piveau-hub-repo
+    human-in-the-loop: true
+    audit: required
+    deprecated: true
+- api: registry-api
+  path: /catalogues/{catalogueId}/resources
+  method: get
+  operationId: listCatalogueResources
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: required
+    token:
+      max-ttl: 300
+      audience: piveau-hub-repo
+    human-in-the-loop: false
+    audit: none
+- api: registry-api
+  path: /catalogues/{catalogueId}/resources
+  method: post
+  operationId: postCatalogueResources
+  x-agentic-access:
+    action-class: connected
+    consequence: write
+    subject: required
+    token:
+      max-ttl: 300
+      audience: piveau-hub-repo
+    human-in-the-loop: true
+    audit: required
+- api: registry-api
+  path: /catalogues/{catalogueId}/resources/origin
+  method: get
+  operationId: getCatalogueResourcesOrigin
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: required
+    token:
+      max-ttl: 300
+      audience: piveau-hub-repo
+    human-in-the-loop: false
+    audit: none
+- api: registry-api
+  path: /catalogues/{catalogueId}/resources/origin
+  method: put
+  operationId: putCatalogueResourcesOrigin
+  x-agentic-access:
+    action-class: connected
+    consequence: write
+    subject: required
+    token:
+      max-ttl: 300
+      audience: piveau-hub-repo
+    human-in-the-loop: true
+    audit: required
+- api: registry-api
+  path: /catalogues/{catalogueId}/resources/origin
+  method: delete
+  operationId: deleteCatalogueResourcesOrigin
+  x-agentic-access:
+    action-class: connected
+    consequence: delete
+    subject: required
+    token:
+      max-ttl: 300
+      audience: piveau-hub-repo
+    human-in-the-loop: true
+    audit: required
+- api: registry-api
+  path: /resources
+  method: get
+  operationId: listDCATResources
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: required
+    token:
+      max-ttl: 300
+      audience: piveau-hub-repo
+    human-in-the-loop: false
+    audit: none
+- api: registry-api
+  path: /resources/{resourceId}
+  method: get
+  operationId: getDCATResource
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: required
+    token:
+      max-ttl: 300
+      audience: piveau-hub-repo
+    human-in-the-loop: false
+    audit: none
+- api: registry-api
+  path: /resources/{resourceId}
+  method: delete
+  operationId: deleteDCATResource
+  x-agentic-access:
+    action-class: connected
+    consequence: delete
+    subject: required
+    token:
+      max-ttl: 300
+      audience: piveau-hub-repo
+    human-in-the-loop: true
+    audit: required
+- api: registry-api
+  path: /resources/{resourceId}/record
+  method: get
+  operationId: getDCATResourceRecord
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: required
+    token:
+      max-ttl: 300
+      audience: piveau-hub-repo
+    human-in-the-loop: false
+    audit: none
+- api: registry-api
+  path: /resources/{resourceId}/metrics
+  method: get
+  operationId: getDCATResourceMetrics
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: required
+    token:
+      max-ttl: 300
+      audience: piveau-hub-repo
+    human-in-the-loop: false
+    audit: none
+- api: registry-api
+  path: /resources/{resourceId}/metrics
+  method: put
+  operationId: putDCATResourceMetrics
+  x-agentic-access:
+    action-class: connected
+    consequence: write
+    subject: required
+    token:
+      max-ttl: 300
+      audience: piveau-hub-repo
+    human-in-the-loop: true
+    audit: required
+- api: registry-api
+  path: /resources/{resourceId}/metrics
+  method: delete
+  operationId: deleteDCATResourceMetrics
+  x-agentic-access:
+    action-class: connected
+    consequence: delete
+    subject: required
+    token:
+      max-ttl: 300
+      audience: piveau-hub-repo
+    human-in-the-loop: true
+    audit: required
+- api: registry-api
+  path: /datasets
+  method: get
+  operationId: listDatasets
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: required
+    token:
+      max-ttl: 300
+      audience: piveau-hub-repo
+    human-in-the-loop: false
+    audit: none
+    deprecated: true
+- api: registry-api
+  path: /datasets
+  method: post
+  operationId: postCatalogueDatasetLegacy
+  x-agentic-access:
+    action-class: connected
+    consequence: write
+    subject: required
+    token:
+      max-ttl: 300
+      audience: piveau-hub-repo
+    human-in-the-loop: true
+    audit: required
+    deprecated: true
+- api: registry-api
+  path: /datasets
+  method: put
+  operationId: putDatasetLegacy
+  x-agentic-access:
+    action-class: connected
+    consequence: write
+    subject: required
+    token:
+      max-ttl: 300
+      audience: piveau-hub-repo
+    human-in-the-loop: true
+    audit: required
+    deprecated: true
+- api: registry-api
+  path: /datasets
+  method: delete
+  operationId: deleteDatasetLegacy
+  x-agentic-access:
+    action-class: connected
+    consequence: delete
+    subject: required
+    token:
+      max-ttl: 300
+      audience: piveau-hub-repo
+    human-in-the-loop: true
+    audit: required
+    deprecated: true
+- api: registry-api
+  path: /datasets/{datasetId}
   method: get
   operationId: getDataset
   x-agentic-access:
     action-class: connected
     consequence: read
-    subject: optional
+    subject: required
     token:
-      max-ttl: 3600
+      max-ttl: 300
+      audience: piveau-hub-repo
+    human-in-the-loop: false
     audit: none
-- path: /datasets/{datasetId}/distributions
+    deprecated: true
+- api: registry-api
+  path: /datasets/{datasetId}
+  method: put
+  operationId: putDataset
+  x-agentic-access:
+    action-class: connected
+    consequence: write
+    subject: required
+    token:
+      max-ttl: 300
+      audience: piveau-hub-repo
+    human-in-the-loop: true
+    audit: required
+    deprecated: true
+- api: registry-api
+  path: /datasets/{datasetId}
+  method: delete
+  operationId: deleteDataset
+  x-agentic-access:
+    action-class: connected
+    consequence: delete
+    subject: required
+    token:
+      max-ttl: 300
+      audience: piveau-hub-repo
+    human-in-the-loop: true
+    audit: required
+    deprecated: true
+- api: registry-api
+  path: /datasets/revisions/{revisionId}
   method: get
-  operationId: getDatasetDistributions
+  operationId: getDatasetRevision
   x-agentic-access:
     action-class: connected
     consequence: read
     subject: optional
     token:
       max-ttl: 3600
+      audience: null
+    human-in-the-loop: false
     audit: none
-- path: /vocabularies
+    deprecated: true
+- api: registry-api
+  path: /datasets/{datasetId}/diff
+  method: get
+  operationId: getDatasetDiff
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    token:
+      max-ttl: 3600
+      audience: null
+    human-in-the-loop: false
+    audit: none
+    deprecated: true
+- api: registry-api
+  path: /datasets/{datasetId}/distributions
+  method: get
+  operationId: listDatasetDistributions
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: required
+    token:
+      max-ttl: 300
+      audience: piveau-hub-repo
+    human-in-the-loop: false
+    audit: none
+    deprecated: true
+- api: registry-api
+  path: /datasets/{datasetId}/distributions
+  method: post
+  operationId: postDatasetDistribution
+  x-agentic-access:
+    action-class: connected
+    consequence: write
+    subject: required
+    token:
+      max-ttl: 300
+      audience: piveau-hub-repo
+    human-in-the-loop: true
+    audit: required
+    deprecated: true
+- api: registry-api
+  path: /distributions/{distributionId}
+  method: get
+  operationId: getDistribution
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: required
+    token:
+      max-ttl: 300
+      audience: piveau-hub-repo
+    human-in-the-loop: false
+    audit: none
+    deprecated: true
+- api: registry-api
+  path: /distributions/{distributionId}
+  method: put
+  operationId: putDistribution
+  x-agentic-access:
+    action-class: connected
+    consequence: write
+    subject: required
+    token:
+      max-ttl: 300
+      audience: piveau-hub-repo
+    human-in-the-loop: true
+    audit: required
+    deprecated: true
+- api: registry-api
+  path: /distributions/{distributionId}
+  method: delete
+  operationId: deleteDistribution
+  x-agentic-access:
+    action-class: connected
+    consequence: delete
+    subject: required
+    token:
+      max-ttl: 300
+      audience: piveau-hub-repo
+    human-in-the-loop: true
+    audit: required
+    deprecated: true
+- api: registry-api
+  path: /datasets/{datasetId}/metrics
+  method: get
+  operationId: getMetrics
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: required
+    token:
+      max-ttl: 300
+      audience: piveau-hub-repo
+    human-in-the-loop: false
+    audit: none
+    deprecated: true
+- api: registry-api
+  path: /datasets/{datasetId}/metrics
+  method: put
+  operationId: putMetrics
+  x-agentic-access:
+    action-class: connected
+    consequence: write
+    subject: required
+    token:
+      max-ttl: 300
+      audience: piveau-hub-repo
+    human-in-the-loop: true
+    audit: required
+    deprecated: true
+- api: registry-api
+  path: /datasets/{datasetId}/metrics
+  method: delete
+  operationId: deleteMetrics
+  x-agentic-access:
+    action-class: connected
+    consequence: delete
+    subject: required
+    token:
+      max-ttl: 300
+      audience: piveau-hub-repo
+    human-in-the-loop: true
+    audit: required
+    deprecated: true
+- api: registry-api
+  path: /datasets/{datasetId}/record
+  method: get
+  operationId: getRecord
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: required
+    token:
+      max-ttl: 300
+      audience: piveau-hub-repo
+    human-in-the-loop: false
+    audit: none
+    deprecated: true
+- api: registry-api
+  path: /records/revisionRecord/{revisionId}
+  method: get
+  operationId: getRevisionRecord
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    token:
+      max-ttl: 3600
+      audience: null
+    human-in-the-loop: false
+    audit: none
+- api: registry-api
+  path: /records/{datasetId}
+  method: get
+  operationId: getRecordLegacy
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: required
+    token:
+      max-ttl: 300
+      audience: piveau-hub-repo
+    human-in-the-loop: false
+    audit: none
+    deprecated: true
+- api: registry-api
+  path: /datasets/{datasetId}/index
+  method: get
+  operationId: getDatasetIndex
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: required
+    token:
+      max-ttl: 300
+      audience: piveau-hub-repo
+    human-in-the-loop: false
+    audit: none
+    deprecated: true
+- api: registry-api
+  path: /drafts/datasets
+  method: get
+  operationId: listDatasetDrafts
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: required
+    token:
+      max-ttl: 300
+      audience: piveau-hub-repo
+    human-in-the-loop: false
+    audit: none
+- api: registry-api
+  path: /drafts/datasets
+  method: post
+  operationId: createDatasetDraft
+  x-agentic-access:
+    action-class: connected
+    consequence: write
+    subject: required
+    token:
+      max-ttl: 300
+      audience: piveau-hub-repo
+    human-in-the-loop: true
+    audit: required
+- api: registry-api
+  path: /drafts/datasets/{id}
+  method: get
+  operationId: readDatasetDraft
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: required
+    token:
+      max-ttl: 300
+      audience: piveau-hub-repo
+    human-in-the-loop: false
+    audit: none
+- api: registry-api
+  path: /drafts/datasets/{id}
+  method: put
+  operationId: createOrUpdateDatasetDraft
+  x-agentic-access:
+    action-class: connected
+    consequence: write
+    subject: required
+    token:
+      max-ttl: 300
+      audience: piveau-hub-repo
+    human-in-the-loop: true
+    audit: required
+- api: registry-api
+  path: /drafts/datasets/{id}
+  method: delete
+  operationId: deleteDatasetDraft
+  x-agentic-access:
+    action-class: connected
+    consequence: delete
+    subject: required
+    token:
+      max-ttl: 300
+      audience: piveau-hub-repo
+    human-in-the-loop: true
+    audit: required
+- api: registry-api
+  path: /drafts/datasets/publish/{id}
+  method: put
+  operationId: publishDatasetDraft
+  x-agentic-access:
+    action-class: connected
+    consequence: write
+    subject: required
+    token:
+      max-ttl: 300
+      audience: piveau-hub-repo
+    human-in-the-loop: true
+    audit: required
+- api: registry-api
+  path: /drafts/datasets/hide/{id}
+  method: put
+  operationId: hideDataset
+  x-agentic-access:
+    action-class: connected
+    consequence: write
+    subject: required
+    token:
+      max-ttl: 300
+      audience: piveau-hub-repo
+    human-in-the-loop: true
+    audit: required
+- api: registry-api
+  path: /vocabularies
   method: get
   operationId: listVocabularies
   x-agentic-access:
@@ -51,14 +1468,593 @@ operations:
     subject: optional
     token:
       max-ttl: 3600
+      audience: null
+    human-in-the-loop: false
     audit: none
-- path: /catalogs
+- api: registry-api
+  path: /vocabularies
+  method: put
+  operationId: createOrUpdateVocabulary
+  x-agentic-access:
+    action-class: connected
+    consequence: write
+    subject: required
+    token:
+      max-ttl: 300
+      audience: piveau-hub-repo
+    human-in-the-loop: true
+    audit: required
+    deprecated: true
+- api: registry-api
+  path: /vocabularies/{vocabularyId}
   method: get
-  operationId: listCatalogs
+  operationId: getVocabulary
   x-agentic-access:
     action-class: connected
     consequence: read
     subject: optional
     token:
       max-ttl: 3600
+      audience: null
+    human-in-the-loop: false
     audit: none
+- api: registry-api
+  path: /vocabularies/{vocabularyId}
+  method: put
+  operationId: putVocabulary
+  x-agentic-access:
+    action-class: connected
+    consequence: write
+    subject: required
+    token:
+      max-ttl: 300
+      audience: piveau-hub-repo
+    human-in-the-loop: true
+    audit: required
+- api: registry-api
+  path: /vocabularies/{vocabularyId}
+  method: delete
+  operationId: deleteVocabulary
+  x-agentic-access:
+    action-class: connected
+    consequence: delete
+    subject: required
+    token:
+      max-ttl: 300
+      audience: piveau-hub-repo
+    human-in-the-loop: true
+    audit: required
+- api: registry-api
+  path: /translation
+  method: post
+  operationId: postTranslation
+  x-agentic-access:
+    action-class: connected
+    consequence: write
+    subject: required
+    token:
+      max-ttl: 300
+      audience: piveau-hub-repo
+    human-in-the-loop: true
+    audit: required
+- api: registry-api
+  path: /identifiers/datasets/{datasetId}
+  method: put
+  operationId: createDatasetIdentifier
+  x-agentic-access:
+    action-class: connected
+    consequence: write
+    subject: required
+    token:
+      max-ttl: 300
+      audience: piveau-hub-repo
+    human-in-the-loop: true
+    audit: required
+- api: registry-api
+  path: /identifiers/datasets/{datasetId}/eligibility
+  method: get
+  operationId: checkIdentifierEligibility
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: required
+    token:
+      max-ttl: 300
+      audience: piveau-hub-repo
+    human-in-the-loop: false
+    audit: none
+- api: registry-api
+  path: /customresources
+  method: get
+  operationId: listCustomResourceTypes
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    token:
+      max-ttl: 3600
+      audience: null
+    human-in-the-loop: false
+    audit: none
+    deprecated: true
+- api: registry-api
+  path: /customresources/{type}
+  method: get
+  operationId: listCustomResources
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: required
+    token:
+      max-ttl: 300
+      audience: piveau-hub-repo
+    human-in-the-loop: false
+    audit: none
+    deprecated: true
+- api: registry-api
+  path: /customresources/{type}
+  method: post
+  operationId: postCustomResource
+  x-agentic-access:
+    action-class: connected
+    consequence: write
+    subject: required
+    token:
+      max-ttl: 300
+      audience: piveau-hub-repo
+    human-in-the-loop: true
+    audit: required
+    deprecated: true
+- api: registry-api
+  path: /customresources/{type}
+  method: put
+  operationId: putCustomResource
+  x-agentic-access:
+    action-class: connected
+    consequence: write
+    subject: required
+    token:
+      max-ttl: 300
+      audience: piveau-hub-repo
+    human-in-the-loop: true
+    audit: required
+    deprecated: true
+- api: registry-api
+  path: /customresources/{type}/{id}
+  method: get
+  operationId: getCustomResource
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: required
+    token:
+      max-ttl: 300
+      audience: piveau-hub-repo
+    human-in-the-loop: false
+    audit: none
+    deprecated: true
+- api: registry-api
+  path: /customresources/{type}/{id}
+  method: delete
+  operationId: deleteCustomResource
+  x-agentic-access:
+    action-class: connected
+    consequence: delete
+    subject: required
+    token:
+      max-ttl: 300
+      audience: piveau-hub-repo
+    human-in-the-loop: true
+    audit: required
+    deprecated: true
+- api: registry-api
+  path: /customresources/{type}/origin
+  method: get
+  operationId: getCustomResourceOrigin
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: required
+    token:
+      max-ttl: 300
+      audience: piveau-hub-repo
+    human-in-the-loop: false
+    audit: none
+    deprecated: true
+- api: registry-api
+  path: /action
+  method: post
+  operationId: postAction
+  x-agentic-access:
+    action-class: connected
+    consequence: write
+    subject: required
+    token:
+      max-ttl: 300
+      audience: piveau-hub-repo
+    human-in-the-loop: true
+    audit: required
+- api: mqa-metrics-cache-api
+  path: /admin/refresh
+  method: post
+  operationId: refreshAllMetrics
+  x-agentic-access:
+    action-class: connected
+    consequence: write
+    subject: required
+    token:
+      max-ttl: 300
+      audience: null
+    human-in-the-loop: true
+    audit: required
+    note: portal administration operation — not an integrator surface
+- api: mqa-metrics-cache-api
+  path: /admin/refresh/{scope}/{id}
+  method: post
+  operationId: refreshSingleMetrics
+  x-agentic-access:
+    action-class: connected
+    consequence: write
+    subject: required
+    token:
+      max-ttl: 300
+      audience: null
+    human-in-the-loop: true
+    audit: required
+    note: portal administration operation — not an integrator surface
+- api: mqa-metrics-cache-api
+  path: /admin/clear
+  method: post
+  operationId: clearMetrics
+  x-agentic-access:
+    action-class: connected
+    consequence: write
+    subject: required
+    token:
+      max-ttl: 300
+      audience: null
+    human-in-the-loop: true
+    audit: required
+    note: portal administration operation — not an integrator surface
+- api: mqa-metrics-cache-api
+  path: /admin/migratescore
+  method: post
+  operationId: migrateScore
+  x-agentic-access:
+    action-class: connected
+    consequence: write
+    subject: required
+    token:
+      max-ttl: 300
+      audience: null
+    human-in-the-loop: true
+    audit: required
+    note: portal administration operation — not an integrator surface
+- api: mqa-metrics-cache-api
+  path: /admin/schedule
+  method: post
+  operationId: scheduleRefresh
+  x-agentic-access:
+    action-class: connected
+    consequence: write
+    subject: required
+    token:
+      max-ttl: 300
+      audience: null
+    human-in-the-loop: true
+    audit: required
+    note: portal administration operation — not an integrator surface
+- api: mqa-metrics-cache-api
+  path: /admin/schedule
+  method: get
+  operationId: getScheduleRefresh
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: required
+    token:
+      max-ttl: 300
+      audience: null
+    human-in-the-loop: false
+    audit: none
+    note: portal administration operation — not an integrator surface
+- api: mqa-metrics-cache-api
+  path: /global
+  method: get
+  operationId: getGlobalMetrics
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    token:
+      max-ttl: 3600
+      audience: null
+    human-in-the-loop: false
+    audit: none
+- api: mqa-metrics-cache-api
+  path: /global/history
+  method: get
+  operationId: getHistoricGlobalMetrics
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    token:
+      max-ttl: 3600
+      audience: null
+    human-in-the-loop: false
+    audit: none
+- api: mqa-metrics-cache-api
+  path: /countries
+  method: get
+  operationId: getCountryMetrics
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    token:
+      max-ttl: 3600
+      audience: null
+    human-in-the-loop: false
+    audit: none
+- api: mqa-metrics-cache-api
+  path: /countries/history
+  method: get
+  operationId: getHistoricCountryMetrics
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    token:
+      max-ttl: 3600
+      audience: null
+    human-in-the-loop: false
+    audit: none
+- api: mqa-metrics-cache-api
+  path: /countries/{id}
+  method: get
+  operationId: getSingleCountryMetrics
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    token:
+      max-ttl: 3600
+      audience: null
+    human-in-the-loop: false
+    audit: none
+- api: mqa-metrics-cache-api
+  path: /countries/{id}/history
+  method: get
+  operationId: getHistoricSingleCountryMetrics
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    token:
+      max-ttl: 3600
+      audience: null
+    human-in-the-loop: false
+    audit: none
+- api: mqa-metrics-cache-api
+  path: /catalogues
+  method: get
+  operationId: getCatalogueMetrics
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    token:
+      max-ttl: 3600
+      audience: null
+    human-in-the-loop: false
+    audit: none
+- api: mqa-metrics-cache-api
+  path: /catalogues/history
+  method: get
+  operationId: getHistoricCatalogueMetrics
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    token:
+      max-ttl: 3600
+      audience: null
+    human-in-the-loop: false
+    audit: none
+- api: mqa-metrics-cache-api
+  path: /catalogues/{id}
+  method: get
+  operationId: getSingleCatalogueMetrics
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    token:
+      max-ttl: 3600
+      audience: null
+    human-in-the-loop: false
+    audit: none
+- api: mqa-metrics-cache-api
+  path: /catalogues/{id}
+  method: delete
+  operationId: deleteCatalogueMetrics
+  x-agentic-access:
+    action-class: connected
+    consequence: delete
+    subject: optional
+    token:
+      max-ttl: 3600
+      audience: null
+    human-in-the-loop: true
+    audit: required
+- api: mqa-metrics-cache-api
+  path: /catalogues/{id}/history
+  method: get
+  operationId: getHistoricSingleCatalogueMetrics
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    token:
+      max-ttl: 3600
+      audience: null
+    human-in-the-loop: false
+    audit: none
+- api: mqa-metrics-cache-api
+  path: /catalogues/{id}/distributions/reachability
+  method: get
+  operationId: getCatalogueDistributionReachability
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    token:
+      max-ttl: 3600
+      audience: null
+    human-in-the-loop: false
+    audit: none
+- api: mqa-metrics-cache-api
+  path: /catalogues/{id}/violations
+  method: get
+  operationId: getCatalogueViolations
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    token:
+      max-ttl: 3600
+      audience: null
+    human-in-the-loop: false
+    audit: none
+- api: mqa-metrics-cache-api
+  path: /datasets/{id}
+  method: get
+  operationId: getSingleDatasetMetrics
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    token:
+      max-ttl: 3600
+      audience: null
+    human-in-the-loop: false
+    audit: none
+- api: mqa-metrics-cache-api
+  path: /datasets/{id}/distributions
+  method: get
+  operationId: getDistributionMetricsv2
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    token:
+      max-ttl: 3600
+      audience: null
+    human-in-the-loop: false
+    audit: none
+- api: mqa-metrics-cache-api
+  path: /distributions/{id}
+  method: get
+  operationId: getDistributionMetrics
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    token:
+      max-ttl: 3600
+      audience: null
+    human-in-the-loop: false
+    audit: none
+    deprecated: true
+- api: mqa-metrics-cache-api
+  path: /distributions/{id}/validations
+  method: get
+  operationId: getDistributionValidationCsv
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    token:
+      max-ttl: 3600
+      audience: null
+    human-in-the-loop: false
+    audit: none
+- api: mqa-metrics-cache-api
+  path: /action
+  method: post
+  operationId: postAction
+  x-agentic-access:
+    action-class: connected
+    consequence: write
+    subject: optional
+    token:
+      max-ttl: 3600
+      audience: null
+    human-in-the-loop: true
+    audit: required
+- api: mqa-shacl-validation-api
+  path: /validation/report
+  method: post
+  operationId: validationReport
+  x-agentic-access:
+    action-class: connected
+    consequence: write
+    subject: optional
+    token:
+      max-ttl: 3600
+      audience: null
+    human-in-the-loop: true
+    audit: required
+- api: mqa-metrics-reporter-api
+  path: /reports/{catalogueId}/{languageCode}
+  method: get
+  operationId: getCatalogueReport
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    token:
+      max-ttl: 3600
+      audience: null
+    human-in-the-loop: false
+    audit: none
+- api: mqa-metrics-reporter-api
+  path: /report/{languageCode}
+  method: get
+  operationId: getReportViaHeader
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    token:
+      max-ttl: 3600
+      audience: null
+    human-in-the-loop: false
+    audit: none
+- api: mqa-metrics-reporter-api
+  path: /report/{languageCode}/{format}
+  method: get
+  operationId: getReport
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    token:
+      max-ttl: 3600
+      audience: null
+    human-in-the-loop: false
+    audit: none
+- api: mqa-metrics-reporter-api
+  path: /generate
+  method: post
+  operationId: generate
+  x-agentic-access:
+    action-class: connected
+    consequence: write
+    subject: optional
+    token:
+      max-ttl: 3600
+      audience: null
+    human-in-the-loop: true
+    audit: required

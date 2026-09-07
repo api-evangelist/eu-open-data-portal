@@ -1,0 +1,125 @@
+generated: '2026-09-07'
+method: searched
+source: >-
+  https://dataeuropa.gitlab.io/data-provider-manual/api-documentation/ (+ /api-access-control/, /api-store/),
+  the six published contracts under openapi/, and live responses observed from
+  https://data.europa.eu/api/hub/search/ on 2026-09-07
+provider: eu-open-data-portal
+auth:
+  style: none for reads; X-API-Key or JWT Bearer for writes
+  detail: >-
+    Every read operation on hub-search, the MQA metrics cache, the MQA reporter, the SHACL validator, the
+    statistics service and the SPARQL endpoint is anonymous. Writes declare two alternative schemes in the
+    contracts — ApiKeyAuth (header X-API-Key) and BearerAuth (http bearer, JWT). The bearer token is issued
+    by a Keycloak realm (data.europa.eu/auth/realms/DEU); publishers exchange an EU Login user token for a
+    UMA party token scoped to audience piveau-hub-repo, and service accounts POST client_id/client_secret to
+    https://data.europa.eu/auth/middleware/login/service. Tokens expire in 300 seconds.
+  cross_reference: authentication/eu-open-data-portal-authentication.yml
+pagination:
+  style: page-and-limit (hub-search) / limit-and-offset (hub-repo)
+  parameters:
+    hub-search: [page, limit]
+    hub-repo: [limit, offset, usePagedCollection]
+  cursor: >-
+    hub-search additionally supports a deep-paging cursor: GET /scroll plus the searchAfter, searchAfterSort
+    and pitId parameters on /search, which is the Elasticsearch point-in-time pattern surfaced directly.
+  response_fields: 'hub-search wraps results as {success, result:{count, results:[...]}} — count is the total hit count'
+  defaults: page defaults to 0 on /search; limit is required to be a positive integer (a non-numeric limit returns 400)
+filtering_and_expansion:
+  faceting: 'facets (JSON-as-string), facetOperator, facetGroupOperator, aggregation, aggregationFields, globalAggregation'
+  field_selection: 'fields and includes on /search — sparse field selection'
+  spatial: bboxMinLon / bboxMaxLon / bboxMinLat / bboxMaxLat bounding-box filter
+  temporal: minDate / maxDate / dateType
+  content_negotiation: >-
+    hub-repo is content-negotiated RDF: application/rdf+xml, application/ld+json, application/n-triples,
+    application/n-quads, application/trig, application/trix, text/turtle, text/n3 and application/json.
+request_id_tracing:
+  supported: false
+  note: No request-id or correlation header is documented or observed. The JSON-RPC /action surface carries its own string `id`, which correlates an action, not an HTTP request.
+versioning:
+  cross_reference: lifecycle/eu-open-data-portal-lifecycle.yml
+  summary: per-service semver in info.version; no version segment in any base path
+error_envelope:
+  documented: '{success:false, message:string} as application/json (hub-search)'
+  observed: 'text/plain bodies on live 400 and 404 responses'
+  rfc9457: false
+  cross_reference: errors/eu-open-data-portal-problem-types.yml
+rate_limit_signaling:
+  headers: none
+  note: >-
+    No X-RateLimit-*, RateLimit-* or Retry-After header on any observed response, and no documented limit.
+    An agent has no runtime backpressure signal from this API beyond HTTP status.
+  cross_reference: rate-limits/eu-open-data-portal-rate-limits.yml
+idempotency:
+  coverage: none
+  mechanism: none
+  scope: []
+  detail: >-
+    No Idempotency-Key header, no client-supplied request key, no replay window in any of the six contracts.
+    What exists instead is PUT-based upsert semantics: the documented publishing flow is
+    PUT /catalogues/{catalogueId}/resources/origin?originalId=<your id>, where the pair (catalogueId,
+    originalId) is the client-chosen key and re-sending the same graph answers 304 Not Modified. That makes
+    the dataset-publishing path naturally idempotent by HTTP method, and the manual explicitly tells
+    publishers to GET first to avoid accidentally overwriting an existing dataset. It is not a replay-protection
+    mechanism: POST /catalogues/{catalogueId}/resources, POST /datasets, POST /organizations,
+    POST /vocabularies/{vocabulary} and POST /action have no idempotency guarantee at all, and a duplicated
+    POST creates a duplicate resource. Recorded as `none` because no key-based mechanism exists — the band
+    gate reads this field, and PUT semantics are not a mechanism the provider offers.
+  evidence: https://dataeuropa.gitlab.io/data-provider-manual/api-documentation/
+reversibility:
+  grade: documented
+  detail: >-
+    Every write surface has a reversal operation, and none of them has a published window. Deletes are
+    immediate and unqualified; nothing in the manual or the contracts states a retention or restore period,
+    so no window is asserted here.
+  write_surfaces:
+  - surface: dataset / DCAT resource publishing (hub-repo)
+    create_or_update: [putCatalogueResourcesOrigin, postCatalogueResources, putDataset, postCatalogueDatasetLegacy]
+    reversal: [deleteDCATResource, deleteCatalogueResourcesOrigin, deleteDataset, deleteDatasetLegacy]
+    window: null
+    window_note: no stated restore or undelete period
+  - surface: draft datasets (hub-repo)
+    create_or_update: [createDatasetDraft, createOrUpdateDatasetDraft, publishDatasetDraft]
+    reversal: [hideDataset, deleteDatasetDraft]
+    window: null
+    window_note: >-
+      PUT /drafts/datasets/hide/{id} un-publishes a dataset — the closest thing to an undo of a publish —
+      but no time limit or guarantee is documented.
+  - surface: dataset revisions (hub-search)
+    create_or_update: [createDatasetRevision, createOrUpdateDataset]
+    reversal: [deleteDatasetRevision]
+    read_back: [readDatasetRevision, readDatasetRevisionByRevisionId, getDatasetRevision, getDatasetDiff]
+    window: null
+    window_note: >-
+      Prior revisions are retained and readable, and hub-repo publishes a diff operation, so a previous state
+      can be recovered and re-PUT by the client. No retention period is stated, so this is a capability, not a guarantee.
+  - surface: distributions and quality metrics (hub-repo)
+    create_or_update: [postDatasetDistribution, putDistribution, putDCATResourceMetrics, putMetrics]
+    reversal: [deleteDistribution, deleteDCATResourceMetrics, deleteMetrics]
+    window: null
+  - surface: catalogues, organisations, vocabularies (hub-repo, hub-search)
+    create_or_update: [putCatalogue, putOrganization, putVocabulary, createOrUpdateCatalogue, createOrUpdateVocabulary]
+    reversal: [deleteCatalogue, deleteOrganization, deleteVocabulary]
+    window: null
+  na_for:
+  - hub-search read surface
+  - MQA metrics cache read surface
+  - MQA metrics reporter
+  - SHACL validator (stateless POST, produces a report and stores nothing)
+  - SPARQL endpoint (read-only)
+dry_run_mode:
+  supported: partial
+  detail: >-
+    Not a dry-run flag, but two genuine rehearsal surfaces exist: POST /validation/report on the SHACL service
+    validates a DCAT-AP graph against the official shapes without writing anything, and GET
+    /identifiers/datasets/{datasetId}/eligibility checks persistent-identifier eligibility before
+    PUT /identifiers/datasets/{datasetId} commits one. The manual's documented pre-creation check — GET the
+    dataset id before PUT-ing it — is the third.
+bulk:
+  operations: [createOrUpdateDatasetBulk, createOrUpdateBulkEditorialContent]
+  note: 'PUT /bulk/datasets returns a per-item result array {success, status, message, id} rather than failing the batch'
+async:
+  note: >-
+    202 Accepted is used widely (25 responses across the contracts) for work that completes after the
+    response — MQA admin refreshes, catalogue distribution reachability checks, report generation. There is
+    no callback, webhook or polling token documented for these; the client re-reads the affected resource.

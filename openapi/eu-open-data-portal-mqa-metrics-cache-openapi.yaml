@@ -1,0 +1,2388 @@
+openapi: 3.0.3
+info:
+  version: 5.8.3
+  title: Metrics Cache
+  description: 'The API is designed to provide actual quality information for datasets. This quality information
+    is delivered as a set of metrics in five dimensions: Findability, Accessibility, Interoperability,
+    Reusability, and Contextuality. These metrics gauge compliance with the standards of DCAT-AP, which
+    are based on the Resource Description Framework (RDF) vocabulary of Data Catalog Vocabulary developed
+    by The World Wide Web Consortium (W3C). The values for the delivered metrics are stored in a custom
+    data model. The top final score is 450 points, with maximal ratings of 100 points assigned to Findability,
+    100 points assigned to Accessibility, 110 points to Interoperability, 75 points to Reusability, and
+    20 points to Contextuality.
+
+    '
+  x-logo:
+    url: images/logo
+servers:
+- url: https://data.europa.eu/api/mqa/cache
+  description: Metadata Quality Assurance (MQA) Metrics Cache API
+tags:
+- name: Action API
+  description: "The action API utilizes the [JSON-RPC 2.0](https://www.jsonrpc.org/specification) specification\
+    \ with the following constraints:\n\n* `id` reference needs to be a string\n* `params` are passed\
+    \ as object map, not as array list\n* `data` of an error is an object\n* Batch processing of actions\
+    \ is not yet supported\n\nAlthough a correlation identifier (`id`) is not necessary on top of HTTP,\
+    \ you should always include it to allow \nthe server to distinguish between sync calls and notifications.\
+    \ Omit the `id` only in case of a notification.\nFor notifications, the server will immediately respond\
+    \ with a `202 Accepted` without a body.\n"
+paths:
+  /admin/refresh:
+    post:
+      tags:
+      - Administration
+      summary: Refresh all metrics
+      description: This function is reserved for internal use only and is not part of our public API offerings.
+        You must be authorized to refresh all metrics. If you are authorized, send POST request to the
+        specified URL of the API with the resource path "/admin/refresh" to fetch DQV (Data Quality Vocabulary)
+        values from remote endpoint and calculates a new set of metrics for all available metadata.
+      operationId: refreshAllMetrics
+      security:
+      - ApiKeyAuth: []
+      responses:
+        202:
+          description: Request accepted
+  /admin/refresh/{scope}/{id}:
+    post:
+      tags:
+      - Administration
+      summary: Refresh a specific metric
+      description: This function is reserved for internal use only and is not part of our public API offerings.
+        You must be authorized to refresh the metrics of a specified document. If you are authorized,
+        send POST request to the specified URL of the API endpoint with the resource path "/admin/refresh/{scope}/{id}"
+        to fetch DQV (Data Quality Vocabulary) values from remote endpoint and calculate a new set of
+        metrics for the document with specified id.
+      operationId: refreshSingleMetrics
+      parameters:
+      - name: scope
+        in: path
+        description: The scope
+        required: true
+        schema:
+          type: string
+          enum:
+          - catalogues
+          - countries
+          - global
+      - name: id
+        in: path
+        description: Document id. In case of 'global' the id is ignored. The only document id of global
+          scope is implicitly 'global'.
+        required: true
+        schema:
+          type: string
+      security:
+      - ApiKeyAuth: []
+      responses:
+        202:
+          description: Request accepted
+  /admin/clear:
+    post:
+      tags:
+      - Administration
+      summary: Remove all currently existing metrics and their values
+      description: This function is reserved for internal use only and is not part of our public API offerings.
+        You must be authorized to remove all currently existing metrics and their values. If you are authorized,
+        send POST request to the specified URL of the API endpoint with the resource path "/admin/clear"
+        to remove the metrics.
+      operationId: clearMetrics
+      security:
+      - ApiKeyAuth: []
+      responses:
+        202:
+          description: Request accepted
+  /admin/migratescore:
+    post:
+      tags:
+      - Administration
+      summary: Migrates old score history entries into the new db schema
+      description: This function is reserved for internal use only and is not part of our public API offerings.
+        You must be authorized to update deprecated format of metrics' entries according to the current
+        data base schema. You may need to update format only if entries were made using Metrics-Cache
+        version lower than 3, with had different database schema. As an authorized user, you can make
+        a POST request to the specified URL of the API endpoint with the resource path "/admin/migratescore"
+        added at the end of the URL. The format will be updated.
+      operationId: migrateScore
+      security:
+      - ApiKeyAuth: []
+      responses:
+        202:
+          description: Request accepted
+  /admin/schedule:
+    post:
+      tags:
+      - Administration
+      summary: Schedule the refresh action
+      description: This function is reserved for internal use only and is not part of our public API offerings.
+        Authorization is required to set an internal schedule for refreshing the metrics for all catalogues.
+        If you are authorized, send POST request to the specified URL of the API endpoint with the resource
+        path "/admin/schedule" added at the end of the URL. Pay attention that you can choose different
+        request body schema according to the scheduling details you need. It is necessary to create an
+        unique id for each scheduling instance. Remember that currently, you cannot delete or modify a
+        schedule.
+      operationId: scheduleRefresh
+      requestBody:
+        content:
+          application/json:
+            schema:
+              anyOf:
+              - $ref: '#/components/schemas/CronTrigger'
+              - $ref: '#/components/schemas/IntervalTrigger'
+              - $ref: '#/components/schemas/SpecificTrigger'
+      security:
+      - ApiKeyAuth: []
+      responses:
+        202:
+          description: Request accepted
+    get:
+      tags:
+      - Administration
+      summary: Return refresh schedules
+      description: This function is reserved for internal use only and is not part of our public API offerings.
+        Authorization is required to obtain a list of all refresh schedules. If you are authorized, send
+        GET request to the specified URL of the API endpoint with the resource path "/admin/schedule"
+        added at the end of the URL.
+      operationId: getScheduleRefresh
+      security:
+      - ApiKeyAuth: []
+      responses:
+        200:
+          description: The trigger
+          content:
+            application/json:
+              schema:
+                oneOf:
+                - $ref: '#/components/schemas/CronTrigger'
+                - $ref: '#/components/schemas/IntervalTrigger'
+                - $ref: '#/components/schemas/SpecificTrigger'
+        404:
+          description: Pipe or trigger not found
+  /global:
+    get:
+      tags:
+      - Global
+      summary: Get global metrics
+      description: To get a general overview in terms of data quality for all available metadata, make
+        a GET request to the specified URL of the API endpoint with the resource path "/global" added
+        at the end of the URL. If successful, the response will contain metrics that cover the dimensions
+        of 'findability', 'accessibility', 'interoperability', 'reusability', and 'contextuality'.
+      operationId: getGlobalMetrics
+      parameters:
+      - $ref: '#/components/parameters/filterGlobal'
+      responses:
+        200:
+          description: Metrics regarding all available catalogues
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  result:
+                    type: object
+                    properties:
+                      count:
+                        type: integer
+                      results:
+                        type: array
+                        items:
+                          $ref: '#/components/schemas/Metrics'
+  /global/history:
+    get:
+      summary: Get historic global metrics
+      description: To retrieve the history of measurements for all available metadata that are accessible
+        on the portal make GET request to the specified URL of the API endpoint with the resource path
+        "/global/history" added at the end of the URL. Include the "startDate" query parameter in the
+        request, providing a valid date value in the correct format. This specifies the start date for
+        retrieving the measurement history. If successful, the response will contain  metrics that covers
+        the dimensions 'findability', 'accessibility', 'interoperability', 'reusability' and 'contextuality'.
+      operationId: getHistoricGlobalMetrics
+      parameters:
+      - $ref: '#/components/parameters/filterGlobal'
+      - $ref: '#/components/parameters/startDate'
+      - $ref: '#/components/parameters/endDate'
+      - $ref: '#/components/parameters/resolution'
+      tags:
+      - Global
+      responses:
+        200:
+          description: Metrics regarding all available catalogues
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  result:
+                    type: object
+                    properties:
+                      count:
+                        type: integer
+                      results:
+                        type: array
+                        items:
+                          $ref: '#/components/schemas/HistoricMetrics'
+        400:
+          description: Bad Request (e.g. startDate is later then endDate).
+  /countries:
+    get:
+      summary: List of all country metrics
+      description: To get metadata quality score aggregated over parameter "country's id" and grouped
+        by IDs of the countries of origin of the data make GET request to the specified URL of the API
+        endpoint with the resource path "/countries" added at the end of the URL. The following five dimensions
+        can be returned "findability", "accessibility", "interoperability", "reusability",  and "contextuality".
+        The aggregation process takes into account all datasets associated with catalogs sharing the same
+        'country ID,' which follows ISO 3166-1 ALPHA-3 Code standards for country ID abbreviations.
+      operationId: getCountryMetrics
+      tags:
+      - Countries
+      parameters:
+      - $ref: '#/components/parameters/filter'
+      responses:
+        200:
+          description: List of country metrics Objects.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  result:
+                    type: object
+                    properties:
+                      count:
+                        type: integer
+                      results:
+                        type: array
+                        items:
+                          $ref: '#/components/schemas/CountryMetrics'
+        500:
+          description: Could not fetch list of countries metrics.
+  /countries/history:
+    get:
+      summary: Get historic aggregated metrics aggregated for all countries
+      description: To retrieve the history of measurements for all available metadata that is accessible
+        on the portal, aggregated over "country's id" and grouped by IDs of the countries of origin of
+        the data, make a GET request to the specified URL of the API endpoint with the resource path "/countries/history"
+        added at the end of the URL. Include the "startDate" query parameter in the request, providing
+        a valid date value in the correct format. This specifies the start date for retrieving the measurement
+        history. If successful, the response will contain metrics that cover the dimensions of "findability",
+        "accessibility", "interoperability", "reusability", and "contextuality'. The aggregation process
+        takes into account all datasets associated with catalogs sharing the same 'country ID,' which
+        follows ISO 3166-1 ALPHA-3 Code standards for country ID abbreviations
+      operationId: getHistoricCountryMetrics
+      parameters:
+      - $ref: '#/components/parameters/filter'
+      - $ref: '#/components/parameters/startDate'
+      - $ref: '#/components/parameters/endDate'
+      - $ref: '#/components/parameters/resolution'
+      tags:
+      - Countries
+      responses:
+        200:
+          description: List of historic country metrics Objects.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  result:
+                    type: object
+                    properties:
+                      count:
+                        type: integer
+                      results:
+                        type: array
+                        items:
+                          $ref: '#/components/schemas/HistoricCountryMetrics'
+        400:
+          description: Bad Request (e.g. startDate is later then endDate  ).
+  /countries/{id}:
+    get:
+      tags:
+      - Countries
+      summary: Get metrics for a country
+      description: To retrieve the measurements for metadata, aggregated over a designated country, make
+        a GET request to the specified URL of the API endpoint with the resource path '/countries/{id}'
+        added at the end of the URL and set the unique ID of the country as the {id} element of the URL.
+        The country ID abbreviations should follow the ISO 3166-1 ALPHA-3 Code standards. If successful,
+        the response will contain metrics that cover the dimensions of 'findability', 'accessibility',
+        'interoperability', 'reusability', and 'contextuality'. The aggregation process takes into account
+        all datasets associated with catalog with specified 'country ID'.
+      operationId: getSingleCountryMetrics
+      parameters:
+      - $ref: '#/components/parameters/countryId'
+      - $ref: '#/components/parameters/filter'
+      responses:
+        200:
+          description: Country metrics
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  result:
+                    type: object
+                    properties:
+                      count:
+                        type: integer
+                      results:
+                        type: array
+                        items:
+                          $ref: '#/components/schemas/CountryMetrics'
+        404:
+          description: Country not found
+  /countries/{id}/history:
+    get:
+      summary: Get historic metrics aggregated over a country
+      description: To retrieve the history of measurements for metadata, aggregated over a designated
+        country, make a GET request to the specified URL of the API endpoint with the resource path"/countries/{id}/history"
+        added at the end of the URL and set the unique ID of the country as {id} element of the URL. The
+        country ID abbreviations should follow the ISO 3166-1 ALPHA-3 Code standards. Include the "startDate"
+        query parameter in the request, providing a valid date value in the correct format. This specifies
+        the start date for retrieving the measurement history. If successful, the response will contain
+        metrics that cover the dimensions of "findability", "accessibility", "interoperability", "reusability",
+        and "contextuality'. The aggregation process takes into account all datasets associated with catalog
+        with specified 'country ID'.
+      operationId: getHistoricSingleCountryMetrics
+      parameters:
+      - $ref: '#/components/parameters/countryId'
+      - $ref: '#/components/parameters/filter'
+      - $ref: '#/components/parameters/startDate'
+      - $ref: '#/components/parameters/endDate'
+      - $ref: '#/components/parameters/resolution'
+      tags:
+      - Countries
+      responses:
+        200:
+          description: Metrics regarding all available catalogues
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  result:
+                    type: object
+                    properties:
+                      count:
+                        type: integer
+                      results:
+                        type: array
+                        items:
+                          $ref: '#/components/schemas/HistoricCountryMetrics'
+        400:
+          description: Bad Request (e.g. startDate is later then endDate).
+        404:
+          description: Country not found
+  /catalogues:
+    get:
+      summary: List of all catalogue metrics
+      description: To obtain the aggregated metadata quality score across all the catalogues, make a GET
+        request to the specified URL of the API endpoint with the resource path "/catalogues" added at
+        the end of the URL . If successful, the response will contain metrics that cover the dimensions
+        of "findability", "accessibility", "interoperability", "reusability", and "contextuality'. The
+        catalogue's ID and other information on the relevant catalogue can be found under the attribute
+        name 'info'.
+      operationId: getCatalogueMetrics
+      tags:
+      - Catalogues
+      parameters:
+      - $ref: '#/components/parameters/filter'
+      responses:
+        200:
+          description: List of catalogue metrics Objects.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  result:
+                    type: object
+                    properties:
+                      count:
+                        type: integer
+                      results:
+                        type: array
+                        items:
+                          $ref: '#/components/schemas/CatalogueMetrics'
+        500:
+          description: Could not fetch list of countries metrics.
+  /catalogues/history:
+    get:
+      summary: Get historic metrics for all catalogues
+      description: To retrieve the measurement history for all available catalogues' metadata accessible
+        on the portal, aggregated over all catalogues and grouped by catalogue IDs, make a GET request
+        to the specified URL of the API endpoint with the resource path'/catalogues/history' added at
+        the end of the URL. Include the 'startDate' query parameter in the request, providing a valid
+        date value in the correct format. This specifies the start date for retrieving the measurement
+        history. If successful, the response will contain metrics that cover the dimensions of 'findability',
+        'accessibility', 'interoperability', 'reusability', and 'contextuality'. The catalogue's ID and
+        other relevant information can be found under the attribute name 'info'.
+      operationId: getHistoricCatalogueMetrics
+      parameters:
+      - $ref: '#/components/parameters/filterGlobal'
+      - $ref: '#/components/parameters/startDate'
+      - $ref: '#/components/parameters/endDate'
+      - $ref: '#/components/parameters/resolution'
+      tags:
+      - Catalogues
+      responses:
+        200:
+          description: List of historic country metrics Objects.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  result:
+                    type: object
+                    properties:
+                      count:
+                        type: integer
+                      results:
+                        type: array
+                        items:
+                          $ref: '#/components/schemas/HistoricCatalogueMetrics'
+        400:
+          description: Bad Request (e.g. startDate is later then endDate).
+  /catalogues/{id}:
+    get:
+      tags:
+      - Catalogues
+      summary: Get metrics for a catalogue
+      description: To retrieve the measurements for metadata, aggregated over the designated catalogue,
+        make a GET request to the specified URL of the API endpoint with the resource path '/catalogues/{id}'
+        at the end of the URL and set the unique ID of the catalogue as the {id} element of the URL. If
+        successful, the response will contain metrics that cover the dimensions of "findability," "accessibility,"
+        "interoperability," "reusability," and "contextuality." To find a catalogue ID, use, for example,
+        the operation "List of all catalogue metrics".
+      operationId: getSingleCatalogueMetrics
+      parameters:
+      - $ref: '#/components/parameters/catalogueId'
+      - $ref: '#/components/parameters/filter'
+      responses:
+        200:
+          description: Catalogue metrics
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  result:
+                    type: object
+                    properties:
+                      count:
+                        type: integer
+                      results:
+                        type: array
+                        items:
+                          $ref: '#/components/schemas/CatalogueMetrics'
+        404:
+          description: Catalogue not found
+    delete:
+      tags:
+      - Catalogues
+      summary: Delete all metrics of a catalogue
+      description: This function is reserved for internal use only and is not part of our public API offerings.
+        You must be authorized to delete all metrics of a specified catalogue. If you are authorized,
+        send DELETE request to the specified URL of the API endpoint with the resource path "/catalogues/{id}"
+        at the end of the URL and set the unique ID of the catalogue as the {id} element of the URL. If
+        successful all metrics of the specified catalogue are deleted.
+      operationId: deleteCatalogueMetrics
+      parameters:
+      - name: id
+        in: path
+        description: ID of catalogue to delete metrics
+        required: true
+        schema:
+          type: string
+      responses:
+        200:
+          description: Catalogue metrics deleted
+        404:
+          description: Catalogue not found
+  /catalogues/{id}/history:
+    get:
+      summary: Get historic metrics for a catalogue
+      description: To retrieve the history of measurements for metadata, aggregated over the designated
+        catalogue, make a GET request to the specified URL of the API endpoint with the resource path
+        "/catalogues/{id}/history" at the end of the URL and set the unique ID of the catalogue as {id}
+        element of the URL. If successful, the response will contain metrics that cover the dimensions
+        of "findability," "accessibility," "interoperability," "reusability," and "contextuality." To
+        find a catalogue ID, use, for example, the operation "List of all catalogue metrics".
+      operationId: getHistoricSingleCatalogueMetrics
+      parameters:
+      - $ref: '#/components/parameters/catalogueId'
+      - $ref: '#/components/parameters/filterGlobal'
+      - $ref: '#/components/parameters/startDate'
+      - $ref: '#/components/parameters/endDate'
+      - $ref: '#/components/parameters/resolution'
+      tags:
+      - Catalogues
+      responses:
+        200:
+          description: Historic metrics regarding all available catalogues
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  result:
+                    type: object
+                    properties:
+                      count:
+                        type: integer
+                      results:
+                        type: array
+                        items:
+                          $ref: '#/components/schemas/HistoricCatalogueMetrics'
+        400:
+          description: Bad Request (e.g. startDate is later then endDate).
+        404:
+          description: Catalogue not found.
+  /catalogues/{id}/distributions/reachability:
+    get:
+      tags:
+      - Catalogues
+      summary: Get unreachable download and access URLs of a catalogue
+      description: Send a GET request to the specified URL of the API endpoint with the resource path
+        '/catalogues/{id}/distributions/reachability' added at the end of the URL. Set the unique ID of
+        the catalogue as the {id} element of the URL. The API will return the status codes of the access
+        URLs' or download URLs', aggregated for every distribution of the datasets included in the specified
+        catalogue, depending on the format of the data. Pay attention that, the delivered list consists
+        of the access URLs and download URLs, that were not reachable by the last refresh of the metrics.
+        By default, the quantity of returned distributions is limited to 100.
+      operationId: getCatalogueDistributionReachability
+      parameters:
+      - $ref: '#/components/parameters/catalogueId'
+      - in: query
+        name: offset
+        required: false
+        schema:
+          type: integer
+          minimum: 0
+          default: 0
+        description: The number of items to skip before starting to collect the result set
+      - in: query
+        name: limit
+        required: false
+        schema:
+          type: integer
+          minimum: 1
+          default: 100
+        description: The numbers of items to return
+      - in: query
+        name: locale
+        schema:
+          type: string
+        description: The language of the dataset title that should be returned
+      responses:
+        202:
+          description: List of a catalogues' distributions that have errorneous status codes in its access
+            or download URL.
+        404:
+          description: Catalogue not found.
+        500:
+          description: internal server error
+  /catalogues/{id}/violations:
+    get:
+      tags:
+      - Catalogues
+      summary: Get DCAT-AP SHACL violations
+      description: To retrieve all the datasets with dcat-ap compliance issues for a specific catalogue,  make
+        a GET request to the specified URL of the API endpoint with the resource path "/catalogues/{id}/violations"
+        added at the end of the URL and set the unique ID of the catalogue as {id} element of the URL.
+        By default, the quantity of returned datasets is limited to 100.
+      operationId: getCatalogueViolations
+      parameters:
+      - name: id
+        in: path
+        description: ID of catalogue for which to receive a metric
+        required: true
+        schema:
+          type: string
+      - in: query
+        name: offset
+        required: false
+        schema:
+          type: integer
+          minimum: 0
+          default: 0
+        description: The number of items to skip before starting to collect the result set
+      - in: query
+        name: limit
+        required: false
+        schema:
+          type: integer
+          minimum: 1
+          default: 100
+        description: The numbers of items to return
+      - in: query
+        name: locale
+        schema:
+          type: string
+        description: The language of the dataset title that should be returned
+      responses:
+        200:
+          description: List of SHACL violations.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Violations'
+        404:
+          description: Catalogue not found.
+  /datasets/{id}:
+    get:
+      tags:
+      - Datasets
+      summary: Get metrics for a dataset
+      description: To retrieve the measurements for metadata refers to the designated dataset, make a
+        GET request to the specified URL of the API endpoint with the resource path '/datasets/{id}' added
+        at the end of the URL and set the unique ID of the dataset as the {id} element of the URL. If
+        successful, the response will contain metrics that cover the dimensions of "findability," "accessibility,"
+        "interoperability," "reusability," and "contextuality."
+      operationId: getSingleDatasetMetrics
+      parameters:
+      - $ref: '#/components/parameters/datasetId'
+      - in: query
+        name: locale
+        schema:
+          type: string
+        description: The language of the dataset that should be returned
+      responses:
+        200:
+          description: Catalogue metrics
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  result:
+                    type: object
+                    properties:
+                      count:
+                        type: integer
+                      results:
+                        type: array
+                        items:
+                          $ref: '#/components/schemas/DatasetMetrics'
+        404:
+          description: Dataset not found
+  /datasets/{id}/distributions:
+    get:
+      tags:
+      - Distributions
+      summary: Get metrics for all distributions of a dataset
+      description: To retrieve metrics for all distributions of a designated dataset, make a GET request
+        to the specified URL of the API endpoint with the resource path '/datasets/{id}/distributions'
+        added at the end of the URL and set the unique ID of the dataset as the {id} element of the URL.
+        If successful, the response will contain metrics that cover the dimensions of "findability," "accessibility,"
+        "interoperability," "reusability," and "contextuality."
+      operationId: getDistributionMetricsv2
+      parameters:
+      - $ref: '#/components/parameters/datasetId'
+      - in: query
+        name: locale
+        schema:
+          type: string
+        description: The language of the distribution that should be returned
+      responses:
+        200:
+          description: Catalogue metrics
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  result:
+                    type: object
+                    properties:
+                      count:
+                        type: integer
+                      results:
+                        type: array
+                        items:
+                          $ref: '#/components/schemas/DistributionMetrics'
+        404:
+          description: Dataset not found
+  /distributions/{id}:
+    get:
+      deprecated: true
+      tags:
+      - Distributions
+      summary: use /datasets/{id}/distributions instead
+      description: Metrics that cover the dimensions 'accessibility', 'interoperability', 'reusability'
+        and 'contextuality'.
+      operationId: getDistributionMetrics
+      parameters:
+      - $ref: '#/components/parameters/datasetId'
+      - in: query
+        name: locale
+        schema:
+          type: string
+        description: The language of the distribution that should be returned
+      responses:
+        200:
+          description: Catalogue metrics
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  result:
+                    type: object
+                    properties:
+                      count:
+                        type: integer
+                      results:
+                        type: array
+                        items:
+                          $ref: '#/components/schemas/DistributionMetrics'
+        404:
+          description: Dataset not found
+  /distributions/{id}/validations:
+    get:
+      tags:
+      - Distributions
+      summary: Get the validations present for all distributions of a dataset
+      description: Result of the linting of this CSV file
+      operationId: getDistributionValidationCsv
+      parameters:
+      - $ref: '#/components/parameters/datasetId'
+      responses:
+        200:
+          description: Catalogue metrics
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ValidationCsv'
+        404:
+          description: Dataset not found
+  /action:
+    post:
+      tags:
+      - Action API
+      description: 'Post a JSON-RPC request to make a call to an action
+
+
+        Currently the only defined action is `refreshScope` to start a pipe run.
+
+        '
+      summary: Call an Action
+      operationId: postAction
+      requestBody:
+        description: The action in JSON-RPC format
+        required: true
+        content:
+          application/json:
+            schema:
+              oneOf:
+              - $ref: '#/components/schemas/refreshScope'
+      responses:
+        '200':
+          description: JSON-RPC Response
+          content:
+            application/json:
+              schema:
+                oneOf:
+                - $ref: '#/components/schemas/JSON-RPCSuccess'
+                - $ref: '#/components/schemas/JSON-RPCError'
+        '202':
+          description: In case of an omitted `id` correlator
+components:
+  parameters:
+    catalogueId:
+      name: id
+      in: path
+      description: ID of catalogue to retrieve
+      required: true
+      schema:
+        type: string
+    countryId:
+      name: id
+      in: path
+      description: ISO 3166-1 ALPHA-3 Code of the country to retrieve
+      required: true
+      schema:
+        type: string
+      example: ESP
+    datasetId:
+      name: id
+      in: path
+      description: ID of dataset to retrieve
+      required: true
+      schema:
+        type: string
+    startDate:
+      name: startDate
+      in: query
+      description: Start date for which to retrieve the history formatted as ISO
+      required: true
+      schema:
+        type: string
+        format: date
+      example: 1997-8-25
+    endDate:
+      name: endDate
+      in: query
+      description: End date for which to retrieve the history. If no end date is specified, the currend
+        date is used.
+      schema:
+        type: string
+        format: date
+      example: 2012-11-1
+    resolution:
+      name: resolution
+      in: query
+      description: Dimension for which to retrieve the history
+      required: false
+      schema:
+        enum:
+        - year
+        - month
+        - day
+        default: month
+    filterGlobal:
+      name: filter
+      in: query
+      description: Filter for one more multiple specific dimensions and/or the `score` that should be
+        returned. If present,  the document will contain _only_ the specified Dimensions. If this parameter
+        is missing, the complete document will be returned.
+      required: false
+      style: form
+      explode: false
+      schema:
+        type: array
+        items:
+          type: string
+          enum:
+          - findability
+          - accessibility
+          - interoperability
+          - reusability
+          - contextuality
+          - score
+    filter:
+      name: filter
+      in: query
+      description: Filter for one more multiple specific dimensions and/or the `score` and `info` object
+        that should be returned.If present,  the document will contain _only_ the specified Dimensions.
+        If this parameter is missing, the complete document will be returned.
+      required: false
+      style: form
+      explode: false
+      schema:
+        type: array
+        items:
+          type: string
+          enum:
+          - findability
+          - accessibility
+          - interoperability
+          - reusability
+          - contextuality
+          - score
+          - info
+  schemas:
+    ValidationCsv:
+      type: object
+      properties:
+        passed:
+          type: boolean
+        item_count:
+          type: integer
+        row_count:
+          type: integer
+        errors:
+          type: object
+          properties:
+            count:
+              type: integer
+            items:
+              type: array
+              items:
+                $ref: '#/components/schemas/IndicatorItem'
+        warnings:
+          type: object
+          properties:
+            count:
+              type: integer
+            items:
+              type: array
+              items:
+                $ref: '#/components/schemas/IndicatorItem'
+        infos:
+          type: object
+          properties:
+            count:
+              type: integer
+            items:
+              type: array
+              items:
+                $ref: '#/components/schemas/IndicatorItem'
+    IndicatorItem:
+      type: object
+      properties:
+        row:
+          type: integer
+        column:
+          type: integer
+        columnName:
+          type: string
+        message:
+          type: string
+        message_header:
+          type: string
+        indicator:
+          type: string
+    CatalogueMetrics:
+      type: object
+      properties:
+        info:
+          $ref: '#/components/schemas/CatalogueInfo'
+        findability:
+          $ref: '#/components/schemas/Findability'
+        accessibility:
+          $ref: '#/components/schemas/Accessibility'
+        interoperability:
+          $ref: '#/components/schemas/Interoperability'
+        resusability:
+          $ref: '#/components/schemas/Reusability'
+        contextuality:
+          $ref: '#/components/schemas/Contextuality'
+        score:
+          description: The aggregated score
+          type: number
+          format: int32
+    CatalogueInfo:
+      type: object
+      properties:
+        id:
+          type: string
+        title:
+          type: string
+        description:
+          type: string
+        spatial:
+          type: string
+        type:
+          type: string
+    CountryMetrics:
+      type: object
+      properties:
+        info:
+          type: string
+        findability:
+          $ref: '#/components/schemas/Findability'
+        accessibility:
+          $ref: '#/components/schemas/Accessibility'
+        interoperability:
+          $ref: '#/components/schemas/Interoperability'
+        resusability:
+          $ref: '#/components/schemas/Reusability'
+        contextuality:
+          $ref: '#/components/schemas/Contextuality'
+        score:
+          description: The aggregated score
+          type: number
+          format: int32
+    Metrics:
+      description: A full page of metrics related to the entity with the specified ID
+      type: object
+      properties:
+        findability:
+          $ref: '#/components/schemas/Findability'
+        accessibility:
+          $ref: '#/components/schemas/Accessibility'
+        interoperability:
+          $ref: '#/components/schemas/Interoperability'
+        resusability:
+          $ref: '#/components/schemas/Reusability'
+        contextuality:
+          $ref: '#/components/schemas/Contextuality'
+        score:
+          description: The aggregated score
+          type: number
+          format: int32
+          example: 300
+    Findability:
+      description: Findability metrics
+      type: object
+      properties:
+        keywordAvailability:
+          type: array
+          items:
+            $ref: '#/components/schemas/NamedPercentage'
+          example:
+          - name: true
+            percentage: 55.0
+          - name: false
+            percentage: 45.0
+        categoryAvailability:
+          type: array
+          items:
+            $ref: '#/components/schemas/NamedPercentage'
+          example:
+          - name: true
+            percentage: 55.0
+          - name: false
+            percentage: 45.0
+        spatialAvailability:
+          type: array
+          items:
+            $ref: '#/components/schemas/NamedPercentage'
+          example:
+          - name: true
+            percentage: 55.0
+          - name: false
+            percentage: 45.0
+        temporalAvailability:
+          type: array
+          items:
+            $ref: '#/components/schemas/NamedPercentage'
+          example:
+          - name: true
+            percentage: 55.0
+          - name: false
+            percentage: 45.0
+        score:
+          description: The aggregated score
+          type: object
+          items:
+            $ref: '#/components/schemas/PointPercentageMax'
+          example:
+            point: 55.0
+            percentage: 55.0
+            max: 80.0
+    Accessibility:
+      description: Accessibility metrics
+      type: object
+      properties:
+        accessUrlStatusCodes:
+          type: array
+          items:
+            $ref: '#/components/schemas/NamedPercentage'
+          example:
+          - name: 200
+            percentage: 92.0
+          - name: 400
+            percentage: 1.0
+          - name: 404
+            percentage: 1.0
+          - name: 1300
+            percentage: 2.0
+          - name: 405
+            percentage: 3.0
+          - name: 1100
+            percentage: 1.0
+        downloadUrlAvailability:
+          type: array
+          items:
+            $ref: '#/components/schemas/NamedPercentage'
+          example:
+          - name: true
+            percentage: 55.0
+          - name: false
+            percentage: 45.0
+        downloadUrlStatusCodes:
+          type: array
+          items:
+            $ref: '#/components/schemas/NamedPercentage'
+        score:
+          description: The aggregated score
+          type: object
+          items:
+            $ref: '#/components/schemas/PointPercentageMax'
+          example:
+            point: 55.0
+            percentage: 55.0
+            max: 80.0
+    Interoperability:
+      description: Interoperability metrics
+      type: object
+      properties:
+        formatAvailability:
+          type: array
+          items:
+            $ref: '#/components/schemas/NamedPercentage'
+          example:
+          - name: true
+            percentage: 55.0
+          - name: false
+            percentage: 45.0
+        mediaTypeAvailability:
+          type: array
+          items:
+            $ref: '#/components/schemas/NamedPercentage'
+          example:
+          - name: true
+            percentage: 55.0
+          - name: false
+            percentage: 45.0
+        formatMediaTypeAlignment:
+          type: array
+          items:
+            $ref: '#/components/schemas/NamedPercentage'
+          example:
+          - name: true
+            percentage: 55.0
+          - name: false
+            percentage: 45.0
+        formatMediaTypeNonProprietary:
+          type: array
+          items:
+            $ref: '#/components/schemas/NamedPercentage'
+          example:
+          - name: true
+            percentage: 55.0
+          - name: false
+            percentage: 45.0
+        formatMediaTypeMachineReadable:
+          type: array
+          items:
+            $ref: '#/components/schemas/NamedPercentage'
+          example:
+          - name: true
+            percentage: 55.0
+          - name: false
+            percentage: 45.0
+        dcatApCompliance:
+          type: array
+          items:
+            $ref: '#/components/schemas/NamedPercentage'
+          example:
+          - name: true
+            percentage: 55.0
+          - name: false
+            percentage: 45.0
+        score:
+          description: The aggregated score
+          type: object
+          items:
+            $ref: '#/components/schemas/PointPercentageMax'
+          example:
+            point: 55.0
+            percentage: 55.0
+            max: 80.0
+    Reusability:
+      description: Reusability metrics
+      type: object
+      properties:
+        licenceAvailability:
+          type: array
+          items:
+            $ref: '#/components/schemas/NamedPercentage'
+          example:
+          - name: true
+            percentage: 55.0
+          - name: false
+            percentage: 45.0
+        licenceAlignment:
+          type: array
+          items:
+            $ref: '#/components/schemas/NamedPercentage'
+          example:
+          - name: true
+            percentage: 55.0
+          - name: false
+            percentage: 45.0
+        accessRightsAvailability:
+          type: array
+          items:
+            $ref: '#/components/schemas/NamedPercentage'
+          example:
+          - name: true
+            percentage: 55.0
+          - name: false
+            percentage: 45.0
+        accessRightsAlignment:
+          type: array
+          items:
+            $ref: '#/components/schemas/NamedPercentage'
+          example:
+          - name: true
+            percentage: 55.0
+          - name: false
+            percentage: 45.0
+        contactPointAvailability:
+          type: array
+          items:
+            $ref: '#/components/schemas/NamedPercentage'
+          example:
+          - name: true
+            percentage: 55.0
+          - name: false
+            percentage: 45.0
+        publisherAvailability:
+          type: array
+          items:
+            $ref: '#/components/schemas/NamedPercentage'
+          example:
+          - name: true
+            percentage: 55.0
+          - name: false
+            percentage: 45.0
+        score:
+          description: The aggregated score
+          type: object
+          items:
+            $ref: '#/components/schemas/PointPercentageMax'
+          example:
+            point: 55.0
+            percentage: 55.0
+            max: 80.0
+    Contextuality:
+      description: Contextuality metrics
+      type: object
+      properties:
+        rightsAvailability:
+          type: array
+          items:
+            $ref: '#/components/schemas/NamedPercentage'
+          example:
+          - name: true
+            percentage: 55.0
+          - name: false
+            percentage: 45.0
+        byteSizeAvailability:
+          type: array
+          items:
+            $ref: '#/components/schemas/NamedPercentage'
+          example:
+          - name: true
+            percentage: 55.0
+          - name: false
+            percentage: 45.0
+        dateIssuedAvailability:
+          type: array
+          items:
+            $ref: '#/components/schemas/NamedPercentage'
+          example:
+          - name: true
+            percentage: 55.0
+          - name: false
+            percentage: 45.0
+        dateModifiedAvailability:
+          type: array
+          items:
+            $ref: '#/components/schemas/NamedPercentage'
+          example:
+          - name: true
+            percentage: 55.0
+          - name: false
+            percentage: 45.0
+        score:
+          description: The aggregated score
+          type: object
+          items:
+            $ref: '#/components/schemas/PointPercentageMax'
+          example:
+            point: 55.0
+            percentage: 55.0
+            max: 80.0
+    NamedPercentage:
+      description: Named percentage
+      type: object
+      properties:
+        name:
+          type: string
+          example: true
+        percentage:
+          type: number
+          format: double
+          example: 50.5
+    PointPercentageMax:
+      description: Point Percentage Max
+      type: object
+      properties:
+        point:
+          type: number
+          format: double
+          example: 50.5
+        percentage:
+          type: number
+          format: double
+          example: 50.5
+        max:
+          type: number
+          format: double
+          example: 80.0
+    HistoricMetrics:
+      description: A full page of metrics related to the entity with the specified ID
+      type: object
+      properties:
+        findability:
+          $ref: '#/components/schemas/HistoricFindability'
+        accessibility:
+          $ref: '#/components/schemas/HistoricAccessibility'
+        interoperability:
+          $ref: '#/components/schemas/HistoricInteroperability'
+        resusability:
+          $ref: '#/components/schemas/HistoricReusability'
+        contextuality:
+          $ref: '#/components/schemas/HistoricContextuality'
+        score:
+          $ref: '#/components/schemas/HistoricScore'
+    HistoricCatalogueMetrics:
+      type: object
+      properties:
+        info:
+          $ref: '#/components/schemas/CatalogueInfo'
+        findability:
+          $ref: '#/components/schemas/HistoricFindability'
+        accessibility:
+          $ref: '#/components/schemas/HistoricAccessibility'
+        interoperability:
+          $ref: '#/components/schemas/HistoricInteroperability'
+        resusability:
+          $ref: '#/components/schemas/HistoricReusability'
+        contextuality:
+          $ref: '#/components/schemas/HistoricContextuality'
+        score:
+          $ref: '#/components/schemas/HistoricScore'
+    HistoricCountryMetrics:
+      type: object
+      properties:
+        info:
+          type: string
+          example: DEU
+        findability:
+          $ref: '#/components/schemas/HistoricFindability'
+        accessibility:
+          $ref: '#/components/schemas/HistoricAccessibility'
+        interoperability:
+          $ref: '#/components/schemas/HistoricInteroperability'
+        resusability:
+          $ref: '#/components/schemas/HistoricReusability'
+        contextuality:
+          $ref: '#/components/schemas/HistoricContextuality'
+        score:
+          $ref: '#/components/schemas/HistoricScore'
+    HistoricFindability:
+      description: Findability metrics
+      type: object
+      properties:
+        keywordAvailability:
+          type: array
+          items:
+            $ref: '#/components/schemas/HistoricNamedPercentages'
+          example:
+          - '2020-03-02':
+            - name: true
+              percentage: 55.0
+            - name: false
+              percentage: 45.0
+          - '2020-03-03':
+            - name: true
+              percentage: 33.0
+            - name: false
+              percentage: 67.0
+          - '2020-03-04':
+            - name: true
+              percentage: 82.5
+            - name: false
+              percentage: 17.5
+        categoryAvailability:
+          type: array
+          items:
+            $ref: '#/components/schemas/HistoricNamedPercentages'
+          example:
+          - '2020-03-02':
+            - name: true
+              percentage: 55.0
+            - name: false
+              percentage: 45.0
+          - '2020-03-03':
+            - name: true
+              percentage: 33.0
+            - name: false
+              percentage: 67.0
+          - '2020-03-04':
+            - name: true
+              percentage: 82.5
+            - name: false
+              percentage: 17.5
+        spatialAvailability:
+          type: array
+          items:
+            $ref: '#/components/schemas/HistoricNamedPercentages'
+          example:
+          - '2020-03-02':
+            - name: true
+              percentage: 55.0
+            - name: false
+              percentage: 45.0
+          - '2020-03-03':
+            - name: true
+              percentage: 33.0
+            - name: false
+              percentage: 67.0
+          - '2020-03-04':
+            - name: true
+              percentage: 82.5
+            - name: false
+              percentage: 17.5
+        temporalAvailability:
+          type: array
+          items:
+            $ref: '#/components/schemas/HistoricNamedPercentages'
+          example:
+          - '2020-03-02':
+            - name: true
+              percentage: 55.0
+            - name: false
+              percentage: 45.0
+          - '2020-03-03':
+            - name: true
+              percentage: 33.0
+            - name: false
+              percentage: 67.0
+          - '2020-03-04':
+            - name: true
+              percentage: 82.5
+            - name: false
+              percentage: 17.5
+        score:
+          $ref: '#/components/schemas/HistoricScore'
+    HistoricAccessibility:
+      description: Accessibility metrics
+      type: object
+      properties:
+        accessUrlStatusCodes:
+          type: array
+          items:
+            $ref: '#/components/schemas/HistoricNamedPercentages'
+          example:
+          - '2020-03-02':
+            - name: 200
+              percentage: 55.0
+            - name: 404
+              percentage: 45.0
+          - '2020-03-03':
+            - name: 200
+              percentage: 33.0
+            - name: 404
+              percentage: 67.0
+          - '2020-03-04':
+            - name: 200
+              percentage: 82.5
+            - name: 500
+              percentage: 17.5
+        downloadUrlAvailability:
+          type: array
+          items:
+            $ref: '#/components/schemas/HistoricNamedPercentages'
+          example:
+          - '2020-03-02':
+            - name: true
+              percentage: 55.0
+            - name: false
+              percentage: 45.0
+          - '2020-03-03':
+            - name: true
+              percentage: 33.0
+            - name: false
+              percentage: 67.0
+          - '2020-03-04':
+            - name: true
+              percentage: 82.5
+            - name: false
+              percentage: 17.5
+        downloadUrlStatusCodes:
+          type: array
+          items:
+            $ref: '#/components/schemas/HistoricNamedPercentages'
+          example:
+          - '2020-03-02':
+            - name: 200
+              percentage: 55.0
+            - name: 404
+              percentage: 45.0
+          - '2020-03-03':
+            - name: 404
+              percentage: 33.0
+            - name: 500
+              percentage: 67.0
+          - '2020-03-04':
+            - name: 200
+              percentage: 82.5
+            - name: 500
+              percentage: 17.5
+        score:
+          $ref: '#/components/schemas/HistoricScore'
+    HistoricInteroperability:
+      description: Interoperability metrics
+      type: object
+      properties:
+        formatAvailability:
+          type: array
+          items:
+            $ref: '#/components/schemas/HistoricNamedPercentages'
+          example:
+          - '2020-03-02':
+            - name: true
+              percentage: 55.0
+            - name: false
+              percentage: 45.0
+          - '2020-03-03':
+            - name: true
+              percentage: 33.0
+            - name: false
+              percentage: 67.0
+          - '2020-03-04':
+            - name: true
+              percentage: 82.5
+            - name: false
+              percentage: 17.5
+        mediaTypeAvailability:
+          type: array
+          items:
+            $ref: '#/components/schemas/HistoricNamedPercentages'
+          example:
+          - '2020-03-02':
+            - name: true
+              percentage: 55.0
+            - name: false
+              percentage: 45.0
+          - '2020-03-03':
+            - name: true
+              percentage: 33.0
+            - name: false
+              percentage: 67.0
+          - '2020-03-04':
+            - name: true
+              percentage: 82.5
+            - name: false
+              percentage: 17.5
+        formatMediaTypeAlignment:
+          type: array
+          items:
+            $ref: '#/components/schemas/HistoricNamedPercentages'
+          example:
+          - '2020-03-02':
+            - name: true
+              percentage: 55.0
+            - name: false
+              percentage: 45.0
+          - '2020-03-03':
+            - name: true
+              percentage: 33.0
+            - name: false
+              percentage: 67.0
+          - '2020-03-04':
+            - name: true
+              percentage: 82.5
+            - name: false
+              percentage: 17.5
+        formatMediaTypeNonProprietary:
+          type: array
+          items:
+            $ref: '#/components/schemas/HistoricNamedPercentages'
+          example:
+          - '2020-03-02':
+            - name: true
+              percentage: 55.0
+            - name: false
+              percentage: 45.0
+          - '2020-03-03':
+            - name: true
+              percentage: 33.0
+            - name: false
+              percentage: 67.0
+          - '2020-03-04':
+            - name: true
+              percentage: 82.5
+            - name: false
+              percentage: 17.5
+        formatMediaTypeMachineReadable:
+          type: array
+          items:
+            $ref: '#/components/schemas/HistoricNamedPercentages'
+          example:
+          - '2020-03-02':
+            - name: true
+              percentage: 55.0
+            - name: false
+              percentage: 45.0
+          - '2020-03-03':
+            - name: true
+              percentage: 33.0
+            - name: false
+              percentage: 67.0
+          - '2020-03-04':
+            - name: true
+              percentage: 82.5
+            - name: false
+              percentage: 17.5
+        dcatApCompliance:
+          type: array
+          items:
+            $ref: '#/components/schemas/HistoricNamedPercentages'
+          example:
+          - '2020-03-02':
+            - name: true
+              percentage: 55.0
+            - name: false
+              percentage: 45.0
+          - '2020-03-03':
+            - name: true
+              percentage: 33.0
+            - name: false
+              percentage: 67.0
+          - '2020-03-04':
+            - name: true
+              percentage: 82.5
+            - name: false
+              percentage: 17.5
+        score:
+          $ref: '#/components/schemas/HistoricScore'
+    HistoricReusability:
+      description: Reusability metrics
+      type: object
+      properties:
+        licenceAvailability:
+          type: array
+          items:
+            $ref: '#/components/schemas/HistoricNamedPercentages'
+          example:
+          - '2020-03-02':
+            - name: true
+              percentage: 55.0
+            - name: false
+              percentage: 45.0
+          - '2020-03-03':
+            - name: true
+              percentage: 33.0
+            - name: false
+              percentage: 67.0
+          - '2020-03-04':
+            - name: true
+              percentage: 82.5
+            - name: false
+              percentage: 17.5
+        licenceAlignment:
+          type: array
+          items:
+            $ref: '#/components/schemas/HistoricNamedPercentages'
+          example:
+          - '2020-03-02':
+            - name: true
+              percentage: 55.0
+            - name: false
+              percentage: 45.0
+          - '2020-03-03':
+            - name: true
+              percentage: 33.0
+            - name: false
+              percentage: 67.0
+          - '2020-03-04':
+            - name: true
+              percentage: 82.5
+            - name: false
+              percentage: 17.5
+        accessRightsAvailability:
+          type: array
+          items:
+            $ref: '#/components/schemas/HistoricNamedPercentages'
+          example:
+          - '2020-03-02':
+            - name: true
+              percentage: 55.0
+            - name: false
+              percentage: 45.0
+          - '2020-03-03':
+            - name: true
+              percentage: 33.0
+            - name: false
+              percentage: 67.0
+          - '2020-03-04':
+            - name: true
+              percentage: 82.5
+            - name: false
+              percentage: 17.5
+        accessRightsAlignment:
+          type: array
+          items:
+            $ref: '#/components/schemas/HistoricNamedPercentages'
+          example:
+          - '2020-03-02':
+            - name: true
+              percentage: 55.0
+            - name: false
+              percentage: 45.0
+          - '2020-03-03':
+            - name: true
+              percentage: 33.0
+            - name: false
+              percentage: 67.0
+          - '2020-03-04':
+            - name: true
+              percentage: 82.5
+            - name: false
+              percentage: 17.5
+        contactPointAvailability:
+          type: array
+          items:
+            $ref: '#/components/schemas/HistoricNamedPercentages'
+          example:
+          - '2020-03-02':
+            - name: true
+              percentage: 55.0
+            - name: false
+              percentage: 45.0
+          - '2020-03-03':
+            - name: true
+              percentage: 33.0
+            - name: false
+              percentage: 67.0
+          - '2020-03-04':
+            - name: true
+              percentage: 82.5
+            - name: false
+              percentage: 17.5
+        publisherAvailability:
+          type: array
+          items:
+            $ref: '#/components/schemas/HistoricNamedPercentages'
+          example:
+          - '2020-03-02':
+            - name: true
+              percentage: 55.0
+            - name: false
+              percentage: 45.0
+          - '2020-03-03':
+            - name: true
+              percentage: 33.0
+            - name: false
+              percentage: 67.0
+          - '2020-03-04':
+            - name: true
+              percentage: 82.5
+            - name: false
+              percentage: 17.5
+        score:
+          $ref: '#/components/schemas/HistoricScore'
+    HistoricContextuality:
+      description: Contextuality metrics
+      type: object
+      properties:
+        rightsAvailability:
+          type: array
+          items:
+            $ref: '#/components/schemas/HistoricNamedPercentages'
+          example:
+          - '2020-03-02':
+            - name: true
+              percentage: 55.0
+            - name: false
+              percentage: 45.0
+          - '2020-03-03':
+            - name: true
+              percentage: 33.0
+            - name: false
+              percentage: 67.0
+          - '2020-03-04':
+            - name: true
+              percentage: 82.5
+            - name: false
+              percentage: 17.5
+        byteSizeAvailability:
+          type: array
+          items:
+            $ref: '#/components/schemas/HistoricNamedPercentages'
+          example:
+          - '2020-03-02':
+            - name: true
+              percentage: 55.0
+            - name: false
+              percentage: 45.0
+          - '2020-03-03':
+            - name: true
+              percentage: 33.0
+            - name: false
+              percentage: 67.0
+          - '2020-03-04':
+            - name: true
+              percentage: 82.5
+            - name: false
+              percentage: 17.5
+        dateIssuedAvailability:
+          type: array
+          items:
+            $ref: '#/components/schemas/HistoricNamedPercentages'
+          example:
+          - '2020-03-02':
+            - name: true
+              percentage: 55.0
+            - name: false
+              percentage: 45.0
+          - '2020-03-03':
+            - name: true
+              percentage: 33.0
+            - name: false
+              percentage: 67.0
+          - '2020-03-04':
+            - name: true
+              percentage: 82.5
+            - name: false
+              percentage: 17.5
+        dateModifiedAvailability:
+          type: array
+          items:
+            $ref: '#/components/schemas/HistoricNamedPercentages'
+          example:
+          - '2020-03-02':
+            - name: true
+              percentage: 55.0
+            - name: false
+              percentage: 45.0
+          - '2020-03-03':
+            - name: true
+              percentage: 33.0
+            - name: false
+              percentage: 67.0
+          - '2020-03-04':
+            - name: true
+              percentage: 82.5
+            - name: false
+              percentage: 17.5
+        score:
+          $ref: '#/components/schemas/HistoricScore'
+    HistoricNamedPercentages:
+      description: A history of named percentages.
+      type: object
+      additionalProperties:
+        $ref: '#/components/schemas/NamedPercentage'
+      minProperties: 1
+    Violations:
+      description: SHACL violations, List of dcat-ap compliance issues
+      type: object
+      properties:
+        success:
+          type: string
+        result:
+          type: object
+          properties:
+            count:
+              type: integer
+            results:
+              type: array
+              items:
+                type: object
+                properties:
+                  resultPath:
+                    type: string
+                  resultMessage:
+                    type: string
+                  value:
+                    type: string
+                  title:
+                    type: string
+                  reference:
+                    type: string
+    HistoricScore:
+      description: List of name value pairs, where key is the date and value is the score.
+      type: object
+      properties:
+        score:
+          type: array
+          items:
+            type: object
+            additionalProperties:
+              type: integer
+      example:
+      - '2020-03-02': 200.0
+      - '2020-03-03': 221.0
+      - '2020-03-04': 221.0
+    DatasetMetrics:
+      type: object
+      properties:
+        info:
+          $ref: '#/components/schemas/DatasetInfo'
+        findability:
+          $ref: '#/components/schemas/DatasetFindability'
+        accessibility:
+          $ref: '#/components/schemas/DatasetAccessibility'
+        interoperability:
+          $ref: '#/components/schemas/DatasetInteroperability'
+        resusability:
+          $ref: '#/components/schemas/DatasetReusability'
+        contextuality:
+          $ref: '#/components/schemas/DatasetContextuality'
+    DatasetInfo:
+      type: object
+      properties:
+        dataset-id:
+          type: string
+        dataset-uri:
+          type: string
+        score:
+          type: integer
+        distributions:
+          type: array
+          items:
+            type: string
+    DatasetFindability:
+      description: Findability metrics
+      type: object
+      properties:
+        keywordAvailability:
+          type: boolean
+        categoryAvailability:
+          type: boolean
+        spatialAvailability:
+          type: boolean
+        temporalAvailability:
+          type: boolean
+    DatasetAccessibility:
+      description: Accessibility metrics
+      type: object
+      properties:
+        accessUrlStatusCodes:
+          type: array
+          items:
+            $ref: '#/components/schemas/NamedPercentage'
+          example:
+          - name: 200
+            percentage: 92.0
+          - name: 400
+            percentage: 1.0
+          - name: 404
+            percentage: 1.0
+          - name: 1300
+            percentage: 2.0
+          - name: 405
+            percentage: 3.0
+          - name: 1100
+            percentage: 1.0
+        downloadUrlAvailability:
+          type: array
+          items:
+            $ref: '#/components/schemas/NamedPercentage'
+          example:
+          - name: true
+            percentage: 55.0
+          - name: false
+            percentage: 45.0
+        downloadUrlStatusCodes:
+          type: array
+          items:
+            $ref: '#/components/schemas/NamedPercentage'
+    DatasetInteroperability:
+      description: Interoperability metrics
+      type: object
+      properties:
+        formatAvailability:
+          type: array
+          items:
+            $ref: '#/components/schemas/NamedPercentage'
+          example:
+          - name: true
+            percentage: 55.0
+          - name: false
+            percentage: 45.0
+        mediaTypeAvailability:
+          type: array
+          items:
+            $ref: '#/components/schemas/NamedPercentage'
+          example:
+          - name: true
+            percentage: 55.0
+          - name: false
+            percentage: 45.0
+        formatMediaTypeVocabularyAlignment:
+          type: array
+          items:
+            $ref: '#/components/schemas/NamedPercentage'
+          example:
+          - name: true
+            percentage: 55.0
+          - name: false
+            percentage: 45.0
+        dcatApCompliance:
+          type: boolean
+    DatasetReusability:
+      description: Reusability metrics
+      type: object
+      properties:
+        licenceAvailability:
+          type: array
+          items:
+            $ref: '#/components/schemas/NamedPercentage'
+          example:
+          - name: true
+            percentage: 55.0
+          - name: false
+            percentage: 45.0
+        accessRightsAvailability:
+          type: array
+          items:
+            $ref: '#/components/schemas/NamedPercentage'
+          example:
+          - name: true
+            percentage: 55.0
+          - name: false
+            percentage: 45.0
+        accessRightsVocabularyAlignment:
+          type: boolean
+        contactPointAvailability:
+          type: boolean
+        publisherAvailability:
+          type: boolean
+    DatasetContextuality:
+      description: Contextuality metrics
+      type: object
+      properties:
+        rightsAvailability:
+          type: array
+          items:
+            $ref: '#/components/schemas/NamedPercentage'
+          example:
+          - name: true
+            percentage: 55.0
+          - name: false
+            percentage: 45.0
+        byteSizeAvailability:
+          type: array
+          items:
+            $ref: '#/components/schemas/NamedPercentage'
+          example:
+          - name: true
+            percentage: 55.0
+          - name: false
+            percentage: 45.0
+        dataset:
+          type: array
+          items:
+            type: object
+            properties:
+              dateModifiedAvailability:
+                type: boolean
+              dateIssuedAvailability:
+                type: boolean
+        distributions:
+          type: array
+          items:
+            type: object
+            properties:
+              dateModifiedAvailability:
+                type: array
+                items:
+                  $ref: '#/components/schemas/NamedPercentage'
+                example:
+                - name: true
+                  percentage: 55.0
+                - name: false
+                  percentage: 45.0
+              dateIssuedAvailability:
+                type: array
+                items:
+                  $ref: '#/components/schemas/NamedPercentage'
+                example:
+                - name: true
+                  percentage: 55.0
+                - name: false
+                  percentage: 45.0
+    DistributionMetrics:
+      type: object
+      properties:
+        info:
+          $ref: '#/components/schemas/DistributionInfo'
+        accessibility:
+          $ref: '#/components/schemas/DistributionAccessibility'
+        interoperability:
+          $ref: '#/components/schemas/DistributionInteroperability'
+        resusability:
+          $ref: '#/components/schemas/DistributionReusability'
+        contextuality:
+          $ref: '#/components/schemas/DistributionContextuality'
+        validation:
+          $ref: '#/components/schemas/ValidationCsv'
+    DistributionInfo:
+      type: object
+      properties:
+        distribution-id:
+          type: string
+        distribution-uri:
+          type: string
+    DistributionAccessibility:
+      description: Accessibility metrics
+      type: object
+      properties:
+        accessUrlStatusCodes:
+          type: boolean
+        downloadUrlAvailability:
+          type: boolean
+        downloadUrlStatusCodes:
+          type: boolean
+    DistributionInteroperability:
+      description: Interoperability metrics
+      type: object
+      properties:
+        formatAvailability:
+          type: boolean
+        mediaTypeAvailability:
+          type: boolean
+        formatMediaTypeVocabularyAlignment:
+          type: boolean
+    DistributionReusability:
+      description: Reusability metrics
+      type: object
+      properties:
+        licenceAvailability:
+          type: boolean
+    DistributionContextuality:
+      description: Contextuality metrics
+      type: object
+      properties:
+        rightsAvailability:
+          type: boolean
+        byteSizeAvailability:
+          type: boolean
+        dateModifiedAvailability:
+          type: boolean
+        dateIssuedAvailability:
+          type: boolean
+    Trigger:
+      description: A trigger object.
+      type: object
+      required:
+      - id
+      - status
+      properties:
+        id:
+          description: A unique identifier within the scope of the pipe
+          type: string
+        status:
+          description: Indicating the status of the trigger
+          type: string
+          enum:
+          - enabled
+          - disabled
+        startMode:
+          description: Behavior when the pipe is already running. Start anyway, do nothing, cancel and
+            restart, or wait until current run has finished (previously waiting triggers will be dropped).
+          type: string
+          enum:
+          - drop
+          - restart
+          - append
+          - concurrent
+          default: drop
+        configs:
+          description: An object containing configurations to merge into specific segments
+          type: object
+    IntervalTrigger:
+      description: Am interval based trigger
+      type: object
+      required:
+      - interval
+      allOf:
+      - $ref: '#/components/schemas/Trigger'
+      properties:
+        interval:
+          type: object
+          required:
+          - value
+          - unit
+          properties:
+            value:
+              type: integer
+              minimum: 1
+            unit:
+              type: string
+              enum:
+              - MINUTE
+              - HOUR
+              - DAY
+              - WEEK
+              - MONTH
+              - YEAR
+        next:
+          description: The first trigger
+          type: string
+          format: date-time
+    CronTrigger:
+      description: A cron based trigger definition
+      type: object
+      required:
+      - cron
+      allOf:
+      - $ref: '#/components/schemas/Trigger'
+      properties:
+        cron:
+          description: The cron syntax
+          type: string
+        next:
+          description: The first trigger
+          type: string
+          format: date-time
+    SpecificTrigger:
+      description: A list of specific trigger times
+      type: object
+      required:
+      - specific
+      allOf:
+      - $ref: '#/components/schemas/Trigger'
+      properties:
+        specific:
+          description: List of specific date and time triggers
+          type: array
+          items:
+            type: string
+            format: date-time
+    JSON-RPCBase:
+      description: JSON-RPC Base Schema
+      type: object
+      required:
+      - jsonrpc
+      properties:
+        jsonrpc:
+          description: JSON-RPC Version `2.0`
+          type: string
+          enum:
+          - '2.0'
+        id:
+          description: Optional client side defined correlator.
+          type: string
+      additionalProperties: false
+    JSON-RPCRequest:
+      description: JSON-RPC Request
+      type: object
+      discriminator:
+        propertyName: method
+      required:
+      - method
+      allOf:
+      - $ref: '#/components/schemas/JSON-RPCBase'
+      - type: object
+        properties:
+          method:
+            description: The method to call
+            type: string
+        additionalProperties: false
+    refreshScope:
+      description: Run Pipe Request
+      type: object
+      allOf:
+      - $ref: '#/components/schemas/JSON-RPCBase'
+      - type: object
+        required:
+        - method
+        - params
+        properties:
+          method:
+            type: string
+            enum:
+            - refreshScope
+          params:
+            description: Method parameters
+            type: object
+            required:
+            - scope
+            properties:
+              scope:
+                description: Aggregation scope of refresh
+                type: string
+                enum:
+                - all
+                - catalogue
+              catalogueId:
+                description: In case of scope 'catalogue' the catalogue id
+                type: string
+            additionalProperties: false
+        additionalProperties: false
+    JSON-RPCError:
+      description: JSON-RPC Error Response
+      type: object
+      required:
+      - error
+      allOf:
+      - $ref: '#/components/schemas/JSON-RPCBase'
+      - type: object
+        properties:
+          error:
+            $ref: '#/components/schemas/JSON-RPCErrorInfo'
+        additionalProperties: false
+    JSON-RPCSuccess:
+      description: JSON-RPC Success Response
+      type: object
+      required:
+      - result
+      allOf:
+      - $ref: '#/components/schemas/JSON-RPCBase'
+      - type: object
+        properties:
+          result:
+            description: Depending of the called method, the result can look differently.
+            oneOf:
+            - $ref: '#/components/schemas/refreshScopeResult'
+        additionalProperties: false
+    JSON-RPCErrorInfo:
+      description: Error Information Object
+      type: object
+      required:
+      - code
+      - message
+      properties:
+        code:
+          description: '* `-1` Means "Upsala"
+
+            * `-7` Means "That''s not funny, I will not do it."
+
+            * `-9` Means "I don''t know what you mean..."
+
+            '
+          type: integer
+          enum:
+          - -1
+          - -7
+          - -9
+        message:
+          type: string
+        data:
+          type: object
+      additionalProperties: false
+    refreshScopeResult:
+      description: Result in case of refreshScope request
+      type: object
+      required:
+      - status
+      properties:
+        status:
+          type: string
+          enum:
+          - accepted
+      additionalProperties: false
+  securitySchemes:
+    ApiKeyAuth:
+      type: apiKey
+      in: header
+      name: X-API-Key
+    BearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT

@@ -1,0 +1,123 @@
+generated: '2026-09-07'
+method: searched
+source: >-
+  CHANGELOG.md at the head of each first-party service repository in the GitLab group gitlab.com/dataeuropa,
+  read through the GitLab API on 2026-09-07
+provider: eu-open-data-portal
+scheme: semver
+format: Keep-a-Changelog style — '## <version> (YYYY-MM-DD)' headings with Added / Changed / Fixed sections
+location: per-service repository, not a portal-wide changelog page
+note: >-
+  There is no changelog page on data.europa.eu and none in the data provider manual. What the Publications
+  Office does publish is a dated, per-release changelog inside each open-source service repository, which is
+  where an integrator has to look. Coverage is uneven: hub-search and hub-repo are current to within two
+  weeks, the MQA metrics cache last tagged in March 2026, and the statistics service's changelog stops at
+  1.1.1 in 2021 while the deployed contract reports v1.3 — that service's changelog has fallen out of use.
+services:
+- service: hub-search
+  api: eu-open-data-portal:eu-open-data-portal-search-api
+  current_version: 5.3.11
+  changelog: https://gitlab.com/dataeuropa/hub/search/-/blob/master/CHANGELOG.md
+  entries:
+  - version: 5.3.11
+    date: '2026-08-24'
+    breaking: false
+    highlights: [Store organisation ancestors in a dataset and query for them, piveau-indexing updated to 1.0.35]
+  - version: 5.3.10
+    date: '2026-08-18'
+    breaking: false
+    highlights: [Materialise profile-defined source resource properties into destination documents, Fixed doubled underscore in the revision index]
+  - version: 5.3.9
+    date: '2026-07-31'
+    breaking: false
+    highlights:
+    - Vocabularies with additional properties, parent_id on vocabulary-linked facet items
+    - Policy access control supports wildcard attributes for Keycloak token paths
+    - 'OpenAPI documentation updated to include access-control 401/403 responses'
+    - Multiple ODRL policies now evaluated as AND restrictions
+  - version: 5.3.8
+    date: '2026-07-02'
+    breaking: false
+    highlights:
+    - Organizations as a first-class entity; GET /organizations?hierarchy=true
+    - Organization management refactored to direct RDF payload support
+    - Fixed a script_exception when uploading vocabularies with nested replacement fields
+  - version: 5.3.7
+    date: '2026-06-15'
+    breaking: false
+    highlights:
+    - 'Policy-based access control: ODRL constraints on datasets evaluated against JWT claims'
+    - parent_id added to every hvdCategory facet item
+    - Fixed filterDistributions, boost, searchAfterSort and pitId handling on GET /search
+- service: hub-repo (Registry)
+  api: eu-open-data-portal:eu-open-data-portal-registry-api
+  current_version: 4.3.3
+  changelog: https://gitlab.com/dataeuropa/hub/repo/-/blob/main/CHANGELOG.md
+  entries:
+  - version: 4.3.3
+    date: '2026-08-29'
+    breaking: false
+    highlights: [Scheduling rejects unknown jobs, Self-repair of duplicate original ids within a catalogue]
+  - version: 4.3.2
+    date: '2026-08-25'
+    breaking: false
+    highlights: [piveau-hub-indexing updated to 1.0.35, 'CLI command and job name renamed: resolving to resolve']
+  - version: 4.3.1
+    date: '2026-08-23'
+    breaking: false
+    highlights: [CLI commands runnable as scheduled jobs, Strict use of piveau typed catalogue records in SPARQL queries]
+  - version: 4.3.0
+    date: '2026-08-19'
+  - version: 4.2.0
+    date: '2026-08-12'
+  - version: 4.1.2
+    date: '2026-08-04'
+  - version: 4.1.1
+    date: '2026-08-03'
+- service: MQA metrics cache
+  api: eu-open-data-portal:eu-open-data-portal-mqa-metrics-cache-api
+  current_version: 5.8.3
+  changelog: https://gitlab.com/dataeuropa/mqa/cache/-/blob/master/CHANGELOG.md
+  entries:
+  - version: 5.8.3
+    date: '2026-03-02'
+  - version: 5.8.2
+    date: '2025-10-31'
+  - version: 5.8.1
+    date: '2025-04-02'
+  - version: 5.8.0
+    date: '2025-04-02'
+  unreleased_note: >-
+    The Unreleased section is unusually substantive — it documents a SPARQL query rewrite after a measurement
+    showed the refresh sweep silently covering only 81 of 216 eligible catalogues, and a fix for
+    POST /admin/refresh/catalogues/{id} blocking ~95 s and timing out behind a proxy.
+- service: MQA SHACL validator
+  api: eu-open-data-portal:eu-open-data-portal-mqa-shacl-validation-api
+  current_version: 4.4.4
+  changelog: https://gitlab.com/dataeuropa/mqa/validating-shacl/-/blob/master/CHANGELOG.md
+  entries:
+  - version: 4.4.4
+    date: '2026-07-29'
+    highlights: [Fixed stringification of pipe embedded content]
+  - version: 4.4.3
+    date: '2026-07-22'
+  - version: 4.4.2
+    date: '2026-06-08'
+  - version: 4.4.1
+    date: '2026-06-05'
+  - version: 4.4.0
+    date: '2025-01-11'
+- service: hub statistics
+  api: eu-open-data-portal:eu-open-data-portal-statistics-api
+  current_version_deployed: v1.3
+  changelog: https://gitlab.com/dataeuropa/hub/statistics/-/blob/master/CHANGELOG.md
+  entries:
+  - version: 1.1.1
+    date: '2021-08-04'
+    highlights: [Updated requests to the new Search API for datasets assigned to categories]
+  - version: 1.1.0
+    date: '2021-06-10'
+    highlights: [Adopted semantic versioning]
+  gap_note: >-
+    The deployed Swagger contract reports v1.3 while the changelog's newest entry is 1.1.1 from 2021-08-04.
+    Two releases are undocumented.

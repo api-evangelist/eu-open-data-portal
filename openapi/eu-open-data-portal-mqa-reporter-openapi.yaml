@@ -1,0 +1,247 @@
+openapi: 3.0.3
+info:
+  version: ${project.version}
+  title: Metrics Reporter
+  x-logo:
+    url: images/logo
+servers:
+- url: https://data.europa.eu/api/mqa/reporter
+  description: MQA Metrics Reporter API
+paths:
+  /reports/{catalogueId}/{languageCode}:
+    get:
+      summary: Returns the report in the specified format
+      operationId: getCatalogueReport
+      parameters:
+      - name: catalogueId
+        in: path
+        description: Catalogue id
+        required: true
+        schema:
+          type: string
+      - name: languageCode
+        in: path
+        description: Language code of the report to be retrieved
+        required: true
+        schema:
+          type: string
+          enum:
+          - bg
+          - cs
+          - da
+          - de
+          - el
+          - en
+          - es
+          - et
+          - fi
+          - fr
+          - ga
+          - hr
+          - hu
+          - it
+          - lt
+          - lv
+          - mt
+          - nl
+          - false
+          - pl
+          - pt
+          - ro
+          - sk
+          - sl
+          - sv
+      responses:
+        '200':
+          description: Binary file
+          content:
+            application/pdf:
+              schema:
+                type: string
+                format: binary
+            application/vnd.oasis.opendocument.spreadsheet:
+              schema:
+                type: string
+                format: binary
+            application/vnd.openxmlformats-officedocument.spreadsheetml.sheet:
+              schema:
+                type: string
+                format: binary
+        '400':
+          description: Invalid request.
+  /report/{languageCode}:
+    get:
+      summary: Returns the report in the format specified by the accept header
+      operationId: getReportViaHeader
+      parameters:
+      - name: languageCode
+        in: path
+        description: Language code of the report to be retrieved
+        required: true
+        schema:
+          type: string
+          enum:
+          - bg
+          - cs
+          - da
+          - de
+          - el
+          - en
+          - es
+          - et
+          - fi
+          - fr
+          - ga
+          - hr
+          - hu
+          - it
+          - lt
+          - lv
+          - mt
+          - nl
+          - false
+          - pl
+          - pt
+          - ro
+          - sk
+          - sl
+          - sv
+      - name: catalogueId
+        in: query
+        description: Catalogue ID for which to download report. Omitting yields global report.
+        required: false
+        schema:
+          type: string
+      responses:
+        '200':
+          description: Binary file
+          content:
+            application/pdf:
+              schema:
+                type: string
+                format: binary
+            application/vnd.oasis.opendocument.spreadsheet:
+              schema:
+                type: string
+                format: binary
+            application/vnd.openxmlformats-officedocument.spreadsheetml.sheet:
+              schema:
+                type: string
+                format: binary
+        '400':
+          description: Invalid request.
+  /report/{languageCode}/{format}:
+    get:
+      summary: Returns the report in the specified format
+      operationId: getReport
+      parameters:
+      - name: languageCode
+        in: path
+        description: Language code of the report to be retrieved
+        required: true
+        schema:
+          type: string
+          enum:
+          - bg
+          - cs
+          - da
+          - de
+          - el
+          - en
+          - es
+          - et
+          - fi
+          - fr
+          - ga
+          - hr
+          - hu
+          - it
+          - lt
+          - lv
+          - mt
+          - nl
+          - false
+          - pl
+          - pt
+          - ro
+          - sk
+          - sl
+          - sv
+      - name: format
+        in: path
+        description: Language code of the report to be retrieved
+        required: true
+        schema:
+          type: string
+          enum:
+          - pdf
+          - xlsx
+          - ods
+      - name: catalogueId
+        in: query
+        description: Catalogue ID for which to download report. Omitting yields global report.
+        required: false
+        schema:
+          type: string
+      responses:
+        '200':
+          description: Binary file
+          content:
+            application/pdf:
+              schema:
+                type: string
+                format: binary
+            application/vnd.oasis.opendocument.spreadsheet:
+              schema:
+                type: string
+                format: binary
+            application/vnd.openxmlformats-officedocument.spreadsheetml.sheet:
+              schema:
+                type: string
+                format: binary
+        '400':
+          description: Invalid request.
+  /generate:
+    post:
+      summary: Generate all PDF reports
+      operationId: generate
+      parameters:
+      - name: lang
+        in: query
+        description: Language codes for which to generate reports
+        required: true
+        schema:
+          type: array
+          items:
+            type: string
+            enum:
+            - bg
+            - cs
+            - da
+            - de
+            - el
+            - en
+            - es
+            - et
+            - fi
+            - fr
+            - ga
+            - hr
+            - hu
+            - it
+            - lt
+            - lv
+            - mt
+            - nl
+            - false
+            - pl
+            - pt
+            - ro
+            - sk
+            - sl
+            - sv
+      responses:
+        '202':
+          description: Request accepted
+        '500':
+          description: Internal server error

@@ -1,0 +1,22 @@
+overlay: 1.0.0
+info:
+  title: API Evangelist enhancements for EU Open Data Portal Search API (hub-search)
+  version: 1.0.0
+extends: openapi/_original/eu-open-data-portal-hub-search-openapi.yaml
+x-generated: '2026-09-07'
+x-method: generated
+x-source: API Evangelist enrichment pipeline — records our enhancements over the harvested contract without mutating
+  it
+actions:
+- target: $.servers
+  description: 'The published contract ships servers: [{url: ""}] (or omits servers entirely) — a ReDoc workaround
+    that leaves the document with no callable host. This overlay records the real base URL, taken from the path
+    the contract is served at and confirmed live on 2026-09-07.'
+  update:
+  - url: https://data.europa.eu/api/hub/search
+    description: EU Open Data Portal Search API (hub-search)
+- target: $.components.responses.Unauthorized
+  description: hub-search declares Unauthorized and Forbidden as null entries in components.responses while operations
+    reference 401/403. Recorded as a finding; not filled in, because the provider has not stated the body shape.
+  update:
+    x-api-evangelist-note: null response object in the published contract — operations reference it via $ref

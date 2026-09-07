@@ -1,0 +1,95 @@
+generated: '2026-09-07'
+method: derived
+source: >-
+  Derived from the 4xx/5xx responses of openapi/eu-open-data-portal-hub-search-openapi.yaml,
+  openapi/eu-open-data-portal-hub-repo-openapi.yaml, openapi/eu-open-data-portal-mqa-metrics-cache-openapi.yaml
+  and openapi/eu-open-data-portal-mqa-shacl-openapi.yaml, then checked against live responses from
+  https://data.europa.eu/api/hub/search/
+provider: eu-open-data-portal
+format: bespoke
+format_note: >-
+  NOT RFC 9457. No contract declares application/problem+json. hub-search documents a
+  {"success": false, "message": "<text>"} JSON envelope for 400/404/500; hub-repo documents its 400/401/403/404
+  responses with a description string and no schema at all. Observed behaviour is thinner than the contract:
+  GET /api/hub/search/search?limit=abc returned HTTP 400 text/plain "Bad Request", and GET
+  /api/hub/search/datasets/doesnotexist999 returned HTTP 404 text/plain "dataset doesnotexist999 not found".
+  An agent cannot rely on a JSON error body from this API.
+envelope:
+  documented:
+    success: boolean (false on error)
+    message: string
+  media_type: application/json
+  observed_media_type: text/plain
+problem_types:
+- code: 400
+  title: Bad Request
+  documented_as: Validation error / Bad request
+  occurrences: 101
+  meaning: >-
+    Malformed or out-of-range query/path parameter, unparseable RDF payload, or an invalid SPARQL/search
+    expression. On the search surface a non-numeric limit or an invalid facets JSON string produces this.
+  remediation: Validate parameter types and the facets JSON before sending; do not retry unchanged.
+  retryable: false
+- code: 401
+  title: Unauthorized
+  occurrences: 33
+  meaning: Missing or expired credential on a write or restricted-read operation.
+  remediation: >-
+    Obtain a fresh token — service accounts POST to https://data.europa.eu/auth/middleware/login/service;
+    EU Login users exchange a user token for a UMA party token at
+    https://data.europa.eu/auth/realms/DEU/protocol/openid-connect/token. Tokens expire in 300 seconds.
+  retryable: true
+  note: >-
+    hub-search declares Unauthorized/Forbidden in components.responses as NULL entries (no description, no
+    schema) while still referencing 401/403 on operations — a real defect in the published contract.
+- code: 403
+  title: Forbidden
+  occurrences: 30
+  meaning: Authenticated, but the token does not carry write access to the target catalogue.
+  remediation: Request catalogue-scoped access from the portal team; a party token is audience-scoped to piveau-hub-repo.
+  retryable: false
+- code: 404
+  title: Not Found
+  occurrences: 90
+  meaning: Unknown dataset, catalogue, distribution, vocabulary or revision id.
+  remediation: Resolve the id through a search or list operation first.
+  retryable: false
+  observed_body: 'text/plain: "dataset <id> not found"'
+- code: 409
+  title: Conflict
+  occurrences: 1
+  meaning: >-
+    Returned only by PUT /catalogues/{catalogueId}/resources/origin in hub-repo, when the supplied originalId
+    collides with an existing resource of a different type in the catalogue.
+  remediation: Choose a different originalId or update the existing resource in place.
+  retryable: false
+- code: 422
+  title: Unprocessable Entity
+  occurrences: 1
+  meaning: >-
+    Returned only by PUT /identifiers/datasets/{datasetId} in hub-repo, when the dataset is not eligible for a
+    persistent identifier.
+  remediation: Call GET /identifiers/datasets/{datasetId}/eligibility first and fix the metadata it flags.
+  retryable: false
+- code: 500
+  title: Internal Server Error
+  occurrences: 56
+  meaning: >-
+    Backend failure declared on 56 operations. Related observed behaviour: GET
+    /api/hub/search/datasets/doesnotexist999/distributions returned HTTP 404 with the raw Elasticsearch string
+    "[es/get] failed: [index_not_found_exception] no such index [dataset-revisions_distributions]" — a backend
+    exception leaking through as the error body instead of a portal error object.
+  remediation: Retry with exponential backoff; report persistent failures via https://data.europa.eu/en/contact-us
+  retryable: true
+- code: 304
+  title: Not Modified
+  occurrences: 4
+  meaning: >-
+    Not an error. hub-repo's origin-based PUT upserts answer 304 when the submitted graph is byte-equivalent to
+    the stored one — the signal that an upsert was a no-op.
+  remediation: Treat as success; nothing changed.
+  retryable: false
+counts:
+  operations_examined: 150
+  distinct_status_codes: 12
+  rfc9457_responses: 0

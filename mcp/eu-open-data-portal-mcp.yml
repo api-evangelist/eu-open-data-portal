@@ -1,0 +1,105 @@
+generated: '2026-09-07'
+method: derived
+status: candidate
+source: >-
+  Searched for a first-party MCP server (portal site, data provider manual, gitlab.com/dataeuropa 71-project
+  listing, npm registry, web search) — none exists. Tool list below is DERIVED from the public read operations
+  of openapi/eu-open-data-portal-hub-search-openapi.yaml, openapi/eu-open-data-portal-mqa-metrics-cache-openapi.yaml
+  and openapi/eu-open-data-portal-mqa-shacl-openapi.yaml.
+provider: eu-open-data-portal
+deployment:
+  mode: none
+  endpoint: null
+  install: null
+  package: null
+  auth: none
+  verified: searched
+  note: >-
+    The Publications Office ships no MCP server, hosted or stdio. A third-party package
+    @pipeworx/mcp-data-europa (npm, 0.1.0, published 2026-05-15, github.com/pipeworx-io/mcp-data-europa)
+    wraps this portal's public API, but it is not published, endorsed or operated by the portal — it is
+    recorded below as third-party context only and is deliberately NOT what `deployment` describes. No
+    MCPServer pointer is wired into apis.yml, because a candidate tool list derived by us is not an agent
+    surface the provider serves.
+third_party:
+- name: '@pipeworx/mcp-data-europa'
+  registry: npm
+  version: 0.1.0
+  published: '2026-05-15'
+  url: https://www.npmjs.com/package/@pipeworx/mcp-data-europa
+  repository: https://github.com/pipeworx-io/mcp-data-europa
+  operator: pipeworx-io
+  first_party: false
+  transport: stdio
+  note: >-
+    Registry description reads "data.europa.eu — official EU open-data hub (~1.6M datasets)"; "official"
+    describes the data source, not the publisher of the package. Tools not introspected — running an
+    unvetted third-party stdio server was out of scope for this pass.
+tools:
+- name: search_datasets
+  description: Full-text and faceted search across datasets, data services, catalogues, vocabularies and organisations.
+  source_operation: openapi/eu-open-data-portal-hub-search-openapi.yaml#searchGet
+  auth: none
+- name: scroll_search_results
+  description: Page beyond the search window using a scroll / search_after cursor.
+  source_operation: openapi/eu-open-data-portal-hub-search-openapi.yaml#scrollGet
+  auth: none
+- name: list_catalogues
+  description: List the federated catalogues of the portal.
+  source_operation: openapi/eu-open-data-portal-hub-search-openapi.yaml#listCatalogues
+  auth: none
+- name: read_catalogue
+  description: Read one catalogue record by id.
+  source_operation: openapi/eu-open-data-portal-hub-search-openapi.yaml#readCatalogue
+  auth: none
+- name: list_vocabularies
+  description: List the DCAT-AP controlled vocabularies the portal indexes.
+  source_operation: openapi/eu-open-data-portal-hub-search-openapi.yaml#readVocabularies
+  auth: none
+- name: read_vocabulary
+  description: Read one controlled vocabulary and its concepts.
+  source_operation: openapi/eu-open-data-portal-hub-search-openapi.yaml#readVocabulary
+  auth: none
+- name: read_dataset_revision
+  description: Read a specific stored revision of a dataset record.
+  source_operation: openapi/eu-open-data-portal-hub-search-openapi.yaml#readDatasetRevision
+  auth: none
+- name: get_data_service
+  description: Read a DCAT data service record by id.
+  source_operation: openapi/eu-open-data-portal-hub-search-openapi.yaml#getDataService
+  auth: none
+- name: list_organizations
+  description: List publishing organisations known to the portal.
+  source_operation: openapi/eu-open-data-portal-hub-search-openapi.yaml#listOrganizations
+  auth: none
+- name: gazetteer_autocomplete
+  description: Autocomplete place names against the portal gazetteer.
+  source_operation: openapi/eu-open-data-portal-hub-search-openapi.yaml#gazetteerAutocomplete
+  auth: none
+- name: ckan_package_search
+  description: CKAN-compatible package search, for clients that already speak the CKAN action API.
+  source_operation: openapi/eu-open-data-portal-hub-search-openapi.yaml#ckanPackageSearch
+  auth: none
+- name: get_global_quality_metrics
+  description: Portal-wide DCAT-AP metadata quality score across the five MQA dimensions.
+  source_operation: openapi/eu-open-data-portal-mqa-metrics-cache-openapi.yaml#getGlobalMetrics
+  auth: none
+- name: get_catalogue_quality_metrics
+  description: MQA quality score for one catalogue, with history.
+  source_operation: openapi/eu-open-data-portal-mqa-metrics-cache-openapi.yaml#getSingleCatalogueMetrics
+  auth: none
+- name: get_dataset_quality_metrics
+  description: MQA quality score for one dataset.
+  source_operation: openapi/eu-open-data-portal-mqa-metrics-cache-openapi.yaml#getSingleDatasetMetrics
+  auth: none
+- name: validate_dcat_ap_graph
+  description: Validate an RDF graph against the DCAT-AP SHACL shapes and return a validation report.
+  source_operation: openapi/eu-open-data-portal-mqa-shacl-openapi.yaml#validationReport
+  auth: none
+coverage:
+  tools_derived: 15
+  rest_read_operations_available: 48
+  note: >-
+    Derived from the public read surface only. Every write operation (dataset/catalogue/vocabulary CRUD in
+    hub-search and hub-repo) is deliberately excluded from a candidate agent tool list — those require a
+    catalogue-scoped API key or party token and mutate the EU's public metadata record.

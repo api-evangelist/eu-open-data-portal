@@ -1,0 +1,137 @@
+generated: '2026-09-07'
+method: derived
+source: >-
+  Derived from components.schemas and the path structure of
+  openapi/eu-open-data-portal-hub-search-openapi.yaml and openapi/eu-open-data-portal-hub-repo-openapi.yaml,
+  read against the DCAT-AP application profile the contracts declare.
+provider: eu-open-data-portal
+model: DCAT-AP
+model_note: >-
+  The data model is not bespoke: it is DCAT-AP, the European application profile of W3C DCAT, and the JSON
+  the search API returns is a flattened projection of the RDF graph the registry stores. Every reference
+  field below is a URI into the same graph (http://data.europa.eu/88u/...), which is why the registry can
+  serve any resource as RDF/XML, Turtle, JSON-LD, N-Triples, N-Quads, TriG, TriX or N3.
+identifier_scheme:
+  form: 'http://data.europa.eu/88u/<type>/<id>'
+  examples:
+  - http://data.europa.eu/88u/catalogue/eurogeographics
+  - http://data.europa.eu/88u/dataset/dataset-status~~1
+  note: >-
+    Within a catalogue a publisher additionally chooses an `originalId`; the pair (catalogueId, originalId)
+    is the upsert key on the /catalogues/{catalogueId}/resources/origin path.
+entities:
+- name: Catalogue
+  description: A federated data catalogue — a national portal, an EU institution or a thematic collection.
+  schema: components.schemas.Catalogue (hub-search)
+  key_fields: [id, title, description, publisher, country, homepage, license, theme_taxonomy, source_type, catalogueProfile]
+  relationships:
+  - has_many: Dataset
+    via: has_part / dcat:dataset
+  - has_many: DCATResource
+    via: /catalogues/{catalogueId}/resources
+  - belongs_to: Organization
+    via: publisher
+  - belongs_to: Catalogue
+    via: is_part_of
+    note: catalogues nest — a super-catalogue can contain member catalogues
+- name: Dataset
+  description: A DCAT-AP dataset record, the unit of the ~1.9M-record corpus.
+  schema: components.schemas.Dataset (hub-search)
+  key_fields: [id, title, description, keywords, publisher, catalog, country, spatial, temporal, issued, modified, language, is_hvd, hvd_category, applicable_legislation, quality_meas]
+  relationships:
+  - has_many: Distribution
+    via: distributions
+  - belongs_to: Catalogue
+    via: catalog
+  - belongs_to: Organization
+    via: publisher
+  - has_one: CatalogRecord
+    via: catalog_record
+  - has_many: Vocable
+    via: 'subject / theme / hvd_category / country / language (every one is a URI into a controlled vocabulary)'
+  - has_many: DatasetRevision
+    via: /datasets/{id}/revisions/{revisionId}
+  - has_one: QualityMeasurement
+    via: quality_meas
+  - belongs_to: DatasetSeries
+    via: is_version_of / has_version
+- name: Distribution
+  description: A downloadable or callable representation of a dataset.
+  schema: components.schemas.Distribution (hub-search)
+  key_fields: [id, title, access_url, download_url, format, media_type, byte_size, checksum, license, status, availability, conforms_to]
+  relationships:
+  - belongs_to: Dataset
+    via: 'parent path /datasets/{datasetId}/distributions'
+  - has_one: DataService
+    via: access_service
+  - has_one: QualityMeasurement
+    via: /distributions/{id} on the MQA metrics cache
+- name: DataService
+  description: A DCAT data service — an API endpoint catalogued as a first-class resource.
+  schema: components.schemas.DataService (hub-search)
+  key_fields: [id, title, endpoint_url, endpoint_description, serves_dataset, conforms_to, access_right, license]
+  relationships:
+  - has_many: Dataset
+    via: serves_dataset
+  - belongs_to: Catalogue
+    via: catalog
+- name: DatasetSeries
+  description: A series that groups successive dataset versions.
+  schema: 'hub-search /datasetseries/{id}; hub-repo DCAT Resources'
+  relationships:
+  - has_many: Dataset
+    via: 'num_series / is_version_of'
+- name: Organization
+  description: A publishing organisation (corporate body), with a resolvable ancestry hierarchy.
+  schema: 'hub-search /organizations, /organizations?hierarchy=true'
+  relationships:
+  - has_many: Catalogue
+    via: publisher
+  - belongs_to: Organization
+    via: 'ancestors (added in hub-search 5.3.11)'
+  - has_one: Vocable
+    via: corporate-body-classification
+- name: Vocabulary
+  description: A controlled vocabulary (authority table) — 26 are served, EuroVoc the largest at 7,486 concepts.
+  schema: components.schemas.Vocabulary (hub-search)
+  relationships:
+  - has_many: Vocable
+    via: /vocabularies/{vocabulary}/{id}
+  cross_reference: vocabulary/eu-open-data-portal-vocabularies.yml
+- name: Vocable
+  description: One concept inside a vocabulary, carrying multilingual pref_labels and an optional parent_id.
+  schema: components.schemas.Vocable (hub-search)
+  relationships:
+  - belongs_to: Vocabulary
+    via: 'path parameter {vocabulary}'
+  - belongs_to: Vocable
+    via: parent_id
+- name: QualityMeasurement
+  description: >-
+    An MQA measurement over a catalogue, country, dataset or distribution, scored across findability,
+    accessibility, interoperability, reusability and contextuality out of 450 points.
+  schema: 'MQA metrics cache /global, /countries/{id}, /catalogues/{id}, /datasets/{id}, /distributions/{id}'
+  relationships:
+  - belongs_to: [Catalogue, Dataset, Distribution, Country]
+    via: 'scope + id in the metrics path'
+  - has_many: Violation
+    via: /catalogues/{id}/violations
+- name: DatasetRevision
+  description: A stored prior state of a dataset record; readable, diffable and individually deletable.
+  schema: 'hub-search /datasets/{id}/revisions/{revisionId}; hub-repo /datasets/revisions/{revisionId}, /datasets/{datasetId}/diff'
+  relationships:
+  - belongs_to: Dataset
+    via: '{id}'
+- name: EditorialContent
+  description: Portal editorial pages (news, data stories) indexed alongside data records.
+  schema: components.schemas.EditorialContent (hub-search)
+- name: Draft
+  description: An unpublished dataset held in the registry until published or hidden.
+  schema: 'hub-repo /drafts/datasets'
+  relationships:
+  - becomes: Dataset
+    via: 'PUT /drafts/datasets/publish/{id}'
+counts:
+  entities: 13
+  schemas_in_hub_search: 15
+render: null

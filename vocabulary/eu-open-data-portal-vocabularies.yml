@@ -1,0 +1,121 @@
+generated: '2026-09-07'
+method: probed
+source: GET https://data.europa.eu/api/hub/search/vocabularies and GET /vocabularies/{vocabulary} for each entry, 2026-09-07
+provider: eu-open-data-portal
+standard: DCAT-AP controlled vocabularies (EU Publications Office authority tables + EuroVoc)
+summary:
+  vocabulary_count: 26
+  note: The portal serves 26 controlled vocabularies as first-class API resources — every concept carries multilingual
+    pref_labels across the EU languages. These are the authority tables a publisher must use to produce conformant DCAT-AP
+    metadata, and they are readable anonymously, which makes the portal a vocabulary provider as well as a catalogue.
+    Concept counts were read live; a null count means that vocabulary did not return a count on the probe.
+access:
+  list: GET https://data.europa.eu/api/hub/search/vocabularies
+  read: GET https://data.europa.eu/api/hub/search/vocabularies/{vocabulary}
+  concept: GET https://data.europa.eu/api/hub/search/vocabularies/{vocabulary}/{id}
+  write: PUT/POST/PATCH/DELETE on the same paths, X-API-Key required
+vocabularies:
+- id: eurovoc
+  description: EuroVoc, the EU multilingual, multidisciplinary thesaurus used to subject-index datasets
+  concepts: 7486
+  url: https://data.europa.eu/api/hub/search/vocabularies/eurovoc
+- id: timeperiod
+  description: Named time periods
+  concepts: 37
+  url: https://data.europa.eu/api/hub/search/vocabularies/timeperiod
+- id: file-type
+  description: Publications Office file-type authority table used on distributions
+  concepts: 229
+  url: https://data.europa.eu/api/hub/search/vocabularies/file-type
+- id: site
+  description: Portal sites / instances
+  concepts: 419
+  url: https://data.europa.eu/api/hub/search/vocabularies/site
+- id: spdx-checksum-algorithm
+  description: SPDX checksum algorithms for distribution integrity
+  concepts: 17
+  url: https://data.europa.eu/api/hub/search/vocabularies/spdx-checksum-algorithm
+- id: data-theme
+  description: DCAT-AP data themes (the EU Publications Office data-theme authority table)
+  concepts: 14
+  url: https://data.europa.eu/api/hub/search/vocabularies/data-theme
+- id: hvd-category
+  description: High-value dataset categories under Implementing Regulation (EU) 2023/138
+  concepts: 96
+  url: https://data.europa.eu/api/hub/search/vocabularies/hvd-category
+- id: dataset-status
+  description: Dataset status
+  concepts: 6
+  url: https://data.europa.eu/api/hub/search/vocabularies/dataset-status
+- id: dataset-type
+  description: Dataset types
+  concepts: 26
+  url: https://data.europa.eu/api/hub/search/vocabularies/dataset-type
+- id: licence
+  description: Publications Office licence authority table
+  concepts: 178
+  url: https://data.europa.eu/api/hub/search/vocabularies/licence
+- id: corporate-body-classification
+  description: Classification of corporate bodies (institution, agency, national body ...)
+  concepts: 49
+  url: https://data.europa.eu/api/hub/search/vocabularies/corporate-body-classification
+- id: frequency
+  description: Accrual periodicity / update frequency
+  concepts: 41
+  url: https://data.europa.eu/api/hub/search/vocabularies/frequency
+- id: access-right
+  description: Access rights (public, restricted, non-public)
+  concepts: 7
+  url: https://data.europa.eu/api/hub/search/vocabularies/access-right
+- id: iana-media-types
+  description: IANA media types for distributions
+  concepts: 2209
+  url: https://data.europa.eu/api/hub/search/vocabularies/iana-media-types
+- id: measurement-unit
+  description: Measurement units
+  concepts: 52
+  url: https://data.europa.eu/api/hub/search/vocabularies/measurement-unit
+- id: continent
+  description: Continents authority table
+  concepts: 8
+  url: https://data.europa.eu/api/hub/search/vocabularies/continent
+- id: place
+  description: Places, used for spatial coverage
+  concepts: 4368
+  url: https://data.europa.eu/api/hub/search/vocabularies/place
+- id: language
+  description: Languages of the metadata and the data
+  concepts: 1424
+  url: https://data.europa.eu/api/hub/search/vocabularies/language
+- id: distribution-type
+  description: Types of distribution
+  concepts: 5
+  url: https://data.europa.eu/api/hub/search/vocabularies/distribution-type
+- id: planned-availability
+  description: Planned availability of a distribution
+  concepts: 5
+  url: https://data.europa.eu/api/hub/search/vocabularies/planned-availability
+- id: distribution-status
+  description: Distribution status
+  concepts: 9
+  url: https://data.europa.eu/api/hub/search/vocabularies/distribution-status
+- id: corporate-body
+  description: EU and national corporate bodies used as publishers
+  concepts: 1960
+  url: https://data.europa.eu/api/hub/search/vocabularies/corporate-body
+- id: notation-type
+  description: Notation types
+  concepts: 145
+  url: https://data.europa.eu/api/hub/search/vocabularies/notation-type
+- id: country
+  description: Countries, from the Publications Office country authority table
+  concepts: 347
+  url: https://data.europa.eu/api/hub/search/vocabularies/country
+- id: documentation-type
+  description: Documentation types
+  concepts: 5
+  url: https://data.europa.eu/api/hub/search/vocabularies/documentation-type
+- id: adms
+  description: ADMS vocabularies (asset description metadata schema)
+  concepts: 72
+  url: https://data.europa.eu/api/hub/search/vocabularies/adms

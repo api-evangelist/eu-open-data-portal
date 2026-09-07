@@ -4,87 +4,47 @@ schema: https://raw.githubusercontent.com/api-evangelist/interface-research/main
 provider: eu-open-data-portal
 providerId: eu-open-data-portal
 created: '2026-05-04'
-# Provenance stamped 2026-08-11: this artifact was written by the API Evangelist
-# bulk sweep dated 2026-05-04, not harvested from the provider. See roadmap#35.
-method: generated
-modified: '2026-05-04'
-tags:
-  - Rate Limiting
-  - Quotas
-  - Throttling
-description: Machine-readable rate limit definitions for the eu-open-data-portal API surface. Captures
-  per-tier quotas, burst behavior, response signaling, and recovery semantics. Defaults are scaffold values
-  to be replaced with published provider limits.
+modified: '2026-09-07'
+generated: '2026-09-07'
+method: probed
+source: >-
+  Live response headers from https://data.europa.eu/api/hub/search/vocabularies and
+  https://data.europa.eu/api/hub/search/search (2026-09-07), plus a documentation search across
+  https://dataeuropa.gitlab.io/data-provider-manual/api-documentation/, /faq/ and
+  https://data.europa.eu/en/faq
+limit_count: 0
+tags: [Rate Limiting, Quotas, Throttling]
+description: >-
+  No rate limit is published for any data.europa.eu API, and none is signalled at runtime. Response headers
+  observed on live unauthenticated calls were: server, content-type, content-length, date,
+  access-control-allow-origin, strict-transport-security, x-content-type-options, x-xss-protection and the
+  CloudFront cache headers (x-cache, x-amz-cf-pop, x-amz-cf-id, via). There is no X-RateLimit-*, no
+  RateLimit-*, no Retry-After and no documented quota, per key, per account or per endpoint. An agent
+  integrating here has no backpressure signal other than HTTP status, and no published ceiling to design
+  against. The service is fronted by CloudFront, so an abusive client would most likely meet an edge
+  protection response rather than a documented API limit.
 headers:
-  limit: X-RateLimit-Limit
-  remaining: X-RateLimit-Remaining
-  reset: X-RateLimit-Reset
-  retryAfter: Retry-After
-  policy: RateLimit-Policy
+  limit: null
+  remaining: null
+  reset: null
+  retryAfter: null
+  policy: null
+observed_headers:
+- access-control-allow-origin
+- strict-transport-security
+- x-content-type-options
+- x-xss-protection
+- x-cache
+- via
 responseCodes:
-  throttled: 429
-  quotaExceeded: 429
-  serviceUnavailable: 503
-limits:
-  - tier: free
-    name: Free Tier Default
-    scope: api-key
-    metric: requests_per_minute
-    limit: 10
-    burst: 20
-    timeFrame: minute
-    applies:
-      - EU Open Data Portal SPARQL API
-      - EU Open Data Portal Search API
-  - tier: free
-    name: Free Tier Monthly Quota
-    scope: api-key
-    metric: requests_per_month
-    limit: 1000
-    timeFrame: month
-    applies:
-      - EU Open Data Portal SPARQL API
-      - EU Open Data Portal Search API
-  - tier: professional
-    name: Professional Tier Default
-    scope: api-key
-    metric: requests_per_minute
-    limit: 100
-    burst: 200
-    timeFrame: minute
-    applies:
-      - EU Open Data Portal SPARQL API
-      - EU Open Data Portal Search API
-  - tier: professional
-    name: Professional Tier Monthly Quota
-    scope: api-key
-    metric: requests_per_month
-    limit: 100000
-    timeFrame: month
-    applies:
-      - EU Open Data Portal SPARQL API
-      - EU Open Data Portal Search API
-  - tier: enterprise
-    name: Enterprise Negotiated Limit
-    scope: contract
-    metric: requests_per_minute
-    limit: 1000
-    burst: 5000
-    timeFrame: minute
-    applies:
-      - EU Open Data Portal SPARQL API
-      - EU Open Data Portal Search API
-policies:
-  - name: Backoff Strategy
-    description: Clients should implement exponential backoff with jitter, honoring the Retry-After header
-      when present.
-  - name: Burst Handling
-    description: Short bursts above the steady-state limit are tolerated up to the documented burst ceiling
-      before throttling engages.
-  - name: Quota Reset
-    description: Monthly quotas reset at the start of each calendar month in UTC. Per-minute and per-second
-      windows reset on a sliding-window basis.
-  - name: Fair Use
-    description: Even on uncapped enterprise tiers, sustained usage that materially impacts shared infrastructure
-      may be subject to fair-use throttling.
+  throttled: null
+  quotaExceeded: null
+limits: []
+policies: []
+notes:
+- >-
+  REPLACES A FABRICATED SCAFFOLD. Until this pass this file declared five invented limits — 10 req/min and
+  1,000 req/month free, 100 req/min and 100,000 req/month "professional", 1,000 req/min "enterprise
+  negotiated" — plus X-RateLimit-* headers the API does not send, all written by the 2026-05-04 bulk sweep and
+  marked `method: generated`. An honest zero is the finding: the provider documents no limits.
 maintainers: []

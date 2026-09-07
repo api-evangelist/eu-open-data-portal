@@ -2,20 +2,18 @@
   "repo": "eu-open-data-portal",
   "feeds": [
     {
+      "source": "https://www.linkedin.com/company/data-europa-eu",
+      "error": "HTTPError"
+    },
+    {
       "source": "https://data.europa.eu/en/news-events/news",
       "feed_url": "https://data.europa.eu/en/news-events/news",
       "title": "",
       "saved": 0,
-      "method": "none",
-      "nature": "vendor-blog",
-      "nature_basis": "path_blog"
-    },
-    {
-      "source": "https://www.linkedin.com/company/data-europa-eu",
-      "error": "HTTPError"
+      "method": "none"
     }
   ],
-  "fetched": "2026-08-30T22:33:40Z",
+  "fetched": "2026-09-06T19:17:18Z",
   "post_count": 10,
   "feed_nature": "vendor-blog",
   "feed_nature_basis": "path_blog",

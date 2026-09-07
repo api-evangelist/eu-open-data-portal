@@ -1,0 +1,76 @@
+generated: '2026-09-07'
+method: searched
+source: openapi/ securitySchemes across hub-repo, hub-search and the MQA metrics cache, upgraded from https://dataeuropa.gitlab.io/data-provider-manual/api-documentation/api-access-control/
+  and https://dataeuropa.gitlab.io/data-provider-manual/api-documentation/api-store/
+summary:
+  types:
+  - apiKey
+  - http
+  api_key_in:
+  - header
+  public_read: true
+  note: 'Reads are anonymous across every API — search, MQA metrics, MQA reporter, SHACL validation, statistics and SPARQL
+    all answer without a credential (verified live). Credentials are only needed to WRITE into a catalogue, and they
+    are not self-service: access is granted by the portal team to a catalogue you are responsible for.'
+schemes:
+- name: ApiKeyAuth
+  type: apiKey
+  in: header
+  parameter: X-API-Key
+  sources:
+  - openapi/eu-open-data-portal-hub-repo-openapi.yaml
+  - openapi/eu-open-data-portal-hub-search-openapi.yaml
+  - openapi/eu-open-data-portal-mqa-metrics-cache-openapi.yaml
+- name: BearerAuth
+  type: http
+  scheme: bearer
+  bearerFormat: JWT
+  sources:
+  - openapi/eu-open-data-portal-hub-repo-openapi.yaml
+  - openapi/eu-open-data-portal-hub-search-openapi.yaml
+  - openapi/eu-open-data-portal-mqa-metrics-cache-openapi.yaml
+docs: https://dataeuropa.gitlab.io/data-provider-manual/api-documentation/api-access-control/
+flows:
+- name: Service account (client credentials via the access-control middleware)
+  steps:
+  - POST https://data.europa.eu/auth/middleware/login/service with JSON {client_id, client_secret}
+  - 'Response: {"access_token": "..."}'
+  - 'Send the token as Authorization: Bearer <token> to hub-repo and hub-store'
+  audience: hub-repo, hub-store
+  source: https://dataeuropa.gitlab.io/data-provider-manual/api-documentation/api-access-control/
+- name: EU Login user + UMA 2.0 party token (Keycloak realm DEU)
+  steps:
+  - POST https://data.europa.eu/auth/realms/DEU/protocol/openid-connect/token with grant_type=password, client_id=piveau-hub-ui,
+    username, password — returns a user token (expires_in 300, refresh_expires_in 1800, scope 'email profile')
+  - 'POST the same token endpoint with grant_type=urn:ietf:params:oauth:grant-type:uma-ticket and audience=piveau-hub-repo,
+    carrying the user token as Authorization: Bearer — returns the party token'
+  - Use the party token to manage datasets in data.europa.eu
+  audience: piveau-hub-repo
+  token_ttl_seconds: 300
+  refresh_ttl_seconds: 1800
+  source: https://dataeuropa.gitlab.io/data-provider-manual/api-documentation/api-access-control/
+- name: Catalogue-scoped API key
+  steps:
+  - Send the key in the X-API-Key header
+  note: Declared as ApiKeyAuth in all three write-bearing contracts; issuance is handled by the portal team, not documented
+    as self-service.
+  source: openapi/eu-open-data-portal-hub-repo-openapi.yaml
+identity_provider:
+  type: keycloak
+  realm: DEU
+  token_endpoint: https://data.europa.eu/auth/realms/DEU/protocol/openid-connect/token
+  middleware_endpoint: https://data.europa.eu/auth/middleware/login/service
+  discovery_document: https://data.europa.eu/auth/realms/DEU/.well-known/openid-configuration
+  discovery_status: 403
+  discovery_note: The realm is real and documented, but its OIDC discovery document is blocked at the edge (HTTP 403
+    probed 2026-09-07), so a client cannot auto-configure.
+access_control:
+  model: catalogue-scoped, plus ODRL policy-based access control on datasets
+  note: hub-search 5.3.7 added policy-based access control evaluating ODRL constraints on datasets against JWT claims,
+    and 5.3.9 made multiple ODRL policies combine as AND restrictions (service changelog).
+  source: https://gitlab.com/dataeuropa/hub/search/-/blob/master/CHANGELOG.md
+gaps:
+- No scopes are documented anywhere — the observed OIDC scope string is the default "email profile", and no scopes/ artifact
+  is emitted because there is no scope surface to record.
+- Unauthorized and Forbidden are declared as null entries in hub-search components.responses while 401/403 are referenced
+  by operations.

@@ -1,0 +1,167 @@
+generated: '2026-09-07'
+method: searched
+source: >-
+  openapi/ (hub-search 5.3.11, hub-repo 4.3.3, MQA metrics cache 5.8.3, SHACL 4.4.4, metrics reporter,
+  statistics v1.3), https://dataeuropa.gitlab.io/data-provider-manual/api-documentation/,
+  https://dataeuropa.gitlab.io/data-provider-manual/api-documentation/api-access-control/,
+  and live responses from https://data.europa.eu/api/hub/search/
+provider: eu-open-data-portal
+conformance:
+- id: dcat-ap
+  name: DCAT-AP (Data Catalogue Vocabulary — Application Profile for data portals in Europe)
+  conforms: true
+  domain_standard: true
+  evidence: >-
+    The registry API is a DCAT-AP write surface: hub-repo declares tags "DCAT Resources", "Catalogues",
+    "Distributions" and "Dataset Series" and accepts/returns application/rdf+xml, application/ld+json,
+    application/n-triples, application/n-quads, application/trig, application/trix, text/turtle and text/n3.
+    hub-search's x-tagGroups declares a "DCAT-AP" group over Datasets, Data Services, Dataset Series,
+    Catalogues and Vocabularies. The data provider manual states the API "simplifies the management of DCAT
+    resources, adhering to the DCAT-AP standard".
+  source: openapi/eu-open-data-portal-hub-repo-openapi.yaml
+- id: shacl
+  name: W3C SHACL (Shapes Constraint Language)
+  conforms: true
+  domain_standard: true
+  evidence: >-
+    A dedicated public validation service — POST /validation/report at
+    https://data.europa.eu/api/mqa/shacl — runs a submitted graph against the official DCAT-AP SHACL shapes
+    and returns a SHACL validation report; the shapeModel parameter selects the DCAT-AP shape version.
+  source: openapi/eu-open-data-portal-mqa-shacl-openapi.yaml
+- id: sparql-1.1
+  name: W3C SPARQL 1.1 Protocol and Query Language
+  conforms: true
+  domain_standard: true
+  evidence: >-
+    https://data.europa.eu/sparql serves an OpenLink Virtuoso SPARQL endpoint (HTTP 200, "OpenLink Virtuoso
+    SPARQL Query Editor"); the manual documents the machine-readable endpoint and the named-graph layout
+    (one graph per dataset, plus vocabulary, NUTS and MQA measurement graphs).
+  source: https://dataeuropa.gitlab.io/data-provider-manual/how-to-search/sparql/
+- id: rdf
+  name: W3C RDF 1.1 serialisations
+  conforms: true
+  evidence: >-
+    hub-repo's shared RDF200/RDFLIST200 responses enumerate nine RDF media types; content negotiation is the
+    documented way to choose a serialisation.
+  source: openapi/eu-open-data-portal-hub-repo-openapi.yaml
+- id: ckan-action-api
+  name: CKAN Action API (package_list / package_search / package_show)
+  conforms: true
+  domain_standard: true
+  evidence: >-
+    hub-search exposes GET /ckan/package_list, /ckan/package_search and /ckan/package_show under a "Ckan" tag —
+    a deliberate compatibility surface so clients already speaking CKAN, the de-facto open-data portal API,
+    integrate with no bespoke connector. Verified live: GET /api/hub/search/ckan/package_list.
+  source: openapi/eu-open-data-portal-hub-search-openapi.yaml
+- id: json-rpc-2.0
+  name: JSON-RPC 2.0
+  conforms: true
+  evidence: >-
+    Both hub-repo and the MQA metrics cache expose POST /action documented as "The action API utilizes the
+    JSON-RPC 2.0 specification with the following constraints: id must be a string, params are passed as an
+    object map not an array, data of an error is an object, batch processing is not yet supported."
+  source: openapi/eu-open-data-portal-mqa-metrics-cache-openapi.yaml
+- id: openapi-3
+  name: OpenAPI Specification
+  conforms: true
+  evidence: >-
+    Five of six APIs publish OpenAPI (3.0.3 hub-search and MQA cache/reporter, 3.1.2 hub-repo and SHACL);
+    the statistics service publishes Swagger 2.0. The manual states "All APIs on the European Data Portal
+    are documented via OpenAPI".
+  source: https://dataeuropa.gitlab.io/data-provider-manual/api-documentation/
+- id: oidc
+  name: OpenID Connect
+  conforms: true
+  evidence: >-
+    "OpenID Connect is used for access control." Tokens are obtained from a Keycloak realm at
+    https://data.europa.eu/auth/realms/DEU/protocol/openid-connect/token. Caveat — the realm's discovery
+    document at /.well-known/openid-configuration is blocked at the edge (HTTP 403), so the OIDC metadata
+    cannot be read anonymously.
+  source: https://dataeuropa.gitlab.io/data-provider-manual/api-documentation/api-access-control/
+- id: uma-2.0
+  name: OAuth 2.0 User-Managed Access (UMA 2.0) party tokens
+  conforms: true
+  evidence: >-
+    The documented second leg exchanges a user token for a party token with
+    grant_type=urn:ietf:params:oauth:grant-type:uma-ticket and audience=piveau-hub-repo.
+  source: https://dataeuropa.gitlab.io/data-provider-manual/api-documentation/api-access-control/
+- id: atom-rss
+  name: Atom 1.0 / RSS 2.0 syndication
+  conforms: true
+  evidence: hub-search serves GET /{lang}/feeds/datasets.atom, /{lang}/feeds/datasets.rss and per-dataset revision feeds.
+  source: openapi/eu-open-data-portal-hub-search-openapi.yaml
+- id: sitemaps
+  name: sitemaps.org protocol
+  conforms: true
+  evidence: hub-search serves GET /sitemap (index) and GET /sitemap/{id}.
+  source: openapi/eu-open-data-portal-hub-search-openapi.yaml
+- id: eu-hvd
+  name: EU High-Value Datasets Implementing Regulation (EU) 2023/138
+  conforms: true
+  domain_standard: true
+  evidence: >-
+    The portal indexes an `hvd-category` controlled vocabulary (confirmed live in GET
+    /api/hub/search/vocabularies) and publishes an HVD dashboard at https://data.europa.eu/en/hvd-dashboard —
+    the machine-readable expression of the High-Value Datasets regime under the Open Data Directive.
+  source: https://data.europa.eu/api/hub/search/vocabularies
+- id: eurovoc
+  name: EuroVoc multilingual thesaurus
+  conforms: true
+  evidence: '`eurovoc` is one of the 26 controlled vocabularies served by GET /api/hub/search/vocabularies.'
+  source: vocabulary/eu-open-data-portal-vocabularies.yml
+- id: rfc9457
+  name: RFC 9457 Problem Details for HTTP APIs
+  conforms: false
+  evidence: >-
+    No application/problem+json anywhere in the six contracts. hub-search documents a bespoke
+    {success:false, message:string} envelope; hub-repo documents error responses with a description only and
+    no schema; live errors are worse than the contract — GET /api/hub/search/search?limit=abc returns
+    text/plain "Bad Request" and a missing dataset returns text/plain "dataset <id> not found".
+  source: errors/eu-open-data-portal-problem-types.yml
+- id: idempotency-key
+  name: Idempotency-Key request header (draft-ietf-httpapi-idempotency-key-header)
+  conforms: false
+  evidence: >-
+    No Idempotency-Key or equivalent replay-protection header in any of the six contracts. Write safety
+    comes from PUT-based upsert semantics keyed on catalogue id + originalId, not from a client-supplied key.
+  source: conventions/eu-open-data-portal-conventions.yml
+- id: rate-limit-headers
+  name: RateLimit header fields for HTTP (RFC 9331 draft family)
+  conforms: false
+  evidence: >-
+    No X-RateLimit-* or RateLimit-* headers observed on live responses from
+    https://data.europa.eu/api/hub/search/vocabularies (headers returned: server, content-type,
+    access-control-allow-origin, strict-transport-security, x-content-type-options, x-xss-protection, CloudFront cache headers).
+  source: rate-limits/eu-open-data-portal-rate-limits.yml
+- id: oai-pmh
+  name: OAI-PMH
+  conforms: false
+  evidence: >-
+    The portal HARVESTS OAI-PMH sources (gitlab.com/dataeuropa/harvester/importing-oaipmh) but does not
+    serve an OAI-PMH endpoint of its own; no OAI-PMH verb surface was found on data.europa.eu.
+  source: https://gitlab.com/dataeuropa/harvester/importing-oaipmh
+- id: ogc-api
+  name: OGC API / OWS GetCapabilities
+  conforms: false
+  evidence: >-
+    Probed only where evidence pointed — the portal runs geospatial harvesting and a geoviewer
+    (gitlab.com/dataeuropa/geoviewer) — but data.europa.eu itself serves no OGC surface; geospatial datasets
+    are catalogued as DCAT-AP records pointing at member-state services, which host the OGC endpoints.
+  source: https://dataeuropa.gitlab.io/data-provider-manual/geospatial-topics/geospatial_data/
+domain_standard_summary:
+  market: government open data / public sector information
+  standards_declared_by_contract: [dcat-ap, shacl, sparql-1.1, ckan-action-api, eu-hvd]
+  note: >-
+    This provider is a strong domain-standard case: the contract does not merely claim DCAT-AP on a
+    marketing page, it accepts and emits DCAT-AP RDF in nine serialisations, ships a public SHACL validator
+    for the profile, and adds a CKAN-compatible action surface so existing open-data clients need no bespoke
+    connector.
+certifications: []
+compliance_programs:
+  note: >-
+    No SOC 2 / ISO 27001 / PCI / FedRAMP style certification page is published — this is an EU institutional
+    service, and its published obligations are regulatory rather than commercial: Directive (EU) 2019/1024 on
+    open data and the re-use of public sector information, Implementing Regulation (EU) 2023/138 on
+    high-value datasets, and Decision 2011/833/EU on the reuse of Commission documents (all three cited from
+    the data provider manual). No `Compliance` pointer is emitted in apis.yml because no certification or
+    trust-centre programme is published.

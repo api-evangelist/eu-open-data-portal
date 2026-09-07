@@ -1,0 +1,35 @@
+generated: '2026-09-07'
+method: generated
+source: >-
+  Authored from the provider's own published contracts under openapi/ and the data provider manual at
+  https://dataeuropa.gitlab.io/data-provider-manual/. Every operationId referenced was grepped from the
+  harvested specs; none is invented. The provider publishes no skills or AGENTS.md of its own.
+provider: eu-open-data-portal
+skills:
+- file: eu-open-data-portal-search-datasets.md
+  name: eu-open-data-portal-search-datasets
+  api: eu-open-data-portal:eu-open-data-portal-search-api
+  summary: Find EU open datasets and resolve their download links, using real vocabulary values and the deep-paging cursor.
+  auth: none
+  writes: false
+- file: eu-open-data-portal-assess-metadata-quality.md
+  name: eu-open-data-portal-assess-metadata-quality
+  api: eu-open-data-portal:eu-open-data-portal-mqa-metrics-cache-api
+  summary: Read MQA quality scores for a catalogue, country, dataset or distribution and turn them into a violation work list.
+  auth: none
+  writes: false
+- file: eu-open-data-portal-validate-dcat-ap.md
+  name: eu-open-data-portal-validate-dcat-ap
+  api: eu-open-data-portal:eu-open-data-portal-mqa-shacl-validation-api
+  summary: Validate a DCAT-AP graph against the official SHACL shapes before publishing — the one true dry-run surface here.
+  auth: none
+  writes: false
+- file: eu-open-data-portal-publish-dataset.md
+  name: eu-open-data-portal-publish-dataset
+  api: eu-open-data-portal:eu-open-data-portal-registry-api
+  summary: Obtain a party token, check before writing, upsert a DCAT-AP dataset by originalId, and undo.
+  auth: 'bearer JWT (UMA party token) or X-API-Key'
+  writes: true
+  caution: >-
+    Writes to the EU's public metadata record. No idempotency key exists; POST retries duplicate, PUT upserts
+    are safe. No restore window is published.

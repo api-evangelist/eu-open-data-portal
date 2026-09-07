@@ -1,0 +1,106 @@
+generated: '2026-09-07'
+method: searched
+source: >-
+  npm registry search (piveau, data-europa, dataeuropa, europeandataportal), pypi.org lookups,
+  gitlab.com/dataeuropa project listing (GitLab API, 71 projects), and the API documentation page
+  of the data provider manual.
+provider: eu-open-data-portal
+summary:
+  first_party_registry_packages: 0
+  first_party_example_clients: 4
+  upstream_vendor_packages: 3
+  note: >-
+    The Publications Office publishes NO client SDK to any package registry. What it does publish is a
+    set of four first-party API usage examples, one per language, as GitLab repositories under
+    gitlab.com/dataeuropa/api-usage-examples — source you copy, not a library you install. The
+    @piveau/* npm packages that DO exist belong to piveau, the Fraunhofer FOKUS open-source data-portal
+    software that data.europa.eu runs on; they are upstream-vendor packages, not portal-published SDKs,
+    so they are recorded here with official:false. No `SDKs` pointer is emitted in apis.yml because no
+    first-party client library exists to point at.
+packages:
+- language: python
+  registry: none
+  distribution: source
+  name: dataset-search-python
+  url: https://gitlab.com/dataeuropa/api-usage-examples/dataset-search-python
+  kind: example-client
+  official: true
+  version: null
+  published: '2021-10-01'
+  note: >-
+    First-party worked example of calling the hub-search API from Python. Not published to PyPI —
+    there is no registry metadata endpoint to read a version from. Last repository activity 2021-10-01,
+    five years behind the hub-search 5.3.11 release of 2026-08-24.
+- language: javascript
+  registry: none
+  distribution: source
+  name: dataset-search-javascript
+  url: https://gitlab.com/dataeuropa/api-usage-examples/dataset-search-javascript
+  kind: example-client
+  official: true
+  version: null
+  published: '2021-10-06'
+  note: First-party worked example; not published to npm. Last repository activity 2021-10-06.
+- language: java
+  registry: none
+  distribution: source
+  name: dataset-search-java
+  url: https://gitlab.com/dataeuropa/api-usage-examples/dataset-search-java
+  kind: example-client
+  official: true
+  version: null
+  published: '2021-10-01'
+  note: First-party worked example; not published to Maven Central. Last repository activity 2021-10-01.
+- language: ruby
+  registry: none
+  distribution: source
+  name: dataset-search-ruby
+  url: https://gitlab.com/dataeuropa/api-usage-examples/dataset-search-ruby
+  kind: example-client
+  official: true
+  version: null
+  published: '2021-10-01'
+  note: First-party worked example; not published to RubyGems. Last repository activity 2021-10-01.
+- language: javascript
+  registry: npm
+  name: '@piveau/sdk-core'
+  url: https://www.npmjs.com/package/@piveau/sdk-core
+  install: npm install @piveau/sdk-core
+  kind: sdk
+  official: false
+  version: 0.0.0-beta.0
+  published: '2025-01-28'
+  note: >-
+    "Provides API client for piveau services." Published by the piveau project (Fraunhofer FOKUS),
+    the upstream software vendor whose stack data.europa.eu runs — NOT by the Publications Office.
+    Still a pre-release beta from 2025-01-28.
+- language: javascript
+  registry: npm
+  name: '@piveau/sdk-vue'
+  url: https://www.npmjs.com/package/@piveau/sdk-vue
+  install: npm install @piveau/sdk-vue
+  kind: sdk
+  official: false
+  version: 1.0.0-beta.1
+  published: '2025-01-28'
+  note: Upstream piveau (Fraunhofer FOKUS) Vue state-management layer for piveau services; not portal-published.
+- language: javascript
+  registry: npm
+  name: '@piveau/piveau-hub-ui-modules'
+  url: https://www.npmjs.com/package/@piveau/piveau-hub-ui-modules
+  install: npm install @piveau/piveau-hub-ui-modules
+  kind: ui-components
+  official: false
+  version: 4.9.6
+  published: '2026-09-02'
+  note: >-
+    Upstream piveau front-end component library. The portal maintains its own fork/deployment of the hub
+    UI at gitlab.com/dataeuropa/hub/ui; the npm package is the vendor's.
+registries_checked:
+- registry: npm
+  queries: [piveau, data-europa, dataeuropa, europeandataportal]
+  first_party_hits: 0
+- registry: pypi
+  queries: [piveau, data-europa, dataeuropa, europeandataportal]
+  first_party_hits: 0
+  note: all four lookups returned HTTP 404

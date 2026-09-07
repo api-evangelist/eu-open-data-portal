@@ -1,0 +1,97 @@
+generated: '2026-09-07'
+method: searched
+source: >-
+  Service CHANGELOG.md files under gitlab.com/dataeuropa (hub/search, hub/repo, mqa/cache,
+  mqa/validating-shacl, hub/statistics), the deprecated flags in the published OpenAPI contracts, and
+  https://dataeuropa.gitlab.io/data-provider-manual/api-documentation/
+provider: eu-open-data-portal
+versioning:
+  scheme: semver
+  style: per-service, carried in OpenAPI info.version — no version segment in the URL path
+  evidence: >-
+    hub-search 5.3.11, hub-repo 4.3.3, MQA metrics cache 5.8.3, SHACL validator 4.4.4, statistics v1.3.
+    The statistics service records "Semantic versioning" as an explicit 1.1.0 changelog entry. Base paths
+    (/api/hub/search, /api/hub/repo, /api/mqa/cache, /api/mqa/shacl, /api/mqa/reporter,
+    /api/hub/statistics) carry no version segment, so a major service release changes behaviour at the same URL.
+  current_versions:
+    hub-search: 5.3.11
+    hub-repo: 4.3.3
+    mqa-metrics-cache: 5.8.3
+    mqa-shacl: 4.4.4
+    mqa-metrics-reporter: 'unresolved — info.version literally reads ${project.version}'
+    hub-statistics: v1.3
+deprecation:
+  policy_published: false
+  policy_note: >-
+    No written deprecation or sunset policy exists — no notice period, no Sunset/Deprecation headers
+    (RFC 8594), no migration timetable. What the provider does publish is deprecation IN THE CONTRACT:
+    33 of hub-repo's 69 operations carry `deprecated: true`, and the tag description states
+    "**Deprecated !** Please use general DCAT Resources API instead", naming the replacement. That is
+    machine-readable deprecation without a policy, so no `Deprecation` pointer is emitted in apis.yml.
+  sunset_headers: false
+  deprecated_operations:
+    hub-repo:
+      count: 33
+      replacement: the general DCAT Resources API (/catalogues/{catalogueId}/resources, /resources/{resourceId})
+      operations:
+      - listCatalogueDatasets
+      - postCatalogueDataset
+      - getCatalogueDatasetsOrigin
+      - putCatalogueDatasetsOrigin
+      - deleteCatalogueDatasetsOrigin
+      - listDatasets
+      - postCatalogueDatasetLegacy
+      - putDatasetLegacy
+      - deleteDatasetLegacy
+      - getDataset
+      - putDataset
+      - deleteDataset
+      - getDatasetRevision
+      - getDatasetDiff
+      - listDatasetDistributions
+      - postDatasetDistribution
+      - getDistribution
+      - putDistribution
+      - deleteDistribution
+      - getMetrics
+      - putMetrics
+      - deleteMetrics
+      - getRecord
+      - getRecordLegacy
+      - getDatasetIndex
+      - createOrUpdateVocabulary
+      - listCustomResourceTypes
+      - listCustomResources
+      - postCustomResource
+      - putCustomResource
+      - getCustomResource
+      - deleteCustomResource
+      - getCustomResourceOrigin
+    hub-search:
+      count: 1
+      operations: [readDatasetRevision]
+      deprecated_parameters:
+      - 'filter on GET /search — superseded by filters (array form)'
+      - superCatalogue on GET /search
+status_page:
+  published: false
+  evidence: >-
+    No status page found. status.data.europa.eu does not resolve to a portal status service, and neither the
+    portal footer, the FAQ, nor the data provider manual links one. Incidents are communicated through
+    https://data.europa.eu/en/news-events/news and the contact form. No `StatusPage` pointer is emitted.
+sla:
+  published: false
+  note: >-
+    No service level agreement or uptime commitment is published for any of the six APIs. This is a free
+    public-sector service under Decision 2011/833/EU; availability is best-effort.
+support:
+  channel: https://data.europa.eu/en/contact-us
+  faq: https://data.europa.eu/en/faq
+  provider_manual: https://dataeuropa.gitlab.io/data-provider-manual/
+release_cadence:
+  observed: >-
+    Frequent and dated. hub-repo shipped 4.1.1 (2026-08-03) through 4.3.3 (2026-08-29) — seven releases in
+    27 days; hub-search shipped 5.3.5 through 5.3.11 between 2026-04-28 and 2026-08-24. The MQA metrics
+    cache last tagged 5.8.3 on 2026-03-02, and the statistics service's changelog stops at 1.1.1 (2021-08-04)
+    while the deployed contract reports v1.3 — the changelog for that service has fallen out of use.
+  source: https://gitlab.com/dataeuropa
