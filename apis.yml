@@ -13,141 +13,12 @@ deliveryModel:
   method: derived
 specificationVersion: '0.23'
 apis:
-- aid: eu-open-data-portal:eu-open-data-portal-search-api
-  name: EU Open Data Portal Search API (hub-search)
-  description: The hub-search metadata search service for data.europa.eu. Provides full-text and faceted search
-    over ~1.9 million dataset, data service, dataset series, catalogue, vocabulary and organisation records harvested
-    from EU institutions and national portals, plus Atom/RSS feeds, sitemaps, a gazetteer autocomplete and a CKAN-compatible
-    package API. Read operations are public and unauthenticated; write operations require an API key or JWT bearer
-    token.
-  humanURL: https://data.europa.eu/api/hub/search/
-  baseURL: https://data.europa.eu/api/hub/search
-  tags:
-  - Search
-  - Datasets
-  - Catalogues
-  - DCAT-AP
-  - Open Data
-  - CKAN
-  properties:
-  - type: OpenAPI
-    url: openapi/eu-open-data-portal-hub-search-openapi.yaml
-  - type: APIReference
-    url: https://data.europa.eu/api/hub/search/
-  - type: Documentation
-    url: https://dataeuropa.gitlab.io/data-provider-manual/api-documentation/
-  - type: Overlay
-    url: overlays/eu-open-data-portal-hub-search-overlay.yaml
-  - type: SourceCode
-    url: https://gitlab.com/dataeuropa/hub/search
-  - type: Examples
-    url: https://gitlab.com/dataeuropa/api-usage-examples
-  image: https://raw.githubusercontent.com/api-evangelist/eu-open-data-portal/main/screenshots/eu-open-data-portal-2026-06-20T180843.png
-- aid: eu-open-data-portal:eu-open-data-portal-registry-api
-  name: EU Open Data Portal Registry API (hub-repo)
-  description: 'The piveau hub-repo registry service: the DCAT-AP write surface of data.europa.eu. Manages catalogues,
-    DCAT resources (datasets, data services, dataset series), distributions, drafts, vocabularies, quality metrics
-    and persistent identifiers in the Virtuoso triplestore, in RDF/XML, Turtle, JSON-LD, N-Triples, N-Quads, TriG,
-    TriX and N3. Writes require a catalogue-scoped API key or an EU Login / service-account party token.'
-  humanURL: https://data.europa.eu/api/hub/repo/
-  baseURL: https://data.europa.eu/api/hub/repo
-  tags:
-  - Registry
-  - DCAT-AP
-  - RDF
-  - Catalogues
-  - Publishing
-  properties:
-  - type: OpenAPI
-    url: openapi/eu-open-data-portal-hub-repo-openapi.yaml
-  - type: APIReference
-    url: https://data.europa.eu/api/hub/repo/
-  - type: Documentation
-    url: https://dataeuropa.gitlab.io/data-provider-manual/api-documentation/
-  - type: Overlay
-    url: overlays/eu-open-data-portal-hub-repo-overlay.yaml
-  - type: SourceCode
-    url: https://gitlab.com/dataeuropa/hub/repo
-  - type: ChangeLog
-    url: https://gitlab.com/dataeuropa/hub/repo/-/blob/main/CHANGELOG.md
-  image: https://raw.githubusercontent.com/api-evangelist/eu-open-data-portal/main/screenshots/eu-open-data-portal-2026-06-20T180843.png
-- aid: eu-open-data-portal:eu-open-data-portal-mqa-metrics-cache-api
-  name: EU Open Data Portal MQA Metrics Cache API
-  description: The Metadata Quality Assurance (MQA) metrics cache. Serves DCAT-AP quality scores for every catalogue,
-    country, dataset and distribution across five dimensions — findability, accessibility, interoperability, reusability
-    and contextuality — on a 450-point scale, with historic series, distribution reachability and SHACL violation
-    reports. Read operations are public; admin refresh operations require an API key.
-  humanURL: https://data.europa.eu/api/mqa/cache/
-  baseURL: https://data.europa.eu/api/mqa/cache
-  tags:
-  - Data Quality
-  - MQA
-  - DCAT-AP
-  - Metrics
-  properties:
-  - type: OpenAPI
-    url: openapi/eu-open-data-portal-mqa-metrics-cache-openapi.yaml
-  - type: APIReference
-    url: https://data.europa.eu/api/mqa/cache/
-  - type: Documentation
-    url: https://dataeuropa.gitlab.io/data-provider-manual/api-documentation/
-  - type: Overlay
-    url: overlays/eu-open-data-portal-mqa-metrics-cache-overlay.yaml
-  - type: SourceCode
-    url: https://gitlab.com/dataeuropa/mqa/cache
-  image: https://raw.githubusercontent.com/api-evangelist/eu-open-data-portal/main/screenshots/eu-open-data-portal-2026-06-20T180843.png
-- aid: eu-open-data-portal:eu-open-data-portal-mqa-shacl-validation-api
-  name: EU Open Data Portal SHACL Validation API
-  description: A public RDF validation service that runs a submitted DCAT-AP graph against the official DCAT-AP
-    SHACL shapes and returns a SHACL validation report. Supports the DCAT-AP 2.x and 3.x shape models plus customised
-    runs that add range, recommended-field and controlled-vocabulary checks. Unauthenticated, single POST operation.
-  humanURL: https://data.europa.eu/api/mqa/shacl/
-  baseURL: https://data.europa.eu/api/mqa/shacl
-  tags:
-  - Validation
-  - SHACL
-  - DCAT-AP
-  - RDF
-  properties:
-  - type: OpenAPI
-    url: openapi/eu-open-data-portal-mqa-shacl-openapi.yaml
-  - type: APIReference
-    url: https://data.europa.eu/api/mqa/shacl/
-  - type: Documentation
-    url: https://dataeuropa.gitlab.io/data-provider-manual/api-documentation/
-  - type: Overlay
-    url: overlays/eu-open-data-portal-mqa-shacl-overlay.yaml
-  - type: SourceCode
-    url: https://gitlab.com/dataeuropa/mqa/validating-shacl
-  image: https://raw.githubusercontent.com/api-evangelist/eu-open-data-portal/main/screenshots/eu-open-data-portal-2026-06-20T180843.png
-- aid: eu-open-data-portal:eu-open-data-portal-mqa-metrics-reporter-api
-  name: EU Open Data Portal MQA Metrics Reporter API
-  description: The MQA metrics reporter renders catalogue quality reports for data.europa.eu in a requested language
-    and format, and triggers report generation. Public read operations; the spec ships with an unresolved ${project.version}
-    placeholder in info.version.
-  humanURL: https://data.europa.eu/api/mqa/reporter/
-  baseURL: https://data.europa.eu/api/mqa/reporter
-  tags:
-  - Data Quality
-  - MQA
-  - Reporting
-  properties:
-  - type: OpenAPI
-    url: openapi/eu-open-data-portal-mqa-reporter-openapi.yaml
-  - type: APIReference
-    url: https://data.europa.eu/api/mqa/reporter/
-  - type: Documentation
-    url: https://dataeuropa.gitlab.io/data-provider-manual/api-documentation/
-  - type: Overlay
-    url: overlays/eu-open-data-portal-mqa-reporter-overlay.yaml
-  - type: SourceCode
-    url: https://gitlab.com/dataeuropa/mqa/reporter
-  image: https://raw.githubusercontent.com/api-evangelist/eu-open-data-portal/main/screenshots/eu-open-data-portal-2026-06-20T180843.png
 - aid: eu-open-data-portal:eu-open-data-portal-statistics-api
   name: EU Open Data Portal Statistics API
-  description: The hub statistics service exposes portal-wide counts over time — datasets per category, per catalogue,
-    per country, per format and per licence — behind a Swagger 2.0 contract served from a Flask/flask-apispec application.
-    Read operations are public; the maintenance reset operation requires an X-API-KEY header.
+  description: >-
+    The hub statistics service exposes portal-wide counts over time — datasets per category, per catalogue,
+    per country, per format and per licence — behind a Swagger 2.0 contract served from a Flask/flask-apispec
+    application. Read operations are public; the maintenance reset operation requires an X-API-KEY header.
   humanURL: https://data.europa.eu/api/hub/statistics/
   baseURL: https://data.europa.eu/api/hub/statistics
   tags:
@@ -163,13 +34,16 @@ apis:
     url: https://dataeuropa.gitlab.io/data-provider-manual/api-documentation/
   - type: SourceCode
     url: https://gitlab.com/dataeuropa/hub/statistics
-  image: https://raw.githubusercontent.com/api-evangelist/eu-open-data-portal/main/screenshots/eu-open-data-portal-2026-06-20T180843.png
+  image: >-
+    https://raw.githubusercontent.com/api-evangelist/eu-open-data-portal/main/screenshots/eu-open-data-portal-2026-06-20T180843.png
 - aid: eu-open-data-portal:eu-open-data-portal-sparql-api
   name: EU Open Data Portal SPARQL API
-  description: The OpenLink Virtuoso SPARQL endpoint for data.europa.eu. Every harvested dataset is stored in its
-    own named graph alongside DCAT-AP controlled vocabularies, NUTS codes and MQA quality measurements, and can
-    be queried with SPARQL 1.1 returning HTML, XML, JSON, Turtle, CSV, TSV and other RDF serialisations. Public
-    and unauthenticated; there is no OpenAPI for this surface because the contract is the SPARQL 1.1 protocol itself.
+  description: >-
+    The OpenLink Virtuoso SPARQL endpoint for data.europa.eu. Every harvested dataset is stored in its
+    own named graph alongside DCAT-AP controlled vocabularies, NUTS codes and MQA quality measurements,
+    and can be queried with SPARQL 1.1 returning HTML, XML, JSON, Turtle, CSV, TSV and other RDF serialisations.
+    Public and unauthenticated; there is no OpenAPI for this surface because the contract is the SPARQL
+    1.1 protocol itself.
   humanURL: https://data.europa.eu/sparql
   baseURL: https://data.europa.eu/sparql
   tags:
@@ -184,8 +58,1164 @@ apis:
     url: https://dataeuropa.gitlab.io/data-provider-manual/how-to-search/sparql/
   - type: GettingStarted
     url: https://data.europa.eu/en/about/sparql
-  image: https://raw.githubusercontent.com/api-evangelist/eu-open-data-portal/main/screenshots/eu-open-data-portal-2026-06-20T180843.png
+  image: >-
+    https://raw.githubusercontent.com/api-evangelist/eu-open-data-portal/main/screenshots/eu-open-data-portal-2026-06-20T180843.png
+- aid: eu-open-data-portal:eu-open-data-portal-action-api-api
+  name: EU Open Data Portal Action API
+  description: "The action API utilizes the [JSON-RPC 2.0](https://www.jsonrpc.org/specification) specification\
+    \ with the following constraints:\n\n* `id` reference needs to be a string\n* `params` are passed\
+    \ as object map, not as array list\n* `data` of an error is an object\n* Batch processing of actions\
+    \ is not yet supported\n\nAlthough a correlation identifier (`id`) is not necessary on top of HTTP,\
+    \ you should always include it to allow \nthe server to distinguish between sync calls and notifications.\
+    \ Omit the `id` only in case of a notification.\nFor notifications, the server will immediately respond\
+    \ with a `202 Accepted` without a body."
+  humanURL: https://data.europa.eu/api/hub/search/
+  baseURL: https://data.europa.eu/api/hub/search
+  tags:
+  - Action API
+  properties:
+  - type: OpenAPI
+    url: openapi/eu-open-data-portal-action-api-api-openapi.yml
+  - type: APIReference
+    url: https://data.europa.eu/api/hub/search/
+  - type: Documentation
+    url: https://dataeuropa.gitlab.io/data-provider-manual/api-documentation/
+  - type: SourceCode
+    url: https://gitlab.com/dataeuropa/hub/search
+  - type: Examples
+    url: https://gitlab.com/dataeuropa/api-usage-examples
+  - type: APIReference
+    url: https://data.europa.eu/api/hub/repo/
+  - type: SourceCode
+    url: https://gitlab.com/dataeuropa/hub/repo
+  - type: ChangeLog
+    url: https://gitlab.com/dataeuropa/hub/repo/-/blob/main/CHANGELOG.md
+  - type: APIReference
+    url: https://data.europa.eu/api/mqa/cache/
+  - type: SourceCode
+    url: https://gitlab.com/dataeuropa/mqa/cache
+  - type: APIReference
+    url: https://data.europa.eu/api/mqa/shacl/
+  - type: SourceCode
+    url: https://gitlab.com/dataeuropa/mqa/validating-shacl
+  - type: APIReference
+    url: https://data.europa.eu/api/mqa/reporter/
+  - type: SourceCode
+    url: https://gitlab.com/dataeuropa/mqa/reporter
+- aid: eu-open-data-portal:eu-open-data-portal-actions-api
+  name: EU Open Data Portal Actions API
+  description: >-
+    The action API utilizes the [JSON-RPC 2.0](https://www.jsonrpc.org/specification) specification with
+    the following constraints:
+
+
+    * `id` reference needs to be a string
+
+    * `params` are passed as object map, not as array list
+
+    * `data` of an error is an object
+
+    * Batch processing of actions is not yet supported
+
+
+    Although a correlation identifier (`id`) is not necessary on top of HTTP, you should always include
+    it to allow
+
+    the server to distinguish between sync calls and notifications. Omit the `id` only in case of a notification.
+
+    For notifications, the server will immediately respond with a `202 Accepted` without a body.
+  humanURL: https://data.europa.eu/api/hub/search/
+  baseURL: https://data.europa.eu/api/hub/search
+  tags:
+  - Actions
+  properties:
+  - type: OpenAPI
+    url: openapi/eu-open-data-portal-actions-api-openapi.yml
+  - type: APIReference
+    url: https://data.europa.eu/api/hub/search/
+  - type: Documentation
+    url: https://dataeuropa.gitlab.io/data-provider-manual/api-documentation/
+  - type: SourceCode
+    url: https://gitlab.com/dataeuropa/hub/search
+  - type: Examples
+    url: https://gitlab.com/dataeuropa/api-usage-examples
+  - type: APIReference
+    url: https://data.europa.eu/api/hub/repo/
+  - type: SourceCode
+    url: https://gitlab.com/dataeuropa/hub/repo
+  - type: ChangeLog
+    url: https://gitlab.com/dataeuropa/hub/repo/-/blob/main/CHANGELOG.md
+  - type: APIReference
+    url: https://data.europa.eu/api/mqa/cache/
+  - type: SourceCode
+    url: https://gitlab.com/dataeuropa/mqa/cache
+  - type: APIReference
+    url: https://data.europa.eu/api/mqa/shacl/
+  - type: SourceCode
+    url: https://gitlab.com/dataeuropa/mqa/validating-shacl
+  - type: APIReference
+    url: https://data.europa.eu/api/mqa/reporter/
+  - type: SourceCode
+    url: https://gitlab.com/dataeuropa/mqa/reporter
+- aid: eu-open-data-portal:eu-open-data-portal-administration-api
+  name: EU Open Data Portal Administration API
+  description: The Administration API from EU Open Data Portal — 5 operation(s) for administration.
+  humanURL: https://data.europa.eu/api/hub/search/
+  baseURL: https://data.europa.eu/api/hub/search
+  tags:
+  - Administration
+  properties:
+  - type: OpenAPI
+    url: openapi/eu-open-data-portal-administration-api-openapi.yml
+  - type: APIReference
+    url: https://data.europa.eu/api/hub/search/
+  - type: Documentation
+    url: https://dataeuropa.gitlab.io/data-provider-manual/api-documentation/
+  - type: SourceCode
+    url: https://gitlab.com/dataeuropa/hub/search
+  - type: Examples
+    url: https://gitlab.com/dataeuropa/api-usage-examples
+  - type: APIReference
+    url: https://data.europa.eu/api/hub/repo/
+  - type: SourceCode
+    url: https://gitlab.com/dataeuropa/hub/repo
+  - type: ChangeLog
+    url: https://gitlab.com/dataeuropa/hub/repo/-/blob/main/CHANGELOG.md
+  - type: APIReference
+    url: https://data.europa.eu/api/mqa/cache/
+  - type: SourceCode
+    url: https://gitlab.com/dataeuropa/mqa/cache
+  - type: APIReference
+    url: https://data.europa.eu/api/mqa/shacl/
+  - type: SourceCode
+    url: https://gitlab.com/dataeuropa/mqa/validating-shacl
+  - type: APIReference
+    url: https://data.europa.eu/api/mqa/reporter/
+  - type: SourceCode
+    url: https://gitlab.com/dataeuropa/mqa/reporter
+- aid: eu-open-data-portal:eu-open-data-portal-catalogues-api
+  name: EU Open Data Portal Catalogues API
+  description: The Catalogues API from EU Open Data Portal — 7 operation(s) for catalogues.
+  humanURL: https://data.europa.eu/api/hub/search/
+  baseURL: https://data.europa.eu/api/hub/search
+  tags:
+  - Catalogues
+  properties:
+  - type: OpenAPI
+    url: openapi/eu-open-data-portal-catalogues-api-openapi.yml
+  - type: APIReference
+    url: https://data.europa.eu/api/hub/search/
+  - type: Documentation
+    url: https://dataeuropa.gitlab.io/data-provider-manual/api-documentation/
+  - type: SourceCode
+    url: https://gitlab.com/dataeuropa/hub/search
+  - type: Examples
+    url: https://gitlab.com/dataeuropa/api-usage-examples
+  - type: APIReference
+    url: https://data.europa.eu/api/hub/repo/
+  - type: SourceCode
+    url: https://gitlab.com/dataeuropa/hub/repo
+  - type: ChangeLog
+    url: https://gitlab.com/dataeuropa/hub/repo/-/blob/main/CHANGELOG.md
+  - type: APIReference
+    url: https://data.europa.eu/api/mqa/cache/
+  - type: SourceCode
+    url: https://gitlab.com/dataeuropa/mqa/cache
+  - type: APIReference
+    url: https://data.europa.eu/api/mqa/shacl/
+  - type: SourceCode
+    url: https://gitlab.com/dataeuropa/mqa/validating-shacl
+  - type: APIReference
+    url: https://data.europa.eu/api/mqa/reporter/
+  - type: SourceCode
+    url: https://gitlab.com/dataeuropa/mqa/reporter
+- aid: eu-open-data-portal:eu-open-data-portal-ckan-api
+  name: EU Open Data Portal Ckan API
+  description: The Ckan API from EU Open Data Portal — 3 operation(s) for ckan.
+  humanURL: https://data.europa.eu/api/hub/search/
+  baseURL: https://data.europa.eu/api/hub/search
+  tags:
+  - Ckan
+  properties:
+  - type: OpenAPI
+    url: openapi/eu-open-data-portal-ckan-api-openapi.yml
+  - type: APIReference
+    url: https://data.europa.eu/api/hub/search/
+  - type: Documentation
+    url: https://dataeuropa.gitlab.io/data-provider-manual/api-documentation/
+  - type: SourceCode
+    url: https://gitlab.com/dataeuropa/hub/search
+  - type: Examples
+    url: https://gitlab.com/dataeuropa/api-usage-examples
+  - type: APIReference
+    url: https://data.europa.eu/api/hub/repo/
+  - type: SourceCode
+    url: https://gitlab.com/dataeuropa/hub/repo
+  - type: ChangeLog
+    url: https://gitlab.com/dataeuropa/hub/repo/-/blob/main/CHANGELOG.md
+  - type: APIReference
+    url: https://data.europa.eu/api/mqa/cache/
+  - type: SourceCode
+    url: https://gitlab.com/dataeuropa/mqa/cache
+  - type: APIReference
+    url: https://data.europa.eu/api/mqa/shacl/
+  - type: SourceCode
+    url: https://gitlab.com/dataeuropa/mqa/validating-shacl
+  - type: APIReference
+    url: https://data.europa.eu/api/mqa/reporter/
+  - type: SourceCode
+    url: https://gitlab.com/dataeuropa/mqa/reporter
+- aid: eu-open-data-portal:eu-open-data-portal-countries-api
+  name: EU Open Data Portal Countries API
+  description: The Countries API from EU Open Data Portal — 4 operation(s) for countries.
+  humanURL: https://data.europa.eu/api/hub/search/
+  baseURL: https://data.europa.eu/api/hub/search
+  tags:
+  - Countries
+  properties:
+  - type: OpenAPI
+    url: openapi/eu-open-data-portal-countries-api-openapi.yml
+  - type: APIReference
+    url: https://data.europa.eu/api/hub/search/
+  - type: Documentation
+    url: https://dataeuropa.gitlab.io/data-provider-manual/api-documentation/
+  - type: SourceCode
+    url: https://gitlab.com/dataeuropa/hub/search
+  - type: Examples
+    url: https://gitlab.com/dataeuropa/api-usage-examples
+  - type: APIReference
+    url: https://data.europa.eu/api/hub/repo/
+  - type: SourceCode
+    url: https://gitlab.com/dataeuropa/hub/repo
+  - type: ChangeLog
+    url: https://gitlab.com/dataeuropa/hub/repo/-/blob/main/CHANGELOG.md
+  - type: APIReference
+    url: https://data.europa.eu/api/mqa/cache/
+  - type: SourceCode
+    url: https://gitlab.com/dataeuropa/mqa/cache
+  - type: APIReference
+    url: https://data.europa.eu/api/mqa/shacl/
+  - type: SourceCode
+    url: https://gitlab.com/dataeuropa/mqa/validating-shacl
+  - type: APIReference
+    url: https://data.europa.eu/api/mqa/reporter/
+  - type: SourceCode
+    url: https://gitlab.com/dataeuropa/mqa/reporter
+- aid: eu-open-data-portal:eu-open-data-portal-custom-resources-api
+  name: EU Open Data Portal Custom Resources API
+  description: >-
+    **Deprecated !** Will be replaced with the generic DCAT resource API (endpoints will be reused). Any
+    future custom resource
+
+    definitions must be sub-classed from DCAT Resource.
+  humanURL: https://data.europa.eu/api/hub/search/
+  baseURL: https://data.europa.eu/api/hub/search
+  tags:
+  - Custom Resources
+  properties:
+  - type: OpenAPI
+    url: openapi/eu-open-data-portal-custom-resources-api-openapi.yml
+  - type: APIReference
+    url: https://data.europa.eu/api/hub/search/
+  - type: Documentation
+    url: https://dataeuropa.gitlab.io/data-provider-manual/api-documentation/
+  - type: SourceCode
+    url: https://gitlab.com/dataeuropa/hub/search
+  - type: Examples
+    url: https://gitlab.com/dataeuropa/api-usage-examples
+  - type: APIReference
+    url: https://data.europa.eu/api/hub/repo/
+  - type: SourceCode
+    url: https://gitlab.com/dataeuropa/hub/repo
+  - type: ChangeLog
+    url: https://gitlab.com/dataeuropa/hub/repo/-/blob/main/CHANGELOG.md
+  - type: APIReference
+    url: https://data.europa.eu/api/mqa/cache/
+  - type: SourceCode
+    url: https://gitlab.com/dataeuropa/mqa/cache
+  - type: APIReference
+    url: https://data.europa.eu/api/mqa/shacl/
+  - type: SourceCode
+    url: https://gitlab.com/dataeuropa/mqa/validating-shacl
+  - type: APIReference
+    url: https://data.europa.eu/api/mqa/reporter/
+  - type: SourceCode
+    url: https://gitlab.com/dataeuropa/mqa/reporter
+- aid: eu-open-data-portal:eu-open-data-portal-data-api
+  name: EU Open Data Portal Data API
+  description: The Data API from EU Open Data Portal — 3 operation(s) for data.
+  humanURL: https://data.europa.eu/api/hub/search/
+  baseURL: https://data.europa.eu/api/hub/search
+  tags:
+  - Data
+  properties:
+  - type: OpenAPI
+    url: openapi/eu-open-data-portal-data-api-openapi.yml
+  - type: APIReference
+    url: https://data.europa.eu/api/hub/search/
+  - type: Documentation
+    url: https://dataeuropa.gitlab.io/data-provider-manual/api-documentation/
+  - type: SourceCode
+    url: https://gitlab.com/dataeuropa/hub/search
+  - type: Examples
+    url: https://gitlab.com/dataeuropa/api-usage-examples
+  - type: APIReference
+    url: https://data.europa.eu/api/hub/repo/
+  - type: SourceCode
+    url: https://gitlab.com/dataeuropa/hub/repo
+  - type: ChangeLog
+    url: https://gitlab.com/dataeuropa/hub/repo/-/blob/main/CHANGELOG.md
+  - type: APIReference
+    url: https://data.europa.eu/api/mqa/cache/
+  - type: SourceCode
+    url: https://gitlab.com/dataeuropa/mqa/cache
+  - type: APIReference
+    url: https://data.europa.eu/api/mqa/shacl/
+  - type: SourceCode
+    url: https://gitlab.com/dataeuropa/mqa/validating-shacl
+  - type: APIReference
+    url: https://data.europa.eu/api/mqa/reporter/
+  - type: SourceCode
+    url: https://gitlab.com/dataeuropa/mqa/reporter
+- aid: eu-open-data-portal:eu-open-data-portal-data-services-api
+  name: EU Open Data Portal Data Services API
+  description: The Data Services API from EU Open Data Portal — 1 operation(s) for data services.
+  humanURL: https://data.europa.eu/api/hub/search/
+  baseURL: https://data.europa.eu/api/hub/search
+  tags:
+  - Data Services
+  properties:
+  - type: OpenAPI
+    url: openapi/eu-open-data-portal-data-services-api-openapi.yml
+  - type: APIReference
+    url: https://data.europa.eu/api/hub/search/
+  - type: Documentation
+    url: https://dataeuropa.gitlab.io/data-provider-manual/api-documentation/
+  - type: SourceCode
+    url: https://gitlab.com/dataeuropa/hub/search
+  - type: Examples
+    url: https://gitlab.com/dataeuropa/api-usage-examples
+  - type: APIReference
+    url: https://data.europa.eu/api/hub/repo/
+  - type: SourceCode
+    url: https://gitlab.com/dataeuropa/hub/repo
+  - type: ChangeLog
+    url: https://gitlab.com/dataeuropa/hub/repo/-/blob/main/CHANGELOG.md
+  - type: APIReference
+    url: https://data.europa.eu/api/mqa/cache/
+  - type: SourceCode
+    url: https://gitlab.com/dataeuropa/mqa/cache
+  - type: APIReference
+    url: https://data.europa.eu/api/mqa/shacl/
+  - type: SourceCode
+    url: https://gitlab.com/dataeuropa/mqa/validating-shacl
+  - type: APIReference
+    url: https://data.europa.eu/api/mqa/reporter/
+  - type: SourceCode
+    url: https://gitlab.com/dataeuropa/mqa/reporter
+- aid: eu-open-data-portal:eu-open-data-portal-dataset-series-api
+  name: EU Open Data Portal Dataset Series API
+  description: The Dataset Series API from EU Open Data Portal — 1 operation(s) for dataset series.
+  humanURL: https://data.europa.eu/api/hub/search/
+  baseURL: https://data.europa.eu/api/hub/search
+  tags:
+  - Dataset Series
+  properties:
+  - type: OpenAPI
+    url: openapi/eu-open-data-portal-dataset-series-api-openapi.yml
+  - type: APIReference
+    url: https://data.europa.eu/api/hub/search/
+  - type: Documentation
+    url: https://dataeuropa.gitlab.io/data-provider-manual/api-documentation/
+  - type: SourceCode
+    url: https://gitlab.com/dataeuropa/hub/search
+  - type: Examples
+    url: https://gitlab.com/dataeuropa/api-usage-examples
+  - type: APIReference
+    url: https://data.europa.eu/api/hub/repo/
+  - type: SourceCode
+    url: https://gitlab.com/dataeuropa/hub/repo
+  - type: ChangeLog
+    url: https://gitlab.com/dataeuropa/hub/repo/-/blob/main/CHANGELOG.md
+  - type: APIReference
+    url: https://data.europa.eu/api/mqa/cache/
+  - type: SourceCode
+    url: https://gitlab.com/dataeuropa/mqa/cache
+  - type: APIReference
+    url: https://data.europa.eu/api/mqa/shacl/
+  - type: SourceCode
+    url: https://gitlab.com/dataeuropa/mqa/validating-shacl
+  - type: APIReference
+    url: https://data.europa.eu/api/mqa/reporter/
+  - type: SourceCode
+    url: https://gitlab.com/dataeuropa/mqa/reporter
+- aid: eu-open-data-portal:eu-open-data-portal-datasets-api
+  name: EU Open Data Portal Datasets API
+  description: '**Deprecated !** Please use general DCAT Resources API instead'
+  humanURL: https://data.europa.eu/api/hub/search/
+  baseURL: https://data.europa.eu/api/hub/search
+  tags:
+  - Datasets
+  properties:
+  - type: OpenAPI
+    url: openapi/eu-open-data-portal-datasets-api-openapi.yml
+  - type: APIReference
+    url: https://data.europa.eu/api/hub/search/
+  - type: Documentation
+    url: https://dataeuropa.gitlab.io/data-provider-manual/api-documentation/
+  - type: SourceCode
+    url: https://gitlab.com/dataeuropa/hub/search
+  - type: Examples
+    url: https://gitlab.com/dataeuropa/api-usage-examples
+  - type: APIReference
+    url: https://data.europa.eu/api/hub/repo/
+  - type: SourceCode
+    url: https://gitlab.com/dataeuropa/hub/repo
+  - type: ChangeLog
+    url: https://gitlab.com/dataeuropa/hub/repo/-/blob/main/CHANGELOG.md
+  - type: APIReference
+    url: https://data.europa.eu/api/mqa/cache/
+  - type: SourceCode
+    url: https://gitlab.com/dataeuropa/mqa/cache
+  - type: APIReference
+    url: https://data.europa.eu/api/mqa/shacl/
+  - type: SourceCode
+    url: https://gitlab.com/dataeuropa/mqa/validating-shacl
+  - type: APIReference
+    url: https://data.europa.eu/api/mqa/reporter/
+  - type: SourceCode
+    url: https://gitlab.com/dataeuropa/mqa/reporter
+- aid: eu-open-data-portal:eu-open-data-portal-dcat-resources-api
+  name: EU Open Data Portal DCAT Resources API
+  description: Manage DCAT resources and its sub-classes, except DCAT Catalogues.
+  humanURL: https://data.europa.eu/api/hub/search/
+  baseURL: https://data.europa.eu/api/hub/search
+  tags:
+  - DCAT Resources
+  properties:
+  - type: OpenAPI
+    url: openapi/eu-open-data-portal-dcat-resources-api-openapi.yml
+  - type: APIReference
+    url: https://data.europa.eu/api/hub/search/
+  - type: Documentation
+    url: https://dataeuropa.gitlab.io/data-provider-manual/api-documentation/
+  - type: SourceCode
+    url: https://gitlab.com/dataeuropa/hub/search
+  - type: Examples
+    url: https://gitlab.com/dataeuropa/api-usage-examples
+  - type: APIReference
+    url: https://data.europa.eu/api/hub/repo/
+  - type: SourceCode
+    url: https://gitlab.com/dataeuropa/hub/repo
+  - type: ChangeLog
+    url: https://gitlab.com/dataeuropa/hub/repo/-/blob/main/CHANGELOG.md
+  - type: APIReference
+    url: https://data.europa.eu/api/mqa/cache/
+  - type: SourceCode
+    url: https://gitlab.com/dataeuropa/mqa/cache
+  - type: APIReference
+    url: https://data.europa.eu/api/mqa/shacl/
+  - type: SourceCode
+    url: https://gitlab.com/dataeuropa/mqa/validating-shacl
+  - type: APIReference
+    url: https://data.europa.eu/api/mqa/reporter/
+  - type: SourceCode
+    url: https://gitlab.com/dataeuropa/mqa/reporter
+- aid: eu-open-data-portal:eu-open-data-portal-distributions-api
+  name: EU Open Data Portal Distributions API
+  description: '**Deprecated !** Will be removed completely in the future'
+  humanURL: https://data.europa.eu/api/hub/search/
+  baseURL: https://data.europa.eu/api/hub/search
+  tags:
+  - Distributions
+  properties:
+  - type: OpenAPI
+    url: openapi/eu-open-data-portal-distributions-api-openapi.yml
+  - type: APIReference
+    url: https://data.europa.eu/api/hub/search/
+  - type: Documentation
+    url: https://dataeuropa.gitlab.io/data-provider-manual/api-documentation/
+  - type: SourceCode
+    url: https://gitlab.com/dataeuropa/hub/search
+  - type: Examples
+    url: https://gitlab.com/dataeuropa/api-usage-examples
+  - type: APIReference
+    url: https://data.europa.eu/api/hub/repo/
+  - type: SourceCode
+    url: https://gitlab.com/dataeuropa/hub/repo
+  - type: ChangeLog
+    url: https://gitlab.com/dataeuropa/hub/repo/-/blob/main/CHANGELOG.md
+  - type: APIReference
+    url: https://data.europa.eu/api/mqa/cache/
+  - type: SourceCode
+    url: https://gitlab.com/dataeuropa/mqa/cache
+  - type: APIReference
+    url: https://data.europa.eu/api/mqa/shacl/
+  - type: SourceCode
+    url: https://gitlab.com/dataeuropa/mqa/validating-shacl
+  - type: APIReference
+    url: https://data.europa.eu/api/mqa/reporter/
+  - type: SourceCode
+    url: https://gitlab.com/dataeuropa/mqa/reporter
+- aid: eu-open-data-portal:eu-open-data-portal-drafts-api
+  name: EU Open Data Portal Drafts API
+  description: The Drafts API from EU Open Data Portal — 4 operation(s) for drafts.
+  humanURL: https://data.europa.eu/api/hub/search/
+  baseURL: https://data.europa.eu/api/hub/search
+  tags:
+  - Drafts
+  properties:
+  - type: OpenAPI
+    url: openapi/eu-open-data-portal-drafts-api-openapi.yml
+  - type: APIReference
+    url: https://data.europa.eu/api/hub/search/
+  - type: Documentation
+    url: https://dataeuropa.gitlab.io/data-provider-manual/api-documentation/
+  - type: SourceCode
+    url: https://gitlab.com/dataeuropa/hub/search
+  - type: Examples
+    url: https://gitlab.com/dataeuropa/api-usage-examples
+  - type: APIReference
+    url: https://data.europa.eu/api/hub/repo/
+  - type: SourceCode
+    url: https://gitlab.com/dataeuropa/hub/repo
+  - type: ChangeLog
+    url: https://gitlab.com/dataeuropa/hub/repo/-/blob/main/CHANGELOG.md
+  - type: APIReference
+    url: https://data.europa.eu/api/mqa/cache/
+  - type: SourceCode
+    url: https://gitlab.com/dataeuropa/mqa/cache
+  - type: APIReference
+    url: https://data.europa.eu/api/mqa/shacl/
+  - type: SourceCode
+    url: https://gitlab.com/dataeuropa/mqa/validating-shacl
+  - type: APIReference
+    url: https://data.europa.eu/api/mqa/reporter/
+  - type: SourceCode
+    url: https://gitlab.com/dataeuropa/mqa/reporter
+- aid: eu-open-data-portal:eu-open-data-portal-editorialcontent-api
+  name: EU Open Data Portal Editorial Content API
+  description: The EditorialContent API from EU Open Data Portal — 3 operation(s) for editorialcontent.
+  humanURL: https://data.europa.eu/api/hub/search/
+  baseURL: https://data.europa.eu/api/hub/search
+  tags:
+  - EditorialContent
+  properties:
+  - type: OpenAPI
+    url: openapi/eu-open-data-portal-editorialcontent-api-openapi.yml
+  - type: APIReference
+    url: https://data.europa.eu/api/hub/search/
+  - type: Documentation
+    url: https://dataeuropa.gitlab.io/data-provider-manual/api-documentation/
+  - type: SourceCode
+    url: https://gitlab.com/dataeuropa/hub/search
+  - type: Examples
+    url: https://gitlab.com/dataeuropa/api-usage-examples
+  - type: APIReference
+    url: https://data.europa.eu/api/hub/repo/
+  - type: SourceCode
+    url: https://gitlab.com/dataeuropa/hub/repo
+  - type: ChangeLog
+    url: https://gitlab.com/dataeuropa/hub/repo/-/blob/main/CHANGELOG.md
+  - type: APIReference
+    url: https://data.europa.eu/api/mqa/cache/
+  - type: SourceCode
+    url: https://gitlab.com/dataeuropa/mqa/cache
+  - type: APIReference
+    url: https://data.europa.eu/api/mqa/shacl/
+  - type: SourceCode
+    url: https://gitlab.com/dataeuropa/mqa/validating-shacl
+  - type: APIReference
+    url: https://data.europa.eu/api/mqa/reporter/
+  - type: SourceCode
+    url: https://gitlab.com/dataeuropa/mqa/reporter
+- aid: eu-open-data-portal:eu-open-data-portal-feeds-api
+  name: EU Open Data Portal Feeds API
+  description: The Feeds API from EU Open Data Portal — 3 operation(s) for feeds.
+  humanURL: https://data.europa.eu/api/hub/search/
+  baseURL: https://data.europa.eu/api/hub/search
+  tags:
+  - Feeds
+  properties:
+  - type: OpenAPI
+    url: openapi/eu-open-data-portal-feeds-api-openapi.yml
+  - type: APIReference
+    url: https://data.europa.eu/api/hub/search/
+  - type: Documentation
+    url: https://dataeuropa.gitlab.io/data-provider-manual/api-documentation/
+  - type: SourceCode
+    url: https://gitlab.com/dataeuropa/hub/search
+  - type: Examples
+    url: https://gitlab.com/dataeuropa/api-usage-examples
+  - type: APIReference
+    url: https://data.europa.eu/api/hub/repo/
+  - type: SourceCode
+    url: https://gitlab.com/dataeuropa/hub/repo
+  - type: ChangeLog
+    url: https://gitlab.com/dataeuropa/hub/repo/-/blob/main/CHANGELOG.md
+  - type: APIReference
+    url: https://data.europa.eu/api/mqa/cache/
+  - type: SourceCode
+    url: https://gitlab.com/dataeuropa/mqa/cache
+  - type: APIReference
+    url: https://data.europa.eu/api/mqa/shacl/
+  - type: SourceCode
+    url: https://gitlab.com/dataeuropa/mqa/validating-shacl
+  - type: APIReference
+    url: https://data.europa.eu/api/mqa/reporter/
+  - type: SourceCode
+    url: https://gitlab.com/dataeuropa/mqa/reporter
+- aid: eu-open-data-portal:eu-open-data-portal-gazetteer-api
+  name: EU Open Data Portal Gazetteer API
+  description: The Gazetteer API from EU Open Data Portal — 1 operation(s) for gazetteer.
+  humanURL: https://data.europa.eu/api/hub/search/
+  baseURL: https://data.europa.eu/api/hub/search
+  tags:
+  - Gazetteer
+  properties:
+  - type: OpenAPI
+    url: openapi/eu-open-data-portal-gazetteer-api-openapi.yml
+  - type: APIReference
+    url: https://data.europa.eu/api/hub/search/
+  - type: Documentation
+    url: https://dataeuropa.gitlab.io/data-provider-manual/api-documentation/
+  - type: SourceCode
+    url: https://gitlab.com/dataeuropa/hub/search
+  - type: Examples
+    url: https://gitlab.com/dataeuropa/api-usage-examples
+  - type: APIReference
+    url: https://data.europa.eu/api/hub/repo/
+  - type: SourceCode
+    url: https://gitlab.com/dataeuropa/hub/repo
+  - type: ChangeLog
+    url: https://gitlab.com/dataeuropa/hub/repo/-/blob/main/CHANGELOG.md
+  - type: APIReference
+    url: https://data.europa.eu/api/mqa/cache/
+  - type: SourceCode
+    url: https://gitlab.com/dataeuropa/mqa/cache
+  - type: APIReference
+    url: https://data.europa.eu/api/mqa/shacl/
+  - type: SourceCode
+    url: https://gitlab.com/dataeuropa/mqa/validating-shacl
+  - type: APIReference
+    url: https://data.europa.eu/api/mqa/reporter/
+  - type: SourceCode
+    url: https://gitlab.com/dataeuropa/mqa/reporter
+- aid: eu-open-data-portal:eu-open-data-portal-generate-api
+  name: EU Open Data Portal Generate API
+  description: The Generate API from EU Open Data Portal — 1 operation(s) for generate.
+  humanURL: https://data.europa.eu/api/hub/search/
+  baseURL: https://data.europa.eu/api/hub/search
+  tags:
+  - Generate
+  properties:
+  - type: OpenAPI
+    url: openapi/eu-open-data-portal-generate-api-openapi.yml
+  - type: APIReference
+    url: https://data.europa.eu/api/hub/search/
+  - type: Documentation
+    url: https://dataeuropa.gitlab.io/data-provider-manual/api-documentation/
+  - type: SourceCode
+    url: https://gitlab.com/dataeuropa/hub/search
+  - type: Examples
+    url: https://gitlab.com/dataeuropa/api-usage-examples
+  - type: APIReference
+    url: https://data.europa.eu/api/hub/repo/
+  - type: SourceCode
+    url: https://gitlab.com/dataeuropa/hub/repo
+  - type: ChangeLog
+    url: https://gitlab.com/dataeuropa/hub/repo/-/blob/main/CHANGELOG.md
+  - type: APIReference
+    url: https://data.europa.eu/api/mqa/cache/
+  - type: SourceCode
+    url: https://gitlab.com/dataeuropa/mqa/cache
+  - type: APIReference
+    url: https://data.europa.eu/api/mqa/shacl/
+  - type: SourceCode
+    url: https://gitlab.com/dataeuropa/mqa/validating-shacl
+  - type: APIReference
+    url: https://data.europa.eu/api/mqa/reporter/
+  - type: SourceCode
+    url: https://gitlab.com/dataeuropa/mqa/reporter
+- aid: eu-open-data-portal:eu-open-data-portal-global-api
+  name: EU Open Data Portal Global API
+  description: The Global API from EU Open Data Portal — 2 operation(s) for global.
+  humanURL: https://data.europa.eu/api/hub/search/
+  baseURL: https://data.europa.eu/api/hub/search
+  tags:
+  - Global
+  properties:
+  - type: OpenAPI
+    url: openapi/eu-open-data-portal-global-api-openapi.yml
+  - type: APIReference
+    url: https://data.europa.eu/api/hub/search/
+  - type: Documentation
+    url: https://dataeuropa.gitlab.io/data-provider-manual/api-documentation/
+  - type: SourceCode
+    url: https://gitlab.com/dataeuropa/hub/search
+  - type: Examples
+    url: https://gitlab.com/dataeuropa/api-usage-examples
+  - type: APIReference
+    url: https://data.europa.eu/api/hub/repo/
+  - type: SourceCode
+    url: https://gitlab.com/dataeuropa/hub/repo
+  - type: ChangeLog
+    url: https://gitlab.com/dataeuropa/hub/repo/-/blob/main/CHANGELOG.md
+  - type: APIReference
+    url: https://data.europa.eu/api/mqa/cache/
+  - type: SourceCode
+    url: https://gitlab.com/dataeuropa/mqa/cache
+  - type: APIReference
+    url: https://data.europa.eu/api/mqa/shacl/
+  - type: SourceCode
+    url: https://gitlab.com/dataeuropa/mqa/validating-shacl
+  - type: APIReference
+    url: https://data.europa.eu/api/mqa/reporter/
+  - type: SourceCode
+    url: https://gitlab.com/dataeuropa/mqa/reporter
+- aid: eu-open-data-portal:eu-open-data-portal-maintenance-api
+  name: EU Open Data Portal Maintenance API
+  description: The Maintenance API from EU Open Data Portal — 1 operation(s) for maintenance.
+  humanURL: https://data.europa.eu/api/hub/search/
+  baseURL: https://data.europa.eu/api/hub/search
+  tags:
+  - Maintenance
+  properties:
+  - type: OpenAPI
+    url: openapi/eu-open-data-portal-maintenance-api-openapi.yml
+  - type: APIReference
+    url: https://data.europa.eu/api/hub/search/
+  - type: Documentation
+    url: https://dataeuropa.gitlab.io/data-provider-manual/api-documentation/
+  - type: SourceCode
+    url: https://gitlab.com/dataeuropa/hub/search
+  - type: Examples
+    url: https://gitlab.com/dataeuropa/api-usage-examples
+  - type: APIReference
+    url: https://data.europa.eu/api/hub/repo/
+  - type: SourceCode
+    url: https://gitlab.com/dataeuropa/hub/repo
+  - type: ChangeLog
+    url: https://gitlab.com/dataeuropa/hub/repo/-/blob/main/CHANGELOG.md
+  - type: APIReference
+    url: https://data.europa.eu/api/mqa/cache/
+  - type: SourceCode
+    url: https://gitlab.com/dataeuropa/mqa/cache
+  - type: APIReference
+    url: https://data.europa.eu/api/mqa/shacl/
+  - type: SourceCode
+    url: https://gitlab.com/dataeuropa/mqa/validating-shacl
+  - type: APIReference
+    url: https://data.europa.eu/api/mqa/reporter/
+  - type: SourceCode
+    url: https://gitlab.com/dataeuropa/mqa/reporter
+- aid: eu-open-data-portal:eu-open-data-portal-organizations-api
+  name: EU Open Data Portal Organizations API
+  description: The Organizations API from EU Open Data Portal — 3 operation(s) for organizations.
+  humanURL: https://data.europa.eu/api/hub/search/
+  baseURL: https://data.europa.eu/api/hub/search
+  tags:
+  - Organizations
+  properties:
+  - type: OpenAPI
+    url: openapi/eu-open-data-portal-organizations-api-openapi.yml
+  - type: APIReference
+    url: https://data.europa.eu/api/hub/search/
+  - type: Documentation
+    url: https://dataeuropa.gitlab.io/data-provider-manual/api-documentation/
+  - type: SourceCode
+    url: https://gitlab.com/dataeuropa/hub/search
+  - type: Examples
+    url: https://gitlab.com/dataeuropa/api-usage-examples
+  - type: APIReference
+    url: https://data.europa.eu/api/hub/repo/
+  - type: SourceCode
+    url: https://gitlab.com/dataeuropa/hub/repo
+  - type: ChangeLog
+    url: https://gitlab.com/dataeuropa/hub/repo/-/blob/main/CHANGELOG.md
+  - type: APIReference
+    url: https://data.europa.eu/api/mqa/cache/
+  - type: SourceCode
+    url: https://gitlab.com/dataeuropa/mqa/cache
+  - type: APIReference
+    url: https://data.europa.eu/api/mqa/shacl/
+  - type: SourceCode
+    url: https://gitlab.com/dataeuropa/mqa/validating-shacl
+  - type: APIReference
+    url: https://data.europa.eu/api/mqa/reporter/
+  - type: SourceCode
+    url: https://gitlab.com/dataeuropa/mqa/reporter
+- aid: eu-open-data-portal:eu-open-data-portal-persistent-identifiers-api
+  name: EU Open Data Portal Persistent Identifiers API
+  description: Create persistent identifiers for data artifacts.
+  humanURL: https://data.europa.eu/api/hub/search/
+  baseURL: https://data.europa.eu/api/hub/search
+  tags:
+  - Persistent Identifiers
+  properties:
+  - type: OpenAPI
+    url: openapi/eu-open-data-portal-persistent-identifiers-api-openapi.yml
+  - type: APIReference
+    url: https://data.europa.eu/api/hub/search/
+  - type: Documentation
+    url: https://dataeuropa.gitlab.io/data-provider-manual/api-documentation/
+  - type: SourceCode
+    url: https://gitlab.com/dataeuropa/hub/search
+  - type: Examples
+    url: https://gitlab.com/dataeuropa/api-usage-examples
+  - type: APIReference
+    url: https://data.europa.eu/api/hub/repo/
+  - type: SourceCode
+    url: https://gitlab.com/dataeuropa/hub/repo
+  - type: ChangeLog
+    url: https://gitlab.com/dataeuropa/hub/repo/-/blob/main/CHANGELOG.md
+  - type: APIReference
+    url: https://data.europa.eu/api/mqa/cache/
+  - type: SourceCode
+    url: https://gitlab.com/dataeuropa/mqa/cache
+  - type: APIReference
+    url: https://data.europa.eu/api/mqa/shacl/
+  - type: SourceCode
+    url: https://gitlab.com/dataeuropa/mqa/validating-shacl
+  - type: APIReference
+    url: https://data.europa.eu/api/mqa/reporter/
+  - type: SourceCode
+    url: https://gitlab.com/dataeuropa/mqa/reporter
+- aid: eu-open-data-portal:eu-open-data-portal-report-api
+  name: EU Open Data Portal Report API
+  description: The Report API from EU Open Data Portal — 2 operation(s) for report.
+  humanURL: https://data.europa.eu/api/hub/search/
+  baseURL: https://data.europa.eu/api/hub/search
+  tags:
+  - Report
+  properties:
+  - type: OpenAPI
+    url: openapi/eu-open-data-portal-report-api-openapi.yml
+  - type: APIReference
+    url: https://data.europa.eu/api/hub/search/
+  - type: Documentation
+    url: https://dataeuropa.gitlab.io/data-provider-manual/api-documentation/
+  - type: SourceCode
+    url: https://gitlab.com/dataeuropa/hub/search
+  - type: Examples
+    url: https://gitlab.com/dataeuropa/api-usage-examples
+  - type: APIReference
+    url: https://data.europa.eu/api/hub/repo/
+  - type: SourceCode
+    url: https://gitlab.com/dataeuropa/hub/repo
+  - type: ChangeLog
+    url: https://gitlab.com/dataeuropa/hub/repo/-/blob/main/CHANGELOG.md
+  - type: APIReference
+    url: https://data.europa.eu/api/mqa/cache/
+  - type: SourceCode
+    url: https://gitlab.com/dataeuropa/mqa/cache
+  - type: APIReference
+    url: https://data.europa.eu/api/mqa/shacl/
+  - type: SourceCode
+    url: https://gitlab.com/dataeuropa/mqa/validating-shacl
+  - type: APIReference
+    url: https://data.europa.eu/api/mqa/reporter/
+  - type: SourceCode
+    url: https://gitlab.com/dataeuropa/mqa/reporter
+- aid: eu-open-data-portal:eu-open-data-portal-reports-api
+  name: EU Open Data Portal Reports API
+  description: The Reports API from EU Open Data Portal — 1 operation(s) for reports.
+  humanURL: https://data.europa.eu/api/hub/search/
+  baseURL: https://data.europa.eu/api/hub/search
+  tags:
+  - Reports
+  properties:
+  - type: OpenAPI
+    url: openapi/eu-open-data-portal-reports-api-openapi.yml
+  - type: APIReference
+    url: https://data.europa.eu/api/hub/search/
+  - type: Documentation
+    url: https://dataeuropa.gitlab.io/data-provider-manual/api-documentation/
+  - type: SourceCode
+    url: https://gitlab.com/dataeuropa/hub/search
+  - type: Examples
+    url: https://gitlab.com/dataeuropa/api-usage-examples
+  - type: APIReference
+    url: https://data.europa.eu/api/hub/repo/
+  - type: SourceCode
+    url: https://gitlab.com/dataeuropa/hub/repo
+  - type: ChangeLog
+    url: https://gitlab.com/dataeuropa/hub/repo/-/blob/main/CHANGELOG.md
+  - type: APIReference
+    url: https://data.europa.eu/api/mqa/cache/
+  - type: SourceCode
+    url: https://gitlab.com/dataeuropa/mqa/cache
+  - type: APIReference
+    url: https://data.europa.eu/api/mqa/shacl/
+  - type: SourceCode
+    url: https://gitlab.com/dataeuropa/mqa/validating-shacl
+  - type: APIReference
+    url: https://data.europa.eu/api/mqa/reporter/
+  - type: SourceCode
+    url: https://gitlab.com/dataeuropa/mqa/reporter
+- aid: eu-open-data-portal:eu-open-data-portal-resources-api
+  name: EU Open Data Portal Resources API
+  description: The Resources API from EU Open Data Portal — 1 operation(s) for resources.
+  humanURL: https://data.europa.eu/api/hub/search/
+  baseURL: https://data.europa.eu/api/hub/search
+  tags:
+  - Resources
+  properties:
+  - type: OpenAPI
+    url: openapi/eu-open-data-portal-resources-api-openapi.yml
+  - type: APIReference
+    url: https://data.europa.eu/api/hub/search/
+  - type: Documentation
+    url: https://dataeuropa.gitlab.io/data-provider-manual/api-documentation/
+  - type: SourceCode
+    url: https://gitlab.com/dataeuropa/hub/search
+  - type: Examples
+    url: https://gitlab.com/dataeuropa/api-usage-examples
+  - type: APIReference
+    url: https://data.europa.eu/api/hub/repo/
+  - type: SourceCode
+    url: https://gitlab.com/dataeuropa/hub/repo
+  - type: ChangeLog
+    url: https://gitlab.com/dataeuropa/hub/repo/-/blob/main/CHANGELOG.md
+  - type: APIReference
+    url: https://data.europa.eu/api/mqa/cache/
+  - type: SourceCode
+    url: https://gitlab.com/dataeuropa/mqa/cache
+  - type: APIReference
+    url: https://data.europa.eu/api/mqa/shacl/
+  - type: SourceCode
+    url: https://gitlab.com/dataeuropa/mqa/validating-shacl
+  - type: APIReference
+    url: https://data.europa.eu/api/mqa/reporter/
+  - type: SourceCode
+    url: https://gitlab.com/dataeuropa/mqa/reporter
+- aid: eu-open-data-portal:eu-open-data-portal-search-api
+  name: EU Open Data Portal Search API
+  description: The Search API from EU Open Data Portal — 2 operation(s) for search.
+  humanURL: https://data.europa.eu/api/hub/search/
+  baseURL: https://data.europa.eu/api/hub/search
+  tags:
+  - Search
+  properties:
+  - type: OpenAPI
+    url: openapi/eu-open-data-portal-search-api-openapi.yml
+  - type: APIReference
+    url: https://data.europa.eu/api/hub/search/
+  - type: Documentation
+    url: https://dataeuropa.gitlab.io/data-provider-manual/api-documentation/
+  - type: SourceCode
+    url: https://gitlab.com/dataeuropa/hub/search
+  - type: Examples
+    url: https://gitlab.com/dataeuropa/api-usage-examples
+  - type: APIReference
+    url: https://data.europa.eu/api/hub/repo/
+  - type: SourceCode
+    url: https://gitlab.com/dataeuropa/hub/repo
+  - type: ChangeLog
+    url: https://gitlab.com/dataeuropa/hub/repo/-/blob/main/CHANGELOG.md
+  - type: APIReference
+    url: https://data.europa.eu/api/mqa/cache/
+  - type: SourceCode
+    url: https://gitlab.com/dataeuropa/mqa/cache
+  - type: APIReference
+    url: https://data.europa.eu/api/mqa/shacl/
+  - type: SourceCode
+    url: https://gitlab.com/dataeuropa/mqa/validating-shacl
+  - type: APIReference
+    url: https://data.europa.eu/api/mqa/reporter/
+  - type: SourceCode
+    url: https://gitlab.com/dataeuropa/mqa/reporter
+- aid: eu-open-data-portal:eu-open-data-portal-sitemap-api
+  name: EU Open Data Portal Sitemap API
+  description: The Sitemap API from EU Open Data Portal — 2 operation(s) for sitemap.
+  humanURL: https://data.europa.eu/api/hub/search/
+  baseURL: https://data.europa.eu/api/hub/search
+  tags:
+  - Sitemap
+  properties:
+  - type: OpenAPI
+    url: openapi/eu-open-data-portal-sitemap-api-openapi.yml
+  - type: APIReference
+    url: https://data.europa.eu/api/hub/search/
+  - type: Documentation
+    url: https://dataeuropa.gitlab.io/data-provider-manual/api-documentation/
+  - type: SourceCode
+    url: https://gitlab.com/dataeuropa/hub/search
+  - type: Examples
+    url: https://gitlab.com/dataeuropa/api-usage-examples
+  - type: APIReference
+    url: https://data.europa.eu/api/hub/repo/
+  - type: SourceCode
+    url: https://gitlab.com/dataeuropa/hub/repo
+  - type: ChangeLog
+    url: https://gitlab.com/dataeuropa/hub/repo/-/blob/main/CHANGELOG.md
+  - type: APIReference
+    url: https://data.europa.eu/api/mqa/cache/
+  - type: SourceCode
+    url: https://gitlab.com/dataeuropa/mqa/cache
+  - type: APIReference
+    url: https://data.europa.eu/api/mqa/shacl/
+  - type: SourceCode
+    url: https://gitlab.com/dataeuropa/mqa/validating-shacl
+  - type: APIReference
+    url: https://data.europa.eu/api/mqa/reporter/
+  - type: SourceCode
+    url: https://gitlab.com/dataeuropa/mqa/reporter
+- aid: eu-open-data-portal:eu-open-data-portal-test-api
+  name: EU Open Data Portal Test API
+  description: The Test API from EU Open Data Portal — 1 operation(s) for test.
+  humanURL: https://data.europa.eu/api/hub/search/
+  baseURL: https://data.europa.eu/api/hub/search
+  tags:
+  - Test
+  properties:
+  - type: OpenAPI
+    url: openapi/eu-open-data-portal-test-api-openapi.yml
+  - type: APIReference
+    url: https://data.europa.eu/api/hub/search/
+  - type: Documentation
+    url: https://dataeuropa.gitlab.io/data-provider-manual/api-documentation/
+  - type: SourceCode
+    url: https://gitlab.com/dataeuropa/hub/search
+  - type: Examples
+    url: https://gitlab.com/dataeuropa/api-usage-examples
+  - type: APIReference
+    url: https://data.europa.eu/api/hub/repo/
+  - type: SourceCode
+    url: https://gitlab.com/dataeuropa/hub/repo
+  - type: ChangeLog
+    url: https://gitlab.com/dataeuropa/hub/repo/-/blob/main/CHANGELOG.md
+  - type: APIReference
+    url: https://data.europa.eu/api/mqa/cache/
+  - type: SourceCode
+    url: https://gitlab.com/dataeuropa/mqa/cache
+  - type: APIReference
+    url: https://data.europa.eu/api/mqa/shacl/
+  - type: SourceCode
+    url: https://gitlab.com/dataeuropa/mqa/validating-shacl
+  - type: APIReference
+    url: https://data.europa.eu/api/mqa/reporter/
+  - type: SourceCode
+    url: https://gitlab.com/dataeuropa/mqa/reporter
+- aid: eu-open-data-portal:eu-open-data-portal-translation-api
+  name: EU Open Data Portal Translation API
+  description: The Translation API from EU Open Data Portal — 1 operation(s) for translation.
+  humanURL: https://data.europa.eu/api/hub/search/
+  baseURL: https://data.europa.eu/api/hub/search
+  tags:
+  - Translation
+  properties:
+  - type: OpenAPI
+    url: openapi/eu-open-data-portal-translation-api-openapi.yml
+  - type: APIReference
+    url: https://data.europa.eu/api/hub/search/
+  - type: Documentation
+    url: https://dataeuropa.gitlab.io/data-provider-manual/api-documentation/
+  - type: SourceCode
+    url: https://gitlab.com/dataeuropa/hub/search
+  - type: Examples
+    url: https://gitlab.com/dataeuropa/api-usage-examples
+  - type: APIReference
+    url: https://data.europa.eu/api/hub/repo/
+  - type: SourceCode
+    url: https://gitlab.com/dataeuropa/hub/repo
+  - type: ChangeLog
+    url: https://gitlab.com/dataeuropa/hub/repo/-/blob/main/CHANGELOG.md
+  - type: APIReference
+    url: https://data.europa.eu/api/mqa/cache/
+  - type: SourceCode
+    url: https://gitlab.com/dataeuropa/mqa/cache
+  - type: APIReference
+    url: https://data.europa.eu/api/mqa/shacl/
+  - type: SourceCode
+    url: https://gitlab.com/dataeuropa/mqa/validating-shacl
+  - type: APIReference
+    url: https://data.europa.eu/api/mqa/reporter/
+  - type: SourceCode
+    url: https://gitlab.com/dataeuropa/mqa/reporter
+- aid: eu-open-data-portal:eu-open-data-portal-validation-api
+  name: EU Open Data Portal Validation API
+  description: The Validation API from EU Open Data Portal — 1 operation(s) for validation.
+  humanURL: https://data.europa.eu/api/hub/search/
+  baseURL: https://data.europa.eu/api/hub/search
+  tags:
+  - Validation
+  properties:
+  - type: OpenAPI
+    url: openapi/eu-open-data-portal-validation-api-openapi.yml
+  - type: APIReference
+    url: https://data.europa.eu/api/hub/search/
+  - type: Documentation
+    url: https://dataeuropa.gitlab.io/data-provider-manual/api-documentation/
+  - type: SourceCode
+    url: https://gitlab.com/dataeuropa/hub/search
+  - type: Examples
+    url: https://gitlab.com/dataeuropa/api-usage-examples
+  - type: APIReference
+    url: https://data.europa.eu/api/hub/repo/
+  - type: SourceCode
+    url: https://gitlab.com/dataeuropa/hub/repo
+  - type: ChangeLog
+    url: https://gitlab.com/dataeuropa/hub/repo/-/blob/main/CHANGELOG.md
+  - type: APIReference
+    url: https://data.europa.eu/api/mqa/cache/
+  - type: SourceCode
+    url: https://gitlab.com/dataeuropa/mqa/cache
+  - type: APIReference
+    url: https://data.europa.eu/api/mqa/shacl/
+  - type: SourceCode
+    url: https://gitlab.com/dataeuropa/mqa/validating-shacl
+  - type: APIReference
+    url: https://data.europa.eu/api/mqa/reporter/
+  - type: SourceCode
+    url: https://gitlab.com/dataeuropa/mqa/reporter
+- aid: eu-open-data-portal:eu-open-data-portal-vocabularies-api
+  name: EU Open Data Portal Vocabularies API
+  description: The Vocabularies API from EU Open Data Portal — 5 operation(s) for vocabularies.
+  humanURL: https://data.europa.eu/api/hub/search/
+  baseURL: https://data.europa.eu/api/hub/search
+  tags:
+  - Vocabularies
+  properties:
+  - type: OpenAPI
+    url: openapi/eu-open-data-portal-vocabularies-api-openapi.yml
+  - type: APIReference
+    url: https://data.europa.eu/api/hub/search/
+  - type: Documentation
+    url: https://dataeuropa.gitlab.io/data-provider-manual/api-documentation/
+  - type: SourceCode
+    url: https://gitlab.com/dataeuropa/hub/search
+  - type: Examples
+    url: https://gitlab.com/dataeuropa/api-usage-examples
+  - type: APIReference
+    url: https://data.europa.eu/api/hub/repo/
+  - type: SourceCode
+    url: https://gitlab.com/dataeuropa/hub/repo
+  - type: ChangeLog
+    url: https://gitlab.com/dataeuropa/hub/repo/-/blob/main/CHANGELOG.md
+  - type: APIReference
+    url: https://data.europa.eu/api/mqa/cache/
+  - type: SourceCode
+    url: https://gitlab.com/dataeuropa/mqa/cache
+  - type: APIReference
+    url: https://data.europa.eu/api/mqa/shacl/
+  - type: SourceCode
+    url: https://gitlab.com/dataeuropa/mqa/validating-shacl
+  - type: APIReference
+    url: https://data.europa.eu/api/mqa/reporter/
+  - type: SourceCode
+    url: https://gitlab.com/dataeuropa/mqa/reporter
 common:
+- type: Overlay
+  url: overlays/eu-open-data-portal-hub-search-overlay.yaml
+- type: Overlay
+  url: overlays/eu-open-data-portal-hub-repo-overlay.yaml
+- type: Overlay
+  url: overlays/eu-open-data-portal-mqa-metrics-cache-overlay.yaml
+- type: Overlay
+  url: overlays/eu-open-data-portal-mqa-shacl-overlay.yaml
+- type: Overlay
+  url: overlays/eu-open-data-portal-mqa-reporter-overlay.yaml
 - type: Website
   url: https://data.europa.eu/
 - type: Portal
