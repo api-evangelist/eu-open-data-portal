@@ -27,7 +27,7 @@ apis:
   - Reporting
   properties:
   - type: Swagger
-    url: openapi/eu-open-data-portal-hub-statistics-swagger.json
+    url: openapi/_original/eu-open-data-portal-hub-statistics-swagger.json
   - type: APIReference
     url: https://data.europa.eu/api/hub/statistics/
   - type: Documentation
@@ -235,6 +235,8 @@ apis:
   humanURL: https://data.europa.eu/api/hub/search/
   baseURL: https://data.europa.eu/api/hub/search
   tags:
+  - CKAN
+  tags_raw:
   - Ckan
   properties:
   - type: OpenAPI
@@ -635,6 +637,8 @@ apis:
   humanURL: https://data.europa.eu/api/hub/search/
   baseURL: https://data.europa.eu/api/hub/search
   tags:
+  - Feed
+  tags_raw:
   - Feeds
   properties:
   - type: OpenAPI
@@ -815,6 +819,8 @@ apis:
   humanURL: https://data.europa.eu/api/hub/search/
   baseURL: https://data.europa.eu/api/hub/search
   tags:
+  - Organization
+  tags_raw:
   - Organizations
   properties:
   - type: OpenAPI
@@ -1066,7 +1072,8 @@ apis:
   description: The Test API from EU Open Data Portal — 1 operation(s) for test.
   humanURL: https://data.europa.eu/api/hub/search/
   baseURL: https://data.europa.eu/api/hub/search
-  tags:
+  tags: []
+  tags_raw:
   - Test
   properties:
   - type: OpenAPI
@@ -1301,6 +1308,17 @@ accessModel:
   generated: '2026-07-22'
   method: derived
 tags:
+- Government
+- Open Data
+- SPARQL
+- EU
+- Regulatory
+- Linked Data
+- DCAT-AP
+- Data Quality
+- Metadata
+- Catalog
+tags_raw:
 - Government
 - Open Data
 - SPARQL
