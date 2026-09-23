@@ -1,0 +1,94 @@
+openapi: 3.2.0
+info:
+  version: 5.3.11
+  title: hub-search Sitemap API
+  description: Hub-Search is a powerful search solution designed to function as a Metadata Search Service for the Open Data Portal.
+  x-logo:
+    url: images/logo
+servers:
+- url: ''
+tags:
+- name: Sitemap
+paths:
+  /sitemap:
+    get:
+      description: Make a GET request to the specified URL of the API endpoint with the resource path "/sitemap" at the end of the URL to get the Sitemap index that lists all existing Sitemaps with IDs. If successful, the response contains an XML file, grouping multiple Sitemap files.
+      summary: Sitemap Meta
+      operationId: readSitemapIndex
+      tags:
+      - Sitemap
+      responses:
+        '200':
+          $ref: '#/components/responses/QuerySuccess'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+  /sitemap/{id}:
+    get:
+      description: Make a GET request to the specified URL of the API endpoint with the resource path "sitemap/{id}" at the end of the URL to get a Sitemap in XML format. Set the unique identifier of the Sitemap as {id} element of the URL.
+      summary: Sitemap Datasets
+      operationId: readSitemap
+      tags:
+      - Sitemap
+      parameters:
+      - name: id
+        in: path
+        description: Id of the requested sitemap
+        required: true
+        schema:
+          type: integer
+          minimum: 1
+      responses:
+        '200':
+          $ref: '#/components/responses/QuerySuccess'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+components:
+  responses:
+    InternalServerError:
+      description: Internal Server Error
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              success:
+                type: boolean
+                default: false
+              message:
+                type: string
+    QuerySuccess:
+      description: The query was successfully processed
+      content:
+        application/json:
+          schema:
+            type: object
+  securitySchemes:
+    ApiKeyAuth:
+      type: apiKey
+      in: header
+      name: X-API-Key
+    BearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+x-tagGroups:
+- name: Resources
+  tags:
+  - Resources
+  - EditorialContent
+- name: Searching
+  tags:
+  - Search
+  - Feeds
+- name: DCAT-AP
+  tags:
+  - Datasets
+  - Data Services
+  - Dataset Series
+  - Catalogues
+  - Vocabularies
+- name: Misc
+  tags:
+  - Gazetteer
+  - Ckan
+  - Organizations

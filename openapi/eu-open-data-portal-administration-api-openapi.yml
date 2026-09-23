@@ -1,0 +1,215 @@
+openapi: 3.2.0
+info:
+  version: 5.8.3
+  title: Metrics Cache Administration API
+  description: The API is designed to provide actual quality information for datasets.
+  x-logo:
+    url: images/logo
+servers:
+- url: ''
+tags:
+- name: Administration
+paths:
+  /admin/refresh:
+    post:
+      tags:
+      - Administration
+      summary: Refresh all metrics
+      description: This function is reserved for internal use only and is not part of our public API offerings. You must be authorized to refresh all metrics. If you are authorized, send POST request to the specified URL of the API with the resource path "/admin/refresh" to fetch DQV (Data Quality Vocabulary) values from remote endpoint and calculates a new set of metrics for all available metadata.
+      operationId: refreshAllMetrics
+      security:
+      - ApiKeyAuth: []
+      responses:
+        202:
+          description: Request accepted
+  /admin/refresh/{scope}/{id}:
+    post:
+      tags:
+      - Administration
+      summary: Refresh a specific metric
+      description: This function is reserved for internal use only and is not part of our public API offerings. You must be authorized to refresh the metrics of a specified document. If you are authorized, send POST request to the specified URL of the API endpoint with the resource path "/admin/refresh/{scope}/{id}" to fetch DQV (Data Quality Vocabulary) values from remote endpoint and calculate a new set of metrics for the document with specified id.
+      operationId: refreshSingleMetrics
+      parameters:
+      - name: scope
+        in: path
+        description: The scope
+        required: true
+        schema:
+          type: string
+          enum:
+          - catalogues
+          - countries
+          - global
+      - name: id
+        in: path
+        description: Document id. In case of 'global' the id is ignored. The only document id of global scope is implicitly 'global'.
+        required: true
+        schema:
+          type: string
+      security:
+      - ApiKeyAuth: []
+      responses:
+        202:
+          description: Request accepted
+  /admin/clear:
+    post:
+      tags:
+      - Administration
+      summary: Remove all currently existing metrics and their values
+      description: This function is reserved for internal use only and is not part of our public API offerings. You must be authorized to remove all currently existing metrics and their values. If you are authorized, send POST request to the specified URL of the API endpoint with the resource path "/admin/clear" to remove the metrics.
+      operationId: clearMetrics
+      security:
+      - ApiKeyAuth: []
+      responses:
+        202:
+          description: Request accepted
+  /admin/migratescore:
+    post:
+      tags:
+      - Administration
+      summary: Migrates old score history entries into the new db schema
+      description: This function is reserved for internal use only and is not part of our public API offerings. You must be authorized to update deprecated format of metrics' entries according to the current data base schema. You may need to update format only if entries were made using Metrics-Cache version lower than 3, with had different database schema. As an authorized user, you can make a POST request to the specified URL of the API endpoint with the resource path "/admin/migratescore" added at the end of the URL. The format will be updated.
+      operationId: migrateScore
+      security:
+      - ApiKeyAuth: []
+      responses:
+        202:
+          description: Request accepted
+  /admin/schedule:
+    post:
+      tags:
+      - Administration
+      summary: Schedule the refresh action
+      description: This function is reserved for internal use only and is not part of our public API offerings. Authorization is required to set an internal schedule for refreshing the metrics for all catalogues. If you are authorized, send POST request to the specified URL of the API endpoint with the resource path "/admin/schedule" added at the end of the URL. Pay attention that you can choose different request body schema according to the scheduling details you need. It is necessary to create an unique id for each scheduling instance. Remember that currently, you cannot delete or modify a schedule.
+      operationId: scheduleRefresh
+      requestBody:
+        content:
+          application/json:
+            schema:
+              anyOf:
+              - $ref: '#/components/schemas/CronTrigger'
+              - $ref: '#/components/schemas/IntervalTrigger'
+              - $ref: '#/components/schemas/SpecificTrigger'
+      security:
+      - ApiKeyAuth: []
+      responses:
+        202:
+          description: Request accepted
+    get:
+      tags:
+      - Administration
+      summary: Return refresh schedules
+      description: This function is reserved for internal use only and is not part of our public API offerings. Authorization is required to obtain a list of all refresh schedules. If you are authorized, send GET request to the specified URL of the API endpoint with the resource path "/admin/schedule" added at the end of the URL.
+      operationId: getScheduleRefresh
+      security:
+      - ApiKeyAuth: []
+      responses:
+        200:
+          description: The trigger
+          content:
+            application/json:
+              schema:
+                oneOf:
+                - $ref: '#/components/schemas/CronTrigger'
+                - $ref: '#/components/schemas/IntervalTrigger'
+                - $ref: '#/components/schemas/SpecificTrigger'
+        404:
+          description: Pipe or trigger not found
+components:
+  schemas:
+    SpecificTrigger:
+      description: A list of specific trigger times
+      type: object
+      required:
+      - specific
+      allOf:
+      - $ref: '#/components/schemas/Trigger'
+      properties:
+        specific:
+          description: List of specific date and time triggers
+          type: array
+          items:
+            type: string
+            format: date-time
+    IntervalTrigger:
+      description: Am interval based trigger
+      type: object
+      required:
+      - interval
+      allOf:
+      - $ref: '#/components/schemas/Trigger'
+      properties:
+        interval:
+          type: object
+          required:
+          - value
+          - unit
+          properties:
+            value:
+              type: integer
+              minimum: 1
+            unit:
+              type: string
+              enum:
+              - MINUTE
+              - HOUR
+              - DAY
+              - WEEK
+              - MONTH
+              - YEAR
+        next:
+          description: The first trigger
+          type: string
+          format: date-time
+    Trigger:
+      description: A trigger object.
+      type: object
+      required:
+      - id
+      - status
+      properties:
+        id:
+          description: A unique identifier within the scope of the pipe
+          type: string
+        status:
+          description: Indicating the status of the trigger
+          type: string
+          enum:
+          - enabled
+          - disabled
+        startMode:
+          description: Behavior when the pipe is already running. Start anyway, do nothing, cancel and restart, or wait until current run has finished (previously waiting triggers will be dropped).
+          type: string
+          enum:
+          - drop
+          - restart
+          - append
+          - concurrent
+          default: drop
+        configs:
+          description: An object containing configurations to merge into specific segments
+          type: object
+    CronTrigger:
+      description: A cron based trigger definition
+      type: object
+      required:
+      - cron
+      allOf:
+      - $ref: '#/components/schemas/Trigger'
+      properties:
+        cron:
+          description: The cron syntax
+          type: string
+        next:
+          description: The first trigger
+          type: string
+          format: date-time
+  securitySchemes:
+    ApiKeyAuth:
+      type: apiKey
+      in: header
+      name: X-API-Key
+    BearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT

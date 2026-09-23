@@ -1,0 +1,57 @@
+openapi: 3.2.0
+info:
+  version: ${project.version}
+  title: Metrics Reporter Generate API
+  x-logo:
+    url: images/logo
+servers:
+- url: ''
+tags:
+- name: Generate
+paths:
+  /generate:
+    post:
+      summary: Generate all PDF reports
+      operationId: generate
+      parameters:
+      - name: lang
+        in: query
+        description: Language codes for which to generate reports
+        required: true
+        schema:
+          type: array
+          items:
+            type: string
+            enum:
+            - bg
+            - cs
+            - da
+            - de
+            - el
+            - en
+            - es
+            - et
+            - fi
+            - fr
+            - ga
+            - hr
+            - hu
+            - it
+            - lt
+            - lv
+            - mt
+            - nl
+            - false
+            - pl
+            - pt
+            - ro
+            - sk
+            - sl
+            - sv
+      responses:
+        '202':
+          description: Request accepted
+        '500':
+          description: Internal server error
+      tags:
+      - Generate

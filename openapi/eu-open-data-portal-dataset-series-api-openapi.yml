@@ -1,0 +1,204 @@
+openapi: 3.2.0
+info:
+  version: 5.3.11
+  title: hub-search Dataset Series API
+  description: Hub-Search is a powerful search solution designed to function as a Metadata Search Service for the Open Data Portal.
+  x-logo:
+    url: images/logo
+servers:
+- url: ''
+tags:
+- name: Dataset Series
+paths:
+  /datasetseries/{id}:
+    get:
+      description: Get a single Dataset Series based on the ID
+      summary: Get a single Dataset Series
+      operationId: getSeries
+      tags:
+      - Dataset Series
+      parameters:
+      - name: id
+        in: path
+        description: Id of the requested Dataset Series
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          $ref: '#/components/responses/DatasetSeriesSuccess'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+    put:
+      summary: Create or Update a Dataset Series
+      operationId: putSeries
+      tags:
+      - Dataset Series
+      security:
+      - ApiKeyAuth: []
+      parameters:
+      - name: id
+        in: path
+        description: ID of the new or existing Dataset Series
+        required: true
+        schema:
+          type: string
+      requestBody:
+        $ref: '#/components/requestBodies/RDFBody'
+      responses:
+        '201':
+          description: Dataset Series created or updated successfully
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+    delete:
+      description: Endpoint to delete a given Dataset Series
+      summary: Delete a Dataset Series
+      operationId: deleteSeries
+      tags:
+      - Dataset Series
+      security:
+      - ApiKeyAuth: []
+      parameters:
+      - name: id
+        in: path
+        description: Id of the Dataset Series
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          $ref: '#/components/responses/DatasetSuccessId'
+        '202':
+          description: Accepted
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+components:
+  responses:
+    BadRequest:
+      description: Validation error / Bad request
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              success:
+                type: boolean
+                default: false
+              message:
+                type: string
+    InternalServerError:
+      description: Internal Server Error
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              success:
+                type: boolean
+                default: false
+              message:
+                type: string
+    NotFound:
+      description: Not found
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              success:
+                type: boolean
+                default: false
+              message:
+                type: string
+    DatasetSuccessId:
+      description: Dataset response ID
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              success:
+                type: boolean
+                default: true
+              result:
+                type: object
+                properties:
+                  id:
+                    type: string
+    DatasetSeriesSuccess:
+      description: Dataset Series response object
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              success:
+                type: boolean
+                default: true
+              result:
+                type: object
+  requestBodies:
+    RDFBody:
+      required: true
+      content:
+        application/ld+json:
+          schema:
+            type: object
+        application/n-triples:
+          schema:
+            type: string
+        application/n-quads:
+          schema:
+            type: string
+        application/trig:
+          schema:
+            type: string
+        application/trix:
+          schema:
+            type: string
+        text/turtle:
+          schema:
+            type: string
+        text/n3:
+          schema:
+            type: string
+  securitySchemes:
+    ApiKeyAuth:
+      type: apiKey
+      in: header
+      name: X-API-Key
+    BearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+x-tagGroups:
+- name: Resources
+  tags:
+  - Resources
+  - EditorialContent
+- name: Searching
+  tags:
+  - Search
+  - Feeds
+- name: DCAT-AP
+  tags:
+  - Datasets
+  - Data Services
+  - Dataset Series
+  - Catalogues
+  - Vocabularies
+- name: Misc
+  tags:
+  - Gazetteer
+  - Ckan
+  - Organizations

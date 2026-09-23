@@ -1,0 +1,94 @@
+openapi: 3.2.0
+info:
+  version: 5.3.11
+  title: hub-search Gazetteer API
+  description: Hub-Search is a powerful search solution designed to function as a Metadata Search Service for the Open Data Portal.
+  x-logo:
+    url: images/logo
+servers:
+- url: ''
+tags:
+- name: Gazetteer
+paths:
+  /gazetteer/autocomplete:
+    get:
+      description: You can get a list of Gazetteer entries making a GET request to the specified URL of the API endpoint with the resource path "/gazetteer/autocomplete" with required parameter 'q'. The value of the parameter is any string (e.g. a place name). If successful, the response contains an array with gazetteer entries. Your query matches the values of the name-value pairs of the returned entries in whole words and/ or substrings.
+      summary: Gazetteer
+      operationId: gazetteerAutocomplete
+      tags:
+      - Gazetteer
+      parameters:
+      - in: query
+        name: q
+        description: The query string
+        schema:
+          type: string
+      responses:
+        '200':
+          $ref: '#/components/responses/QuerySuccess'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+components:
+  responses:
+    InternalServerError:
+      description: Internal Server Error
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              success:
+                type: boolean
+                default: false
+              message:
+                type: string
+    QuerySuccess:
+      description: The query was successfully processed
+      content:
+        application/json:
+          schema:
+            type: object
+    BadRequest:
+      description: Validation error / Bad request
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              success:
+                type: boolean
+                default: false
+              message:
+                type: string
+  securitySchemes:
+    ApiKeyAuth:
+      type: apiKey
+      in: header
+      name: X-API-Key
+    BearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+x-tagGroups:
+- name: Resources
+  tags:
+  - Resources
+  - EditorialContent
+- name: Searching
+  tags:
+  - Search
+  - Feeds
+- name: DCAT-AP
+  tags:
+  - Datasets
+  - Data Services
+  - Dataset Series
+  - Catalogues
+  - Vocabularies
+- name: Misc
+  tags:
+  - Gazetteer
+  - Ckan
+  - Organizations

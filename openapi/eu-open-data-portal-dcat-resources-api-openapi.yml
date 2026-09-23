@@ -1,0 +1,656 @@
+openapi: 3.2.0
+info:
+  version: 4.3.3
+  title: piveau hub-repo service DCAT Resources API
+  description: The API simplifies the management of DCAT resources, adhering to the DCAT-AP standard for structured data descriptions.
+  x-logo:
+    url: images/logo
+tags:
+- name: DCAT Resources
+  x-displayName: DCAT Resources
+  description: Manage DCAT resources and its sub-classes, except DCAT Catalogues.
+paths:
+  /catalogues/{catalogueId}/resources:
+    parameters:
+    - $ref: '#/components/parameters/CatalogueId'
+    get:
+      description: To retrieve a list of DCAT resources of a specific catalogue make a GET request to the specified URL of the API endpoint with the resource path "/catalogues/{catalogueId}/resources" at the end of the URL, including the unique ID of the catalogue as {catalogueId} element of the URL. The query parameter "limit" specifies the number of DCAT resources to retrieve, while the query parameter "offset" determines the starting point for counting. If the request is successful, by default, the response will contain an array with the URLs of the chosen number of DCAT resources (with 100 being the default limit) from the specified catalogue. To retrieve other data of the DCAT resources from the specified catalogue select a different value for the parameter "valueType".
+      summary: List DCAT resources of catalogue
+      operationId: listCatalogueResources
+      tags:
+      - DCAT Resources
+      security:
+      - ApiKeyAuth: []
+      - BearerAuth: []
+      parameters:
+      - $ref: '#/components/parameters/ValueType'
+      - $ref: '#/components/parameters/Offset'
+      - $ref: '#/components/parameters/Limit'
+      - name: resourceTypes
+        description: Return only values for specific DCAT resource types. If not provided or empty, all DCAT resource types are returned.
+        in: query
+        schema:
+          type: array
+          items:
+            enum:
+            - Dataset
+            - DataService
+            - DatasetSeries
+      responses:
+        '200':
+          $ref: '#/components/responses/RDFLIST200'
+        '400':
+          description: Bad Request
+        '404':
+          description: Catalogue Not Found
+    head:
+      description: To retrieve only the headers for the list of DCAT resources from a specific catalogue, you can make a HEAD request to the specified URL of the API endpoint with the resource path "/catalogues/{catalogueId}/resources" at the end of the URL, including the unique ID of the catalogue as {catalogueId} element of the URL. The query parameter "limit" specifies the number of DCAT resources to retrieve, while the query parameter "offset" determines the starting point for counting. If the request is successful, by default, the response will contain the headers for chosen number of DCAT resources URLs (with 100 being the default limit) from the specified catalogue. To retrieve the headers for other data of the DCAT resources from the specified catalogue select a different value for the parameter "valueType".
+      summary: Headers only for "List DCAT resources of catalogue"
+      operationId: headListCatalogueResources
+      tags:
+      - DCAT Resources
+      security:
+      - ApiKeyAuth: []
+      - BearerAuth: []
+      parameters:
+      - $ref: '#/components/parameters/ValueType'
+      - $ref: '#/components/parameters/Offset'
+      - $ref: '#/components/parameters/Limit'
+      - name: resourceTypes
+        description: Return only values for specific DCAT resource types. If not provided or empty, all DCAT resource types are returned.
+        in: query
+        schema:
+          type: array
+          items:
+            enum:
+            - dataset
+            - dataService
+            - datasetSeries
+            - other
+      responses:
+        '200':
+          description: Headers of list DCAT resources of catalogue
+        '400':
+          description: Bad Request
+        '404':
+          description: Catalogue Not Found
+    post:
+      description: Create a new DCAT resource. For the final id check the LOCATION response header
+      summary: Add a new DCAT resource to catalogue
+      operationId: postCatalogueResources
+      tags:
+      - DCAT Resources
+      parameters:
+      - in: query
+        name: resourceId
+        description: If not exists in this catalogue, use this id as resource id. If it already exists, the service will assign it a generated new id.
+        schema:
+          type: string
+        required: false
+      - in: query
+        name: publicationStatus
+        schema:
+          type: string
+          enum:
+          - draft
+          - published
+          default: published
+        required: false
+      - in: query
+        name: accessLevel
+        schema:
+          type: string
+          enum:
+          - public
+          - internal
+          - restricted
+          default: public
+        required: false
+      security:
+      - ApiKeyAuth: []
+      - BearerAuth: []
+      requestBody:
+        $ref: '#/components/requestBodies/RDFBody'
+      responses:
+        '201':
+          description: DCAT Resource created
+          headers:
+            Location:
+              $ref: '#/components/headers/LocationURIRef'
+        '400':
+          description: Bad Request
+        '401':
+          description: Unauthorized
+        '403':
+          description: Forbidden
+        '404':
+          description: Catalogue Not Found
+  /catalogues/{catalogueId}/resources/origin:
+    parameters:
+    - $ref: '#/components/parameters/CatalogueId'
+    - name: originalId
+      required: true
+      in: query
+      description: The original id of the DCAT resource
+      schema:
+        type: string
+    get:
+      description: To retrieve a specific dataset send a GET request to the specified URL of the API endpoint with the resource path "/catalogues/{catalogueId}/datasets/origin" at the end of the URL, set the unique ID of the catalogue as {catalogueId} element and the unique ID of the dataset as {origin} element of the URL.
+      summary: Get DCAT resources of catalogue by means of an original id
+      operationId: getCatalogueResourcesOrigin
+      tags:
+      - DCAT Resources
+      security:
+      - ApiKeyAuth: []
+      - BearerAuth: []
+      responses:
+        '200':
+          $ref: '#/components/responses/RDF200'
+        '400':
+          description: Bad Request
+        '404':
+          description: Catalogue or DCAT Resource Not Found
+    head:
+      description: To retrieve the headers for a specific dataset send a HEAD request to the specified URL of the API endpoint with the resource path "/catalogues/{catalogueId}/resources/origin" at the end of the URL, set the unique ID of the catalogue as {catalogueId} element and the unique ID of the DCAT resource as {origin} element of the URL.
+      summary: Headers only for "Get DCAT resource of a catalogue by means of an original id"
+      operationId: headGetCatalogueResourcesOrigin
+      tags:
+      - DCAT Resources
+      security:
+      - ApiKeyAuth: []
+      - BearerAuth: []
+      responses:
+        '200':
+          description: Headers of get resource of catalogue by means of an original id
+        '400':
+          description: Bad Request
+        '404':
+          description: Catalogue or DCAT Resource Not Found
+    put:
+      description: This function is reserved for internal use only and is not part of our public API offerings. You must be authorized to create or update a DCAT resource. As an authorized user, you make a PUT request to the specified URL of the API endpoint with the resource path "/catalogues/{catalogueId}/resources/origin" at the end of the URL. Specify the unique ID of the catalogue, where the DCAT resource is created, as the {catalogueId} and the unique ID of the DCAT resource as the {origin} element of the URL accordingly. If the DCAT resource with this ID already exists, it is updated.
+      summary: Create or update DCAT resource of catalogue by means of an original id
+      operationId: putCatalogueResourcesOrigin
+      tags:
+      - DCAT Resources
+      parameters:
+      - in: query
+        name: recordModified
+        description: If set the DCAT resource is only updated when the server side is not newer
+        schema:
+          type: string
+          format: date-time
+        required: false
+      - in: query
+        name: enforceUpdate
+        description: If set to true, the resource is updated, regardless of the hash comparison result
+        schema:
+          type: boolean
+          default: false
+        required: false
+      - in: query
+        name: publicationStatus
+        schema:
+          type: string
+          enum:
+          - draft
+          - published
+          default: published
+        required: false
+      - in: query
+        name: accessLevel
+        schema:
+          type: string
+          enum:
+          - public
+          - internal
+          - restricted
+          default: public
+        required: false
+      security:
+      - ApiKeyAuth: []
+      - BearerAuth: []
+      requestBody:
+        $ref: '#/components/requestBodies/RDFBody'
+      responses:
+        '201':
+          description: DCAT resource created
+          headers:
+            Location:
+              $ref: '#/components/headers/LocationURIRef'
+        '204':
+          description: DCAT resource updated
+        '304':
+          description: Not modified, no update necessary
+        '400':
+          description: Bad Request
+        '401':
+          description: Unauthorized
+        '403':
+          description: Forbidden
+        '404':
+          description: Catalogue Not Found
+        '409':
+          description: DCAT resource on server side is newer
+    delete:
+      description: 'This function is reserved for internal use only and is not part of our public API offerings. As an authorized user you can delete a DCAT resource of a specific catalogue. Send a DELETE request to the specified URL of the API endpoint with the resource path "/catalogues/{catalogueId}/resources/origin". Specify the unique ID of the catalogue as the {catalogueId} and the unique ID of the DCAT resource as the {origin} element of the URL accordingly. This operation deletes the specified DCAT resource from the repository and the index. It also removes any related quality measurements if they exist. Caution: you cannot revert this operation'
+      summary: Delete DCAT resource of catalogue by means of an original id
+      operationId: deleteCatalogueResourcesOrigin
+      tags:
+      - DCAT Resources
+      security:
+      - ApiKeyAuth: []
+      - BearerAuth: []
+      responses:
+        '204':
+          description: DCAT resource deleted
+        '400':
+          description: Bad Request
+        '401':
+          description: Unauthorized
+        '403':
+          description: Forbidden
+        '404':
+          description: Catalogue or DCAT Resource Not Found
+  /resources:
+    get:
+      operationId: listDCATResources
+      tags:
+      - DCAT Resources
+      security:
+      - ApiKeyAuth: []
+      - BearerAuth: []
+      parameters:
+      - $ref: '#/components/parameters/ValueType'
+      - $ref: '#/components/parameters/Offset'
+      - $ref: '#/components/parameters/Limit'
+      - $ref: '#/components/parameters/UsePagedCollection'
+      responses:
+        '200':
+          $ref: '#/components/responses/RDFLIST200'
+        '400':
+          description: Bad Request
+      summary: List DCAT resources
+      x-summary-source: derived
+    head:
+      operationId: headListDCATResources
+      tags:
+      - DCAT Resources
+      security:
+      - ApiKeyAuth: []
+      - BearerAuth: []
+      parameters:
+      - $ref: '#/components/parameters/ValueType'
+      - $ref: '#/components/parameters/Offset'
+      - $ref: '#/components/parameters/Limit'
+      - $ref: '#/components/parameters/UsePagedCollection'
+      responses:
+        '200':
+          $ref: '#/components/responses/RDFLIST200'
+        '400':
+          description: Bad Request
+      summary: Head list DCAT resources
+      x-summary-source: derived
+  /resources/{resourceId}:
+    parameters:
+    - $ref: '#/components/parameters/ResourceId'
+    get:
+      operationId: getDCATResource
+      tags:
+      - DCAT Resources
+      security:
+      - ApiKeyAuth: []
+      - BearerAuth: []
+      responses:
+        '200':
+          $ref: '#/components/responses/RDF200'
+        '400':
+          description: Bad Request
+        '404':
+          description: Catalogue or DCAT Resource Not Found
+      summary: Get DCAT resource
+      x-summary-source: derived
+    head:
+      operationId: headGetDCATResource
+      tags:
+      - DCAT Resources
+      security:
+      - ApiKeyAuth: []
+      - BearerAuth: []
+      responses:
+        '200':
+          description: Headers of get dataset
+        '400':
+          description: Bad request
+        '404':
+          description: Catalogue or DCAT Resource Not Found
+      summary: Head get DCAT resource
+      x-summary-source: derived
+    delete:
+      operationId: deleteDCATResource
+      tags:
+      - DCAT Resources
+      security:
+      - ApiKeyAuth: []
+      - BearerAuth: []
+      responses:
+        '204':
+          description: DCAT Resource deleted
+        '401':
+          description: Unauthorized
+        '403':
+          description: Forbidden
+        '404':
+          description: DCAT Resource Not Found
+      summary: Delete DCAT resource
+      x-summary-source: derived
+  /resources/{resourceId}/record:
+    parameters:
+    - $ref: '#/components/parameters/ResourceId'
+    get:
+      description: Retrieve the catalogue record of a specific DCAT resource.
+      summary: Get catalogue record
+      operationId: getDCATResourceRecord
+      tags:
+      - DCAT Resources
+      security:
+      - ApiKeyAuth: []
+      - BearerAuth: []
+      responses:
+        '200':
+          $ref: '#/components/responses/RDF200'
+        '404':
+          description: DCAT Resource not found
+    head:
+      description: Retrieve only the headers for a catalogue record of a specific DCAT resource.
+      summary: Headers only for "Get catalogue record"
+      operationId: headGetDCATResourceRecord
+      tags:
+      - DCAT Resources
+      security:
+      - ApiKeyAuth: []
+      - BearerAuth: []
+      responses:
+        '200':
+          description: Headers of get catalogue record
+        '404':
+          description: DCAT Resource Not Found
+  /resources/{resourceId}/metrics:
+    parameters:
+    - $ref: '#/components/parameters/ResourceId'
+    get:
+      description: 'To retrieve the metrics of metadata quality and their corresponding values for a specified DCAT resource. To
+
+        obtain a graph with all data collected for the specified dataset, set the query parameter "historic" to "true".'
+      summary: Get DCAT resources metrics
+      operationId: getDCATResourceMetrics
+      tags:
+      - DCAT Resources
+      security:
+      - ApiKeyAuth: []
+      - BearerAuth: []
+      parameters:
+      - name: historic
+        in: query
+        description: Whether the historic metrics graph should be returned. Ignored when historic graphs are disabled in config.
+        schema:
+          type: boolean
+          default: false
+      responses:
+        '200':
+          $ref: '#/components/responses/RDF200'
+        '400':
+          description: Bad Request
+        '404':
+          description: DCAT Resource or Metrics Not Found
+    head:
+      description: 'To retrieve the headers for the metrics of metadata quality and their corresponding values for a specified DCAT
+
+        resource. To get headers for a graph with the metadata of all data, collected for the specified DCAT resource,
+
+        set the query parameter "historic" to "true".'
+      summary: Headers only for "Get DCAT resource metrics"
+      operationId: headGetDCATResourceMetrics
+      tags:
+      - DCAT Resources
+      security:
+      - ApiKeyAuth: []
+      - BearerAuth: []
+      parameters:
+      - name: historic
+        in: query
+        description: Whether the historic metrics graph should be returned. Ignored when historic graphs are disabled in config.
+        schema:
+          type: boolean
+          default: false
+      responses:
+        '200':
+          description: DCAT Resource metrics info
+        '400':
+          description: Bad Request
+        '404':
+          description: Dataset not found
+    put:
+      description: This function is reserved for internal use only and is not part of our public API offerings. As an authorized user you can createor update metrics for a dataset, by making a PUT request to the specified API endpoint URL with the resource path "/datasets/{datasetId}/metrics" added at the end of the URL. Specify the unique ID of the dataset as the {datasetId}.
+      summary: Create/Update metrics for a dataset
+      operationId: putDCATResourceMetrics
+      tags:
+      - DCAT Resources
+      security:
+      - ApiKeyAuth: []
+      - BearerAuth: []
+      requestBody:
+        $ref: '#/components/requestBodies/RDFBody'
+      responses:
+        '201':
+          description: DCAT Resource metrics created
+          headers:
+            Location:
+              $ref: '#/components/headers/LocationURIRef'
+        '204':
+          description: DCAT Resource metrics updated
+        '400':
+          description: Bad Request
+        '401':
+          description: Unauthorized
+        '403':
+          description: Forbidden
+        '404':
+          description: DCAT Resource not found
+    delete:
+      summary: Delete DCAT resource metrics
+      operationId: deleteDCATResourceMetrics
+      tags:
+      - DCAT Resources
+      security:
+      - ApiKeyAuth: []
+      - BearerAuth: []
+      responses:
+        '204':
+          description: DCAT resource metrics deleted
+        '401':
+          description: Unauthorized
+        '403':
+          description: Forbidden
+        '404':
+          description: DCAT resource or its metrics not found
+components:
+  headers:
+    LocationURIRef:
+      description: The final URIRef
+      schema:
+        type: string
+        format: uri
+  parameters:
+    ResourceId:
+      name: resourceId
+      description: The DCAT resource id
+      in: path
+      required: true
+      schema:
+        type: string
+        pattern: '[a-z,0-9,-,~]+'
+    UsePagedCollection:
+      name: usePagedCollection
+      in: query
+      description: Set to 'true' to use the legacy PagedCollection format for pagination. By default, the response will use the updated PartialCollectionView format. This parameter is provided for backward compatibility with clients that expect the old format.
+      schema:
+        type: boolean
+        default: false
+    CatalogueId:
+      name: catalogueId
+      description: The catalogue id
+      in: path
+      required: true
+      schema:
+        type: string
+        pattern: '[a-z,0-9,-]+'
+    Offset:
+      name: offset
+      in: query
+      schema:
+        type: number
+        format: int64
+        default: 0
+        minimum: 0
+    ValueType:
+      name: valueType
+      in: query
+      description: Return value type. In case of `urifRefs` and `identifiers` Accept header will be ignored and the return type will always be a JSON array
+      schema:
+        type: string
+        enum:
+        - uriRefs
+        - identifiers
+        - originalIds
+        - metadata
+        default: uriRefs
+    Limit:
+      name: limit
+      in: query
+      schema:
+        type: number
+        format: int64
+        default: 100
+        minimum: 1
+        maximum: 5000
+  requestBodies:
+    RDFBody:
+      required: true
+      content:
+        application/rdf+xml:
+          schema:
+            type: string
+            format: binary
+        application/ld+json:
+          schema:
+            type: string
+            format: binary
+        application/n-triples:
+          schema:
+            type: string
+            format: binary
+        application/n-quads:
+          schema:
+            type: string
+            format: binary
+        application/trig:
+          schema:
+            type: string
+            format: binary
+        application/trix:
+          schema:
+            type: string
+            format: binary
+        text/turtle:
+          schema:
+            type: string
+            format: binary
+        text/n3:
+          schema:
+            type: string
+            format: binary
+  responses:
+    RDFLIST200:
+      description: The list of resource(s)
+      content:
+        application/json:
+          schema:
+            type: array
+            items:
+              type: string
+        application/rdf+xml:
+          schema:
+            type: string
+            format: binary
+        application/ld+json:
+          schema:
+            type: string
+            format: binary
+        application/n-triples:
+          schema:
+            type: string
+            format: binary
+        application/n-quads:
+          schema:
+            type: string
+            format: binary
+        application/trig:
+          schema:
+            type: string
+            format: binary
+        application/trix:
+          schema:
+            type: string
+            format: binary
+        text/turtle:
+          schema:
+            type: string
+            format: binary
+        text/n3:
+          schema:
+            type: string
+            format: binary
+    RDF200:
+      description: The resource graph(s)
+      content:
+        application/rdf+xml:
+          schema:
+            type: string
+            format: binary
+        application/ld+json:
+          schema:
+            type: string
+            format: binary
+        application/n-triples:
+          schema:
+            type: string
+            format: binary
+        application/n-quads:
+          schema:
+            type: string
+            format: binary
+        application/trig:
+          schema:
+            type: string
+            format: binary
+        application/trix:
+          schema:
+            type: string
+            format: binary
+        text/turtle:
+          schema:
+            type: string
+            format: binary
+        text/n3:
+          schema:
+            type: string
+            format: binary
+  securitySchemes:
+    ApiKeyAuth:
+      type: apiKey
+      in: header
+      name: X-API-Key
+    BearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT

@@ -1,0 +1,22 @@
+openapi: 3.2.0
+info:
+  title: hub statistics Maintenance API
+  version: v1.3
+tags:
+- name: Maintenance
+paths:
+  /reinit-db:
+    get:
+      description: Drops all tables and recreates the schema. ALL DATA WILL BE LOST. Requires X-API-KEY header.
+      parameters:
+      - description: Secret key to authorize database reset
+        in: header
+        name: X-API-KEY
+        required: true
+      responses: {}
+      tags:
+      - Maintenance
+      summary: Get reinit db
+      x-summary-source: derived
+      operationId: getReinitDb
+      x-operation-id-source: derived

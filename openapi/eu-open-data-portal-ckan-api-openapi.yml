@@ -1,0 +1,191 @@
+openapi: 3.2.0
+info:
+  version: 5.3.11
+  title: hub-search Ckan API
+  description: Hub-Search is a powerful search solution designed to function as a Metadata Search Service for the Open Data Portal.
+  x-logo:
+    url: images/logo
+servers:
+- url: ''
+tags:
+- name: Ckan
+paths:
+  /ckan/package_list:
+    get:
+      description: Return a list of the names of the site’s datasets (packages)
+      summary: Package list
+      operationId: ckanPackageList
+      tags:
+      - Ckan
+      parameters:
+      - in: query
+        name: limit
+        description: The number of matching rows to return
+        schema:
+          type: integer
+      - in: query
+        name: offset
+        description: The offset in the complete result for where the set of returned datasets should begin
+        schema:
+          type: integer
+      responses:
+        '200':
+          $ref: '#/components/responses/QuerySuccess'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+  /ckan/package_search:
+    get:
+      description: You can search for datasets (on CKAN data management versions datasets called "packages" ) satisfying a given search criteria, send a GET request to the specified URL of the API endpoint with the resource path "/ckan/package_search". To obtain the desired result, use one or more of the parameters listed below.
+      summary: Package search
+      operationId: ckanPackageSearch
+      tags:
+      - Ckan
+      parameters:
+      - in: query
+        name: q
+        description: The query
+        schema:
+          type: string
+      - in: query
+        name: fq
+        description: Any filter queries to apply
+        schema:
+          type: string
+      - in: query
+        name: sort
+        description: Sorting of the search results
+        schema:
+          type: string
+      - in: query
+        name: rows
+        description: The number of matching rows to return
+        schema:
+          type: integer
+      - in: query
+        name: start
+        description: The offset in the complete result for where the set of returned datasets should begin
+        schema:
+          type: integer
+      - in: query
+        name: facet
+        description: Whether to enable faceted results
+        schema:
+          type: boolean
+      - in: query
+        name: facet.mincount
+        description: The minimum counts for facet fields should be included in the results
+        schema:
+          type: integer
+      - in: query
+        name: facet.field
+        description: The minimum counts for facet fields should be included in the results
+        schema:
+          type: array
+          items:
+            type: string
+      responses:
+        '200':
+          $ref: '#/components/responses/QuerySuccess'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+  /ckan/package_show:
+    get:
+      description: Get the metadata of a dataset (on CKAN data management versions datasets called "packages") making GET request to the specified URL of the API endpoint with the resource path "ckan/package_show" and with required parameter 'id'. The value of the parameter is the unique ID of the dataset. If successful, the response contains the metadata of the dataset and its resources.
+      summary: Package show
+      operationId: ckanPackageShow
+      tags:
+      - Ckan
+      parameters:
+      - in: query
+        name: id
+        description: The id of the requested dataset
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          $ref: '#/components/responses/QuerySuccess'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+components:
+  responses:
+    InternalServerError:
+      description: Internal Server Error
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              success:
+                type: boolean
+                default: false
+              message:
+                type: string
+    QuerySuccess:
+      description: The query was successfully processed
+      content:
+        application/json:
+          schema:
+            type: object
+    BadRequest:
+      description: Validation error / Bad request
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              success:
+                type: boolean
+                default: false
+              message:
+                type: string
+    NotFound:
+      description: Not found
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              success:
+                type: boolean
+                default: false
+              message:
+                type: string
+  securitySchemes:
+    ApiKeyAuth:
+      type: apiKey
+      in: header
+      name: X-API-Key
+    BearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+x-tagGroups:
+- name: Resources
+  tags:
+  - Resources
+  - EditorialContent
+- name: Searching
+  tags:
+  - Search
+  - Feeds
+- name: DCAT-AP
+  tags:
+  - Datasets
+  - Data Services
+  - Dataset Series
+  - Catalogues
+  - Vocabularies
+- name: Misc
+  tags:
+  - Gazetteer
+  - Ckan
+  - Organizations

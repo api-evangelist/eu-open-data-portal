@@ -1,0 +1,102 @@
+openapi: 3.2.0
+info:
+  version: 5.3.11
+  title: hub-search Resources API
+  description: Hub-Search is a powerful search solution designed to function as a Metadata Search Service for the Open Data Portal.
+  x-logo:
+    url: images/logo
+servers:
+- url: ''
+tags:
+- name: Resources
+paths:
+  /resources:
+    get:
+      description: You can get a list of resource types.
+      summary: List resource types
+      operationId: listResourceTypes
+      tags:
+      - Resources
+      responses:
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+        '200':
+          description: Array of resource types
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: string
+components:
+  responses:
+    InternalServerError:
+      description: Internal Server Error
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              success:
+                type: boolean
+                default: false
+              message:
+                type: string
+    BadRequest:
+      description: Validation error / Bad request
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              success:
+                type: boolean
+                default: false
+              message:
+                type: string
+    NotFound:
+      description: Not found
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              success:
+                type: boolean
+                default: false
+              message:
+                type: string
+  securitySchemes:
+    ApiKeyAuth:
+      type: apiKey
+      in: header
+      name: X-API-Key
+    BearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+x-tagGroups:
+- name: Resources
+  tags:
+  - Resources
+  - EditorialContent
+- name: Searching
+  tags:
+  - Search
+  - Feeds
+- name: DCAT-AP
+  tags:
+  - Datasets
+  - Data Services
+  - Dataset Series
+  - Catalogues
+  - Vocabularies
+- name: Misc
+  tags:
+  - Gazetteer
+  - Ckan
+  - Organizations

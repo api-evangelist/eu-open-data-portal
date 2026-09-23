@@ -1,0 +1,771 @@
+openapi: 3.2.0
+info:
+  title: Eu Open Data Portal Vocabularies API
+  x-logo:
+    url: images/logo
+  version: '1.0'
+  description: 'Operations tagged Vocabularies across 2 of this provider''s published API definitions: eu-open-data-portal-hub-repo-openapi.yaml, eu-open-data-portal-hub-search-openapi.yaml. Each path carries the servers of the definition it was published in.'
+tags:
+- name: Vocabularies
+  x-displayName: Vocabularies
+paths:
+  /vocabularies:
+    get:
+      description: You can get a list of indexed (controlled) vocabularies used by the portal sending a GET request to the specified URL of the API endpoint with the resource path "/vocabularies" at the end of the URL. Upon success, the response will contain, by default, an array with the URLs of the chosen number of vocabularies (with 100 being the default limit). To retrieve identifiers (normalized IDs), metadata etc. you can choose a different value for the parameter "valueType".
+      summary: Get list of vocabularies
+      operationId: listVocabularies
+      parameters:
+      - $ref: '#/components/parameters/ValueType'
+      - $ref: '#/components/parameters/Offset'
+      - $ref: '#/components/parameters/Limit'
+      tags:
+      - Vocabularies
+      responses:
+        '200':
+          $ref: '#/components/responses/RDFLIST200'
+        '400':
+          description: Bad Request
+    head:
+      description: To retrieve only the headers for the list of indexed (controlled) vocabularies used by the portal sending a HEAD request to the specified URL of the API endpoint with the resource path "/vocabularies" at the end of the URL. Upon success, the response will contain, by default, the headers for chosen number of the vocabularies' URLs (with 100 being default limit). To retrieve headers for other data of the vocabularies select a different value for the parameter "valueType".
+      summary: Head get list of vocabularies
+      operationId: headListVocabularies
+      parameters:
+      - $ref: '#/components/parameters/ValueType'
+      - $ref: '#/components/parameters/Offset'
+      - $ref: '#/components/parameters/Limit'
+      tags:
+      - Vocabularies
+      responses:
+        '200':
+          description: Headers of list vocabularies
+        '400':
+          description: Bad Request
+    put:
+      description: This function is reserved for internal use only and is not part of our public API offerings. You must be authorized for this operation. As an authorized user you can create or update a vocabulary, sending a PUT request to the specified API endpoint URL with the resource path "/vocabularies" at the end of the URL. Set the unique ID and URI of the vocabulary as required parameters of the request, if the vocabulary ID and URI already exist, the vocabulary is updated.
+      summary: Create or Update a vocabulary
+      deprecated: true
+      operationId: createOrUpdateVocabulary
+      tags:
+      - Vocabularies
+      security:
+      - ApiKeyAuth: []
+      - BearerAuth: []
+      parameters:
+      - name: vocabularyId
+        in: query
+        description: ID of the vocabulary
+        required: true
+        schema:
+          type: string
+      - name: uri
+        in: query
+        description: URI of the vocabulary
+        required: true
+        schema:
+          type: string
+      - name: hash
+        in: query
+        description: Hash of the vocabulary. Used for chunk-wise processing. Default is empty.
+        required: false
+        schema:
+          type: string
+      - name: chunkId
+        in: query
+        description: Id of the corresponding chunk of the vocabulary. Used for chunk-wise processing. Default is 0.
+        required: false
+        schema:
+          type: integer
+          minimum: 0
+      - name: numberOfChunks
+        in: query
+        description: Number of total chunks of the vocabulary. Used for chunk-wise processing. Default is 1.
+        schema:
+          type: integer
+          minimum: 1
+      requestBody:
+        $ref: '#/components/requestBodies/RDFBody'
+      responses:
+        '204':
+          description: Vocabulary updated
+        '201':
+          description: Vocabulary created
+          headers:
+            Location:
+              $ref: '#/components/headers/LocationURIRef'
+        '202':
+          description: Vocabulary chunk accepted
+        '400':
+          description: Bad request
+        '401':
+          description: Unauthorized
+        '403':
+          description: Forbidden
+  /vocabularies/{vocabularyId}:
+    parameters:
+    - $ref: '#/components/parameters/VocabularyId'
+    get:
+      description: You can get a vocabulary, making a GET request to the specified URL of the API endpoint with the resource path "/vocabularies/{vocabularyId}". Set the unique identifier of the vocabulary as {vocabularyId} element of the URL. If successful, the response contains the vocabulary.
+      summary: Get a vocabulary
+      operationId: getVocabulary
+      tags:
+      - Vocabularies
+      responses:
+        '200':
+          $ref: '#/components/responses/RDF200'
+        '404':
+          description: Not Found
+    head:
+      description: You can get only the headers for a vocabulary making a HEAD request to the specified URL of the API endpoint with the resource path "/vocabularies/{vocabularyId}". Set the unique identifier of the vocabulary as {vocabularyId} element of the URL. If successful, the response contains the headers of the specified vocabulary.
+      summary: Head get a vocabulary
+      operationId: headGetVocabulary
+      tags:
+      - Vocabularies
+      responses:
+        '200':
+          description: Headers of get a vocabulary
+        '404':
+          description: Not Found
+    put:
+      description: This function is reserved for internal use only and is not part of our public API offerings. You must be authorized for this operation. As an authorized user you can create or update a vocabulary, sending a PUT request to the specified URL of the API endpoint "/vocabularies/{vocabularyId}". Set the unique identifier of the vocabulary as {vocabularyId} element of the URL. If the vocabulary ID already exists, the vocabulary is updated. If the vocabulary ID is new, a new vocabulary will be created
+      summary: Create or update a vocabulary
+      operationId: putVocabulary
+      tags:
+      - Vocabularies
+      security:
+      - ApiKeyAuth: []
+      - BearerAuth: []
+      requestBody:
+        $ref: '#/components/requestBodies/RDFBody'
+      responses:
+        '204':
+          description: Vocabulary updated
+        '201':
+          description: Vocabulary created
+          headers:
+            Location:
+              $ref: '#/components/headers/LocationURIRef'
+        '400':
+          description: Bad request
+        '401':
+          description: Unauthorized
+        '403':
+          description: Forbidden
+    delete:
+      description: This function is reserved for internal use only and is not part of our public API offerings. You must be authorized for this operation. As an authorized user you can delete a vocabulary, sending a DELETE request to the specified URL of the API endpoint with the resource path "/vocabularies/{vocabularyId}" added at the end of the URL. Set the unique ID of the vocabulary as {vocabularyId} element of the URL. Caution! You cannot revert this operation.
+      summary: Delete a vocabulary
+      operationId: deleteVocabulary
+      tags:
+      - Vocabularies
+      security:
+      - ApiKeyAuth: []
+      - BearerAuth: []
+      responses:
+        '204':
+          description: Vocabulary deleted
+        '401':
+          description: Unauthorized
+        '403':
+          description: Forbidden
+        '404':
+          description: Not Found
+  /vocabularies/{vocabulary}:
+    get:
+      description: You can get a vocabulary, making GET request to the specified URL of the API endpoint with the resource path "vocabularies/{vocabulary}". Set the unique ID of the vocabulary as {vocabulary} element of the URL. If successful, the response contains the Vocabulary object for a valid ID.
+      summary: Get a vocabulary
+      operationId: readVocabulary
+      tags:
+      - Vocabularies
+      parameters:
+      - name: vocabulary
+        in: path
+        description: Id of the requested vocabulary
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          $ref: '#/components/responses/VocabularySuccess'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+    put:
+      description: This function is reserved for internal use only and is not part of our public API offerings. You must be authorized for this operation. As an authorized user you can create or update a vocabulary, sending PUT request to the specified URL of the API endpoint with the resource path "vocabularies/{vocabulary}" at the end of the URL. Set the unique ID of the vocabulary as {vocabulary} element of the URL, if the vocabulary ID already exists, the vocabulary is updated.
+      summary: Create or Update a vocabulary
+      operationId: createOrUpdateVocabulary
+      tags:
+      - Vocabularies
+      security:
+      - ApiKeyAuth: []
+      parameters:
+      - name: vocabulary
+        in: path
+        description: Id of the created or updated vocabulary
+        required: true
+        schema:
+          type: string
+      - in: query
+        name: synchronous
+        description: If disbled the execution is asynchronous (response code 202)
+        schema:
+          type: boolean
+          default: true
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Vocabulary'
+        required: true
+      responses:
+        '200':
+          $ref: '#/components/responses/VocabularySuccess'
+        '201':
+          $ref: '#/components/responses/VocabularySuccess'
+        '202':
+          description: Accepted
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+    delete:
+      description: This function is reserved for internal use only and is not part of our public API offerings. You must be authorized for this operation. As an authorized user you can delete a vocabulary by sending your DELETE request to the specified URL of the API endpoint with the resource path "/vocabularies/{vocabulary}". Set the {vocabulary} as the unique ID of the vocabulary you want to delete.
+      summary: Delete a vocabulary
+      operationId: deleteVocabulary
+      tags:
+      - Vocabularies
+      security:
+      - ApiKeyAuth: []
+      parameters:
+      - name: vocabulary
+        in: path
+        description: Id of the to be deleted vocabulary
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          $ref: '#/components/responses/VocabularySuccessId'
+        '202':
+          description: Accepted
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+    post:
+      description: This function is reserved for internal use only and is not part of our public API offerings. You must be authorized for this operation. As an authorized user you can add a term to a vocabulary sending a POST request to the specified URL of the API endpoint with the resource path "/vocabularies/{vocabulary}". Set the unique ID of the vocabulary as {vocabulary} element of the URL.
+      summary: Create a vocable
+      operationId: createVocable
+      tags:
+      - Vocabularies
+      parameters:
+      - name: vocabulary
+        in: path
+        description: Vocabulary of the created vocable
+        required: true
+        schema:
+          type: string
+      - in: query
+        name: synchronous
+        description: If disabled the execution is asynchronous (response code 202)
+        schema:
+          type: boolean
+          default: true
+      security:
+      - ApiKeyAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Vocable'
+      responses:
+        '201':
+          $ref: '#/components/responses/VocableSuccessId'
+        '202':
+          description: Accepted
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+    servers:
+    - url: ''
+  /vocabularies/{vocabulary}/vocable:
+    get:
+      description: Returns a vocable for a given vocabulary based on the resource identifier aka URI of that vocable. For example `http://www.opendefinition.org/licenses/cc-by.`
+      summary: Get a vocable by URI
+      operationId: readVocableByResource
+      tags:
+      - Vocabularies
+      parameters:
+      - name: vocabulary
+        in: path
+        description: Vocabulary of the requested vocable
+        required: true
+        schema:
+          type: string
+      - name: resource
+        in: query
+        description: URI of the requested vocable
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          $ref: '#/components/responses/VocableSuccess'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+    servers:
+    - url: ''
+  /vocabularies/{vocabulary}/{id}:
+    get:
+      description: You can get a vocable, making GET request to the specified URL of the API endpoint with the resource path "/vocabularies/{vocabulary}/{id}". Set the unique ID of the vocabulary as {vocabulary} element, set the unique ID of the vocable as {id} element of the URL. If successful, the response contains the Vocable object for a valid ID.
+      summary: Get a vocable
+      operationId: readVocable
+      tags:
+      - Vocabularies
+      parameters:
+      - name: vocabulary
+        in: path
+        description: Vocabulary of the requested vocable
+        required: true
+        schema:
+          type: string
+      - name: id
+        in: path
+        description: Id of the requested vocable
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          $ref: '#/components/responses/VocableSuccess'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+    put:
+      description: This function is reserved for internal use only and is not part of our public API offerings. You must be authorized for this operation. As an authorized user you can create or update a vocable, sending PUT request to the specified URL of the API endpoint with the resource path "/vocabularies/{vocabulary}/{id}" at the end of the URL. Set the unique ID of the vocabulary as {vocabulary} element, set the unique ID of the vocable as {id} element of the URL, if the vocable ID already exists, the vocable is updated.
+      summary: Create or Update a vocable
+      operationId: createOrUpdateVocable
+      tags:
+      - Vocabularies
+      security:
+      - ApiKeyAuth: []
+      parameters:
+      - name: vocabulary
+        in: path
+        description: Vocabulary of the created or updated vocable
+        required: true
+        schema:
+          type: string
+      - name: id
+        in: path
+        description: Id of the created or updated Vocable
+        required: true
+        schema:
+          type: string
+      - in: query
+        name: synchronous
+        description: If disabled the execution is asynchronous (response code 202)
+        schema:
+          type: boolean
+          default: true
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Vocable'
+        required: true
+      responses:
+        '200':
+          $ref: '#/components/responses/VocableSuccessId'
+        '201':
+          $ref: '#/components/responses/VocableSuccessId'
+        '202':
+          description: Accepted
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+    patch:
+      description: This function is reserved for internal use only and is not part of our public API offerings. You must be authorized for this operation. As an authorized user you can modify a vocable with an exact ID, sending PATCH request to the specified URL of the API endpoint with the resource path "/vocabularies/{vocabulary}/{id}". Set the unique ID of the vocabulary as {vocabulary} element, set the unique ID of the vocable you want to modify as {id} element of the URL.
+      summary: Modify a vocable
+      operationId: modifyVocable
+      tags:
+      - Vocabularies
+      security:
+      - ApiKeyAuth: []
+      parameters:
+      - name: vocabulary
+        in: path
+        description: Vocabulary of the modified vocable
+        required: true
+        schema:
+          type: string
+      - name: id
+        in: path
+        description: Id of the modified vocable
+        required: true
+        schema:
+          type: string
+      - in: query
+        name: synchronous
+        description: If disabled the execution is asynchronous (response code 202)
+        schema:
+          type: boolean
+          default: true
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Vocable'
+        required: true
+      responses:
+        '200':
+          $ref: '#/components/responses/VocableSuccessId'
+        '202':
+          description: Accepted
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+    delete:
+      description: This function is reserved for internal use only and is not part of our public API offerings. You must be authorized for this operation. As an authorized user you can delete a vocable, sending DELETE request to the specified URL of the API endpoint with the resource path "/vocabularies/{vocabulary}/{id}" at the end of the URL. Set the unique ID of the vocabulary as {vocabulary} element, set the unique ID of the vocable you want to delete as {id} element of the URL.
+      summary: Delete a vocable
+      operationId: deleteVocable
+      tags:
+      - Vocabularies
+      security:
+      - ApiKeyAuth: []
+      parameters:
+      - name: vocabulary
+        in: path
+        description: Vocabulary of the deleted vocable
+        required: true
+        schema:
+          type: string
+      - name: id
+        in: path
+        description: Id of the deleted vocabulary
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          $ref: '#/components/responses/VocableSuccessId'
+        '202':
+          description: Accepted
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+    servers:
+    - url: ''
+components:
+  parameters:
+    VocabularyId:
+      name: vocabularyId
+      description: The vocabulary id
+      in: path
+      required: true
+      schema:
+        type: string
+        pattern: ^[a-z0-9\-~]+$
+    Offset:
+      name: offset
+      in: query
+      schema:
+        type: number
+        format: int64
+        default: 0
+        minimum: 0
+    ValueType:
+      name: valueType
+      in: query
+      description: Return value type. In case of `urifRefs` and `identifiers` Accept header will be ignored and the return type will always be a JSON array
+      schema:
+        type: string
+        enum:
+        - uriRefs
+        - identifiers
+        - originalIds
+        - metadata
+        default: uriRefs
+    Limit:
+      name: limit
+      in: query
+      schema:
+        type: number
+        format: int64
+        default: 100
+        minimum: 1
+        maximum: 5000
+  headers:
+    LocationURIRef:
+      description: The final URIRef
+      schema:
+        type: string
+        format: uri
+  requestBodies:
+    RDFBody:
+      required: true
+      content:
+        application/rdf+xml:
+          schema:
+            type: string
+            format: binary
+        application/ld+json:
+          schema:
+            type: string
+            format: binary
+        application/n-triples:
+          schema:
+            type: string
+            format: binary
+        application/n-quads:
+          schema:
+            type: string
+            format: binary
+        application/trig:
+          schema:
+            type: string
+            format: binary
+        application/trix:
+          schema:
+            type: string
+            format: binary
+        text/turtle:
+          schema:
+            type: string
+            format: binary
+        text/n3:
+          schema:
+            type: string
+            format: binary
+  responses:
+    RDFLIST200:
+      description: The list of resource(s)
+      content:
+        application/json:
+          schema:
+            type: array
+            items:
+              type: string
+        application/rdf+xml:
+          schema:
+            type: string
+            format: binary
+        application/ld+json:
+          schema:
+            type: string
+            format: binary
+        application/n-triples:
+          schema:
+            type: string
+            format: binary
+        application/n-quads:
+          schema:
+            type: string
+            format: binary
+        application/trig:
+          schema:
+            type: string
+            format: binary
+        application/trix:
+          schema:
+            type: string
+            format: binary
+        text/turtle:
+          schema:
+            type: string
+            format: binary
+        text/n3:
+          schema:
+            type: string
+            format: binary
+    RDF200:
+      description: The resource graph(s)
+      content:
+        application/rdf+xml:
+          schema:
+            type: string
+            format: binary
+        application/ld+json:
+          schema:
+            type: string
+            format: binary
+        application/n-triples:
+          schema:
+            type: string
+            format: binary
+        application/n-quads:
+          schema:
+            type: string
+            format: binary
+        application/trig:
+          schema:
+            type: string
+            format: binary
+        application/trix:
+          schema:
+            type: string
+            format: binary
+        text/turtle:
+          schema:
+            type: string
+            format: binary
+        text/n3:
+          schema:
+            type: string
+            format: binary
+    BadRequest:
+      description: Validation error / Bad request
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              success:
+                type: boolean
+                default: false
+              message:
+                type: string
+    VocableSuccess:
+      description: Vocabulary response object
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              success:
+                type: boolean
+                default: true
+              result:
+                $ref: '#/components/schemas/Vocable'
+    VocableSuccessId:
+      description: Vocabulary response object
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              success:
+                type: boolean
+                default: true
+              result:
+                type: object
+                properties:
+                  id:
+                    type: string
+    InternalServerError:
+      description: Internal Server Error
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              success:
+                type: boolean
+                default: false
+              message:
+                type: string
+    VocabularySuccessId:
+      description: Vocabulary response object
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              success:
+                type: boolean
+                default: true
+              result:
+                type: object
+                properties:
+                  id:
+                    type: string
+    NotFound:
+      description: Not found
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              success:
+                type: boolean
+                default: false
+              message:
+                type: string
+    VocabularySuccess:
+      description: Vocabulary response
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              datasets:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    success:
+                      type: boolean
+                    status:
+                      type: integer
+                    message:
+                      type: string
+                    id:
+                      type: string
+  schemas:
+    Vocabulary:
+      description: A representation of a Vocabulary
+      type: object
+      required:
+      - vocab
+      properties:
+        vocab:
+          type: array
+          items:
+            $ref: '#/components/schemas/Vocable'
+    Vocable:
+      description: A representation of a vocable
+      type: object
+      properties:
+        id:
+          type: string
+        title:
+          type: object
+          additionalProperties:
+            type: string
+        resource:
+          type: string
+  securitySchemes:
+    ApiKeyAuth:
+      type: apiKey
+      in: header
+      name: X-API-Key
+    BearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+x-refined-from:
+- eu-open-data-portal-hub-repo-openapi.yaml
+- eu-open-data-portal-hub-search-openapi.yaml

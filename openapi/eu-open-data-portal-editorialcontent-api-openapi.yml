@@ -1,0 +1,302 @@
+openapi: 3.2.0
+info:
+  version: 5.3.11
+  title: hub-search Editorial Content API
+  description: Hub-Search is a powerful search solution designed to function as a Metadata Search Service for the Open Data Portal.
+  x-logo:
+    url: images/logo
+servers:
+- url: ''
+tags:
+- name: EditorialContent
+paths:
+  /resources/editorial-content:
+    get:
+      description: You can get a list of EditorialContents
+      summary: List EditorialContents
+      operationId: listEditorialContent
+      security:
+      - BearerAuth: []
+      tags:
+      - EditorialContent
+      responses:
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          description: Invalid or expired bearer token
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+        '200':
+          description: Array of resources IDs of type EditorialContent
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: string
+      parameters:
+      - in: query
+        name: catalogue
+        description: 'Catalogue to which the resources belong.
+
+          '
+        required: false
+        schema:
+          type: string
+      - in: query
+        name: alias
+        description: 'Alias, default ''resource_editorial-content_read''
+
+          .
+
+          '
+        required: false
+        schema:
+          type: string
+          default: resource_editorial-content_read
+  /resources/editorial-content/{id}:
+    get:
+      description: You can get a resource of type EditorialContent with id.
+      summary: Get a EditorialContent
+      operationId: readEditorialContent
+      security:
+      - BearerAuth: []
+      tags:
+      - EditorialContent
+      responses:
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          description: Invalid or expired bearer token
+        '403':
+          description: Access to the requested resource was denied by access control
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+        '200':
+          description: Resource object of type EditorialContent
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EditorialContent'
+      parameters:
+      - name: id
+        in: path
+        description: Id of the requested resource
+        required: true
+        schema:
+          type: string
+    delete:
+      description: You can delete a resource of type EditorialContent with id.
+      summary: Delete a EditorialContent
+      operationId: deleteEditorialContent
+      tags:
+      - EditorialContent
+      security:
+      - ApiKeyAuth: []
+      responses:
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+        '204':
+          $ref: '#/components/responses/NoContent'
+      parameters:
+      - name: id
+        in: path
+        description: Id of the requested resource
+        required: true
+        schema:
+          type: string
+    put:
+      description: You can put a resource of type EditorialContent with id.
+      summary: Create or Update a EditorialContent
+      operationId: createOrUpdateEditorialContent
+      tags:
+      - EditorialContent
+      security:
+      - ApiKeyAuth: []
+      responses:
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+        '201':
+          $ref: '#/components/responses/Created'
+        '202':
+          $ref: '#/components/responses/Accepted'
+        '204':
+          $ref: '#/components/responses/NoContent'
+      parameters:
+      - name: id
+        in: path
+        description: Id of the requested resource
+        required: true
+        schema:
+          type: string
+      - name: synchronous
+        in: query
+        description: If disabled the execution is asynchronous (response code 202)
+        schema:
+          type: boolean
+          default: 'true'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/EditorialContent'
+  /bulk/resources/editorial-content:
+    put:
+      description: As an authorized user you can create or update multiple EditorialContent at once
+      summary: Bulk-create/update of EditorialContent
+      operationId: createOrUpdateBulkEditorialContent
+      tags:
+      - EditorialContent
+      security:
+      - ApiKeyAuth: []
+      responses:
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+        '201':
+          $ref: '#/components/responses/Created'
+        '202':
+          $ref: '#/components/responses/Accepted'
+        '204':
+          $ref: '#/components/responses/NoContent'
+      parameters:
+      - name: synchronous
+        in: query
+        description: If disabled the execution is asynchronous (response code 202)
+        schema:
+          type: boolean
+          default: 'true'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/EditorialContentArray'
+components:
+  responses:
+    BadRequest:
+      description: Validation error / Bad request
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              success:
+                type: boolean
+                default: false
+              message:
+                type: string
+    NoContent:
+      description: No content
+    Created:
+      description: Created
+    InternalServerError:
+      description: Internal Server Error
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              success:
+                type: boolean
+                default: false
+              message:
+                type: string
+    NotFound:
+      description: Not found
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              success:
+                type: boolean
+                default: false
+              message:
+                type: string
+    Accepted:
+      description: Accepted
+  schemas:
+    EditorialContent:
+      description: Editorial Content
+      type: object
+      properties:
+        thumbnail:
+          type: string
+        description:
+          type: object
+          additionalProperties:
+            type: string
+        issued:
+          type: string
+        title:
+          type: object
+          additionalProperties:
+            type: string
+        modified:
+          type: string
+        content_type:
+          type: string
+        id:
+          type: string
+        path:
+          type: string
+      additionalProperties: false
+    EditorialContentArray:
+      description: An array of EditorialContent
+      type: object
+      required:
+      - editorial-content
+      properties:
+        editorial-content:
+          type: array
+          items:
+            $ref: '#/components/schemas/EditorialContent'
+          minItems: 1
+          maxItems: 500
+  securitySchemes:
+    ApiKeyAuth:
+      type: apiKey
+      in: header
+      name: X-API-Key
+    BearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+x-tagGroups:
+- name: Resources
+  tags:
+  - Resources
+  - EditorialContent
+- name: Searching
+  tags:
+  - Search
+  - Feeds
+- name: DCAT-AP
+  tags:
+  - Datasets
+  - Data Services
+  - Dataset Series
+  - Catalogues
+  - Vocabularies
+- name: Misc
+  tags:
+  - Gazetteer
+  - Ckan
+  - Organizations

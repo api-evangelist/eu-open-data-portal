@@ -1,0 +1,175 @@
+openapi: 3.2.0
+info:
+  version: 5.8.3
+  title: Metrics Cache Action API
+  description: The API is designed to provide actual quality information for datasets.
+  x-logo:
+    url: images/logo
+servers:
+- url: ''
+tags:
+- name: Action API
+  description: 'The action API utilizes the JSON-RPC 2.0 specification with the following constraints:
+
+
+    * `id` reference needs to be a string
+
+    * `params` are passed as object map, not as array list
+
+    * `data` of an error is an object
+
+    * Batch processing of actions is not yet supported
+
+
+    Although a correlation identifier (`id`) is not necessary on top of HTTP, you should always include it to allow
+
+    the server to distinguish between sync calls and notifications.'
+paths:
+  /action:
+    post:
+      tags:
+      - Action API
+      description: 'Post a JSON-RPC request to make a call to an action
+
+
+        Currently the only defined action is `refreshScope` to start a pipe run.'
+      summary: Call an Action
+      operationId: postAction
+      requestBody:
+        description: The action in JSON-RPC format
+        required: true
+        content:
+          application/json:
+            schema:
+              oneOf:
+              - $ref: '#/components/schemas/refreshScope'
+      responses:
+        '200':
+          description: JSON-RPC Response
+          content:
+            application/json:
+              schema:
+                oneOf:
+                - $ref: '#/components/schemas/JSON-RPCSuccess'
+                - $ref: '#/components/schemas/JSON-RPCError'
+        '202':
+          description: In case of an omitted `id` correlator
+components:
+  schemas:
+    JSON-RPCError:
+      description: JSON-RPC Error Response
+      type: object
+      required:
+      - error
+      allOf:
+      - $ref: '#/components/schemas/JSON-RPCBase'
+      - type: object
+        properties:
+          error:
+            $ref: '#/components/schemas/JSON-RPCErrorInfo'
+        additionalProperties: false
+    JSON-RPCSuccess:
+      description: JSON-RPC Success Response
+      type: object
+      required:
+      - result
+      allOf:
+      - $ref: '#/components/schemas/JSON-RPCBase'
+      - type: object
+        properties:
+          result:
+            description: Depending of the called method, the result can look differently.
+            oneOf:
+            - $ref: '#/components/schemas/refreshScopeResult'
+        additionalProperties: false
+    refreshScopeResult:
+      description: Result in case of refreshScope request
+      type: object
+      required:
+      - status
+      properties:
+        status:
+          type: string
+          enum:
+          - accepted
+      additionalProperties: false
+    JSON-RPCErrorInfo:
+      description: Error Information Object
+      type: object
+      required:
+      - code
+      - message
+      properties:
+        code:
+          description: '* `-1` Means "Upsala"
+
+            * `-7` Means "That''s not funny, I will not do it."
+
+            * `-9` Means "I don''t know what you mean..."
+
+            '
+          type: integer
+          enum:
+          - -1
+          - -7
+          - -9
+        message:
+          type: string
+        data:
+          type: object
+      additionalProperties: false
+    JSON-RPCBase:
+      description: JSON-RPC Base Schema
+      type: object
+      required:
+      - jsonrpc
+      properties:
+        jsonrpc:
+          description: JSON-RPC Version `2.0`
+          type: string
+          enum:
+          - '2.0'
+        id:
+          description: Optional client side defined correlator.
+          type: string
+      additionalProperties: false
+    refreshScope:
+      description: Run Pipe Request
+      type: object
+      allOf:
+      - $ref: '#/components/schemas/JSON-RPCBase'
+      - type: object
+        required:
+        - method
+        - params
+        properties:
+          method:
+            type: string
+            enum:
+            - refreshScope
+          params:
+            description: Method parameters
+            type: object
+            required:
+            - scope
+            properties:
+              scope:
+                description: Aggregation scope of refresh
+                type: string
+                enum:
+                - all
+                - catalogue
+              catalogueId:
+                description: In case of scope 'catalogue' the catalogue id
+                type: string
+            additionalProperties: false
+        additionalProperties: false
+  securitySchemes:
+    ApiKeyAuth:
+      type: apiKey
+      in: header
+      name: X-API-Key
+    BearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT

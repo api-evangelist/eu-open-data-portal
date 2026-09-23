@@ -1,0 +1,111 @@
+openapi: 3.2.0
+info:
+  version: 4.3.3
+  title: piveau hub-repo service Persistent Identifiers API
+  description: The API simplifies the management of DCAT resources, adhering to the DCAT-AP standard for structured data descriptions.
+  x-logo:
+    url: images/logo
+tags:
+- name: Persistent Identifiers
+  x-displayName: Persistent Identifiers
+  description: Create persistent identifiers for data artifacts.
+paths:
+  /identifiers/datasets/{datasetId}:
+    description: Under review! Probably moving to action API
+    parameters:
+    - $ref: '#/components/parameters/DatasetId'
+    put:
+      description: This function is reserved for internal use only and is not part of our public API offerings. This endpoint allows to create a persistent identifier for a dataset, that will be stored in the adms:identifier property. Choose value "mock" for the query parameter type if you need it for simulation purpose.
+      summary: Create a persistent identifier for a dataset
+      operationId: createDatasetIdentifier
+      tags:
+      - Persistent Identifiers
+      security:
+      - ApiKeyAuth: []
+      - BearerAuth: []
+      parameters:
+      - name: catalogue
+        deprecated: true
+        in: query
+        description: The the catalogue id to which the dataset belongs
+        schema:
+          type: string
+      - name: type
+        in: query
+        required: true
+        description: The type of the persistent identifier
+        schema:
+          type: string
+          enum:
+          - eu-ra-doi
+          - mock
+      responses:
+        '200':
+          description: Identifier created, details in the response body
+          content:
+            application/json:
+              schema:
+                type: object
+        '401':
+          description: Unauthorized
+        '403':
+          description: Forbidden
+        '404':
+          description: Dataset not found
+        '422':
+          description: Unprocessable Entity, details in the response body.
+          content:
+            application/json:
+              schema:
+                type: object
+  /identifiers/datasets/{datasetId}/eligibility:
+    description: Under review! Probably moving to action API
+    parameters:
+    - $ref: '#/components/parameters/DatasetId'
+    get:
+      description: This function is reserved for internal use only and is not part of our public API offerings. As an authorized user you can check if the specified dataset has all required elements ("creator", "publisher" etc.) to obtain an identifier. Send a GET request to the specified API endpoint URL with the resource path "/identifiers/datasets/{datasetId}/eligibility" added at the end of the URL, set the unique ID of the dataset as {datasetID} element of the URL. Choose value "mock" for the query parameter type if you need it for simulation purpose.
+      summary: Check if an identifier can be issued for the given dataset
+      operationId: checkIdentifierEligibility
+      tags:
+      - Persistent Identifiers
+      security:
+      - ApiKeyAuth: []
+      - BearerAuth: []
+      parameters:
+      - name: catalogue
+        in: query
+        description: The the catalogue id to which the dataset belongs
+        schema:
+          type: string
+      - name: type
+        in: query
+        description: The type of the persistent identifier
+        schema:
+          type: string
+          enum:
+          - eu-ra-doi
+          - mock
+      responses:
+        '200':
+          description: Eligible or not
+        '404':
+          description: The dataset was not found
+components:
+  parameters:
+    DatasetId:
+      name: datasetId
+      description: The dataset id
+      in: path
+      required: true
+      schema:
+        type: string
+        pattern: '[a-z,0-9,-,~]+'
+  securitySchemes:
+    ApiKeyAuth:
+      type: apiKey
+      in: header
+      name: X-API-Key
+    BearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT

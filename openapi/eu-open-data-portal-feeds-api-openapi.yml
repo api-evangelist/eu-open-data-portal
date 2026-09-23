@@ -1,0 +1,482 @@
+openapi: 3.2.0
+info:
+  version: 5.3.11
+  title: hub-search Feeds API
+  description: Hub-Search is a powerful search solution designed to function as a Metadata Search Service for the Open Data Portal.
+  x-logo:
+    url: images/logo
+servers:
+- url: ''
+tags:
+- name: Feeds
+paths:
+  /{lang}/feeds/datasets.atom:
+    get:
+      description: Make a GET request to the specified URL of the API endpoint with the resource path "/{lang}/feeds/datasets.atom" at the end of the URL to get datasets' feeds in Atom format. Set the language element {lang} in the URL to preferred language (see path parameters here below, the languages abbreviation are made according to the standards). A syntactically correct request looks like the following example https://example.org/api/de/feeds/datasets.atom?q=hund
+      summary: Atom
+      operationId: datasets.atom
+      tags:
+      - Feeds
+      parameters:
+      - in: query
+        name: q
+        description: The query
+        schema:
+          type: string
+      - in: query
+        name: facets
+        description: Filter queries by facets (string as json, e.g. 'facets={"catalog":["catalog-x"]}')
+        schema:
+          type: string
+      - in: query
+        name: page
+        description: The page number of matching results
+        schema:
+          type: integer
+          minimum: 0
+      - in: query
+        name: limit
+        description: The maximum number of matching datasets per page
+        schema:
+          type: integer
+          minimum: 1
+          maximum: 1000
+      - in: query
+        name: fields
+        description: Filter queries by document fields (e.g. 'fields=title')
+        schema:
+          type: array
+          items:
+            type: string
+      - in: query
+        name: minDate
+        description: Filter queries by minimum Date
+        schema:
+          type: string
+          format: date-time
+      - in: query
+        name: maxDate
+        description: Filter queries by maximum Date
+        schema:
+          type: string
+          format: date-time
+      - in: query
+        name: boost
+        description: Boost document fields (boost.field=1.0 or boost.field.subfield=1.0, e.g. boost.title=3.0)
+        schema:
+          type: object
+      - in: query
+        name: globalAggregation
+        description: Counting of facets globally or locally (default true)
+        schema:
+          type: boolean
+      - in: query
+        name: facetOperator
+        description: Filtering queries by facets are combined with "AND" or "OR" (default "OR")
+        schema:
+          type: string
+          enum:
+          - AND
+          - OR
+      - in: query
+        name: facetGroupOperator
+        description: Filtering queries by facetgroups are combined with "AND" or "OR" (default "AND")
+        schema:
+          type: string
+          enum:
+          - AND
+          - OR
+      - in: query
+        name: bboxMinLon
+        description: Filter queries by bounding box minimum longitude
+        schema:
+          type: number
+          format: float
+          minimum: -180
+          maximum: 180
+      - in: query
+        name: bboxMaxLon
+        description: Filter queries by bounding box maximum longitude
+        schema:
+          type: number
+          format: float
+          minimum: -180
+          maximum: 180
+      - in: query
+        name: bboxMaxLat
+        description: Filter queries by bounding box maximum latitude
+        schema:
+          type: number
+          format: float
+          minimum: -90
+          maximum: 90
+      - in: query
+        name: bboxMinLat
+        description: Filter queries by bounding box minimum latitude
+        schema:
+          type: number
+          format: float
+          minimum: -90
+          maximum: 90
+      - in: query
+        name: sort
+        description: Sorting of the search result (usage "field+asc" or "field+desc", default is desc)
+        schema:
+          type: array
+          items:
+            type: string
+      - in: query
+        name: filterDistributions
+        description: If datasets are searched by facets distributions are returned filtered (default false)
+        schema:
+          type: boolean
+      - in: path
+        name: lang
+        description: The feed is returned in the requested language
+        required: true
+        schema:
+          type: string
+          enum:
+          - bg
+          - es
+          - cs
+          - da
+          - et
+          - el
+          - en
+          - fr
+          - ga
+          - hr
+          - it
+          - lv
+          - lt
+          - hu
+          - mt
+          - nl
+          - pl
+          - pt
+          - ro
+          - sk
+          - sl
+          - fi
+          - sv
+          - 'no'
+          - de
+      - in: query
+        name: minScoring
+        description: Filter by minimum quality measurement scoring value
+        schema:
+          type: integer
+      - in: query
+        name: maxScoring
+        description: Filter by maximum quality measurement scoring value
+        schema:
+          type: integer
+      - in: query
+        name: countryData
+        description: If enabled only datasets from country catalogues are returned. If disabled only datasets from non-country catalogues are returned. If not specified (null), no filtering is performed.
+        schema:
+          type: boolean
+      - in: query
+        name: vocabulary
+        description: Filter by vocabulary id. Only effective when filter=vocabulary.
+        schema:
+          type: array
+          items:
+            type: string
+      responses:
+        '200':
+          $ref: '#/components/responses/QuerySuccess'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+  /{lang}/feeds/datasets.rss:
+    get:
+      description: Make a GET request to the specified URL of the API endpoint with the resource path "/{lang}/feeds/datasets.rss" at the end of the URL to get datasets' feeds in RSS format. Set the language element {lang} in the URL to preferred language (see path parameters here below, the languages abbreviation are made according to the standards). A syntactically correct request looks like the following example https://example.org/api/de/feeds/datasets.rss?q=hund
+      summary: RSS
+      operationId: datasets.rss
+      tags:
+      - Feeds
+      parameters:
+      - in: query
+        name: q
+        description: The query
+        schema:
+          type: string
+      - in: query
+        name: facets
+        description: Filter queries by facets (string as json, e.g. 'facets={"catalog":["catalog-x"]}')
+        schema:
+          type: string
+      - in: query
+        name: page
+        description: The page number of matching results
+        schema:
+          type: integer
+          minimum: 0
+      - in: query
+        name: limit
+        description: The maximum number of matching datasets per page
+        schema:
+          type: integer
+          minimum: 1
+          maximum: 1000
+      - in: query
+        name: fields
+        description: Filter queries by document fields (e.g. 'fields=title')
+        schema:
+          type: array
+          items:
+            type: string
+      - in: query
+        name: minDate
+        description: Filter queries by minimum Date
+        schema:
+          type: string
+          format: date-time
+      - in: query
+        name: maxDate
+        description: Filter queries by maximum Date
+        schema:
+          type: string
+          format: date-time
+      - in: query
+        name: boost
+        description: Boost document fields (boost.field=1.0 or boost.field.subfield=1.0, e.g. boost.title=3.0)
+        schema:
+          type: object
+      - in: query
+        name: globalAggregation
+        description: Counting of facets globally or locally (default true)
+        schema:
+          type: boolean
+      - in: query
+        name: facetOperator
+        description: Filtering queries by facets are combined with "AND" or "OR" (default "OR")
+        schema:
+          type: string
+          enum:
+          - AND
+          - OR
+      - in: query
+        name: facetGroupOperator
+        description: Filtering queries by facetgroups are combined with "AND" or "OR" (default "AND")
+        schema:
+          type: string
+          enum:
+          - AND
+          - OR
+      - in: query
+        name: bboxMinLon
+        description: Filter queries by bounding box minimum longitude
+        schema:
+          type: number
+          format: float
+          minimum: -180
+          maximum: 180
+      - in: query
+        name: bboxMaxLon
+        description: Filter queries by bounding box maximum longitude
+        schema:
+          type: number
+          format: float
+          minimum: -180
+          maximum: 180
+      - in: query
+        name: bboxMaxLat
+        description: Filter queries by bounding box maximum latitude
+        schema:
+          type: number
+          format: float
+          minimum: -90
+          maximum: 90
+      - in: query
+        name: bboxMinLat
+        description: Filter queries by bounding box minimum latitude
+        schema:
+          type: number
+          format: float
+          minimum: -90
+          maximum: 90
+      - in: query
+        name: sort
+        description: Sorting of the search result (usage "field+asc" or "field+desc", default is desc)
+        schema:
+          type: array
+          items:
+            type: string
+      - in: query
+        name: filterDistributions
+        description: If datasets are searched by facets distributions are returned filtered (default false)
+        schema:
+          type: boolean
+      - in: path
+        name: lang
+        description: The feed is returned in the requested language
+        required: true
+        schema:
+          type: string
+          enum:
+          - bg
+          - es
+          - cs
+          - da
+          - et
+          - el
+          - en
+          - fr
+          - ga
+          - hr
+          - it
+          - lv
+          - lt
+          - hu
+          - mt
+          - nl
+          - pl
+          - pt
+          - ro
+          - sk
+          - sl
+          - fi
+          - sv
+          - 'no'
+          - de
+      - in: query
+        name: minScoring
+        description: Filter by minimum quality measurement scoring value
+        schema:
+          type: integer
+      - in: query
+        name: maxScoring
+        description: Filter by maximum quality measurement scoring value
+        schema:
+          type: integer
+      - in: query
+        name: countryData
+        description: If enabled only datasets from country catalogues are returned. If disabled only datasets from non-country catalogues are returned. If not specified (null), no filtering is performed.
+        schema:
+          type: boolean
+      responses:
+        '200':
+          $ref: '#/components/responses/QuerySuccess'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+  /{lang}/feeds/datasets/{id}:
+    get:
+      description: Make a GET request to the specified URL of the API endpoint with the resource path "{lang}/feeds/datasets/{id}.rss" to retrieve the RSS feed of a dataset with an exact ID. Set the language element {lang} in the URL to preferred language (see path parameters here below, the languages abbreviation are made according to the standards), set the unique identifier of the dataset as {id} element of the URL.
+      summary: RSS for a single dataset
+      operationId: datasetrevisions.rss
+      tags:
+      - Feeds
+      parameters:
+      - in: path
+        name: lang
+        description: The feed is returned in the requested language
+        required: true
+        schema:
+          type: string
+          enum:
+          - bg
+          - es
+          - cs
+          - da
+          - et
+          - el
+          - en
+          - fr
+          - ga
+          - hr
+          - it
+          - lv
+          - lt
+          - hu
+          - mt
+          - nl
+          - pl
+          - pt
+          - ro
+          - sk
+          - sl
+          - fi
+          - sv
+          - 'no'
+          - de
+      - in: path
+        name: id
+        description: Id of the requested dataset
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          $ref: '#/components/responses/QuerySuccess'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+components:
+  responses:
+    InternalServerError:
+      description: Internal Server Error
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              success:
+                type: boolean
+                default: false
+              message:
+                type: string
+    QuerySuccess:
+      description: The query was successfully processed
+      content:
+        application/json:
+          schema:
+            type: object
+    BadRequest:
+      description: Validation error / Bad request
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              success:
+                type: boolean
+                default: false
+              message:
+                type: string
+  securitySchemes:
+    ApiKeyAuth:
+      type: apiKey
+      in: header
+      name: X-API-Key
+    BearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+x-tagGroups:
+- name: Resources
+  tags:
+  - Resources
+  - EditorialContent
+- name: Searching
+  tags:
+  - Search
+  - Feeds
+- name: DCAT-AP
+  tags:
+  - Datasets
+  - Data Services
+  - Dataset Series
+  - Catalogues
+  - Vocabularies
+- name: Misc
+  tags:
+  - Gazetteer
+  - Ckan
+  - Organizations

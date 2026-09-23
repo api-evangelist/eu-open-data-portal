@@ -1,0 +1,403 @@
+openapi: 3.2.0
+info:
+  version: 4.3.3
+  title: piveau hub-repo service Custom Resources API
+  description: The API simplifies the management of DCAT resources, adhering to the DCAT-AP standard for structured data descriptions.
+  x-logo:
+    url: images/logo
+tags:
+- name: Custom Resources
+  x-displayName: Custom Resources
+  description: '**Deprecated !** Will be replaced with the generic DCAT resource API (endpoints will be reused). Any future custom resource
+
+    definitions must be sub-classed from DCAT Resource.'
+paths:
+  /customresources:
+    description: Deprecated!
+    get:
+      deprecated: true
+      description: You can get a list of custom resource types.
+      summary: List custom resource types
+      operationId: listCustomResourceTypes
+      tags:
+      - Custom Resources
+      responses:
+        '200':
+          $ref: '#/components/responses/RDFLIST200'
+        '400':
+          description: Invalid request.
+  /customresources/{type}:
+    description: Deprecated!
+    get:
+      deprecated: true
+      description: You can get a list of custom resources of an exact type with required parameter 'type'.
+      summary: List custom resources
+      operationId: listCustomResources
+      tags:
+      - Custom Resources
+      security:
+      - ApiKeyAuth: []
+      - BearerAuth: []
+      parameters:
+      - name: type
+        in: path
+        required: true
+        description: Type to which the custom resources belong.
+        schema:
+          type: string
+      - name: valueType
+        in: query
+        required: false
+        description: What to return
+        schema:
+          type: string
+          enum:
+          - identifiers
+          - uriRefs
+          - metadata
+          default: identifiers
+      - name: catalogId
+        in: query
+        description: Catalog ID to which the custom resources belongs.
+        schema:
+          type: string
+      responses:
+        '200':
+          description: Request accepted.
+          content:
+            application/json:
+              schema:
+                type: array
+        '404':
+          description: Not found
+    post:
+      deprecated: true
+      description: You can post a custom resource with type.
+      summary: Create a custom resource
+      operationId: postCustomResource
+      tags:
+      - Custom Resources
+      security:
+      - ApiKeyAuth: []
+      - BearerAuth: []
+      parameters:
+      - name: type
+        in: path
+        required: true
+        description: Type to which the custom resource belongs.
+        schema:
+          type: string
+      - name: catalogId
+        in: query
+        description: Catalog ID to which the custom resource belongs.
+        schema:
+          type: string
+      - in: query
+        name: publicationStatus
+        schema:
+          type: string
+          enum:
+          - draft
+          - published
+        required: false
+      - in: query
+        name: accessLevel
+        schema:
+          type: string
+          enum:
+          - public
+          - internal
+          - restricted
+        required: false
+      requestBody:
+        $ref: '#/components/requestBodies/RDFBody'
+      responses:
+        '201':
+          description: Resource created.
+        '400':
+          description: Invalid request.
+        '404':
+          description: Resource type not found.
+    put:
+      deprecated: true
+      description: You can put a custom resource with id and type.
+      summary: Create or Update a custom resource
+      operationId: putCustomResource
+      tags:
+      - Custom Resources
+      security:
+      - ApiKeyAuth: []
+      - BearerAuth: []
+      parameters:
+      - name: id
+        in: query
+        description: Id of the created or updated custom resource
+        required: true
+        schema:
+          type: string
+      - name: type
+        in: path
+        required: true
+        description: Type to which the custom resource belongs.
+        schema:
+          type: string
+      - name: catalogId
+        in: query
+        description: Catalog ID to which the custom resource belongs.
+        schema:
+          type: string
+      - in: query
+        name: publicationStatus
+        schema:
+          type: string
+          enum:
+          - draft
+          - published
+        required: false
+      - in: query
+        name: accessLevel
+        schema:
+          type: string
+          enum:
+          - public
+          - internal
+          - restricted
+        required: false
+      requestBody:
+        $ref: '#/components/requestBodies/RDFBody'
+      responses:
+        '204':
+          description: Custom resource updated.
+        '201':
+          description: Custom resource created.
+        '400':
+          description: Invalid request.
+        '404':
+          description: Custom resource type not found.
+  /customresources/{type}/{id}:
+    description: Deprecated!
+    parameters:
+    - name: id
+      in: path
+      description: Id of the custom resource
+      required: true
+      schema:
+        type: string
+    - name: type
+      in: path
+      required: true
+      description: Type to which the custom resource belongs.
+      schema:
+        type: string
+    - name: catalogId
+      in: query
+      description: Catalog ID to which the custom resource belongs.
+      schema:
+        type: string
+    get:
+      deprecated: true
+      description: You can get a custom resource with id and type.
+      summary: Get a custom resource
+      operationId: getCustomResource
+      tags:
+      - Custom Resources
+      security:
+      - ApiKeyAuth: []
+      - BearerAuth: []
+      responses:
+        '200':
+          $ref: '#/components/responses/RDF200'
+        '400':
+          description: Invalid request.
+        '404':
+          description: Custom resource type or resource id not found.
+    head:
+      deprecated: true
+      description: Get headers returned when requesting a custom resource
+      summary: HEAD a custom resource
+      operationId: headGetCustomResource
+      tags:
+      - Custom Resources
+      responses:
+        '200':
+          description: Request accepted.
+        '400':
+          description: Invalid request.
+        '404':
+          description: Custom resource type or resource id not found.
+    delete:
+      deprecated: true
+      description: You can delete a custom resource with id and type.
+      summary: Delete a custom resource
+      operationId: deleteCustomResource
+      tags:
+      - Custom Resources
+      security:
+      - ApiKeyAuth: []
+      - BearerAuth: []
+      responses:
+        '204':
+          description: Request accepted.
+        '400':
+          description: Invalid request.
+        '404':
+          description: Custom resource type or resource id not found.
+  /customresources/{type}/origin:
+    description: Deprecated!
+    get:
+      deprecated: true
+      description: Get a custom resource by 'type' and origin id.
+      summary: Get custom resource
+      operationId: getCustomResourceOrigin
+      tags:
+      - Custom Resources
+      security:
+      - ApiKeyAuth: []
+      - BearerAuth: []
+      parameters:
+      - name: type
+        in: path
+        required: true
+        description: Type to which the custom resources belong.
+        schema:
+          type: string
+      - name: id
+        in: query
+        description: Id of the custom resource
+        required: true
+        schema:
+          type: string
+      - name: catalogId
+        in: query
+        description: Catalog ID to which the custom resource belongs.
+        schema:
+          type: string
+      responses:
+        '200':
+          $ref: '#/components/responses/RDF200'
+        '400':
+          description: Invalid request.
+        '404':
+          description: Custom resource type or resource id not found.
+components:
+  requestBodies:
+    RDFBody:
+      required: true
+      content:
+        application/rdf+xml:
+          schema:
+            type: string
+            format: binary
+        application/ld+json:
+          schema:
+            type: string
+            format: binary
+        application/n-triples:
+          schema:
+            type: string
+            format: binary
+        application/n-quads:
+          schema:
+            type: string
+            format: binary
+        application/trig:
+          schema:
+            type: string
+            format: binary
+        application/trix:
+          schema:
+            type: string
+            format: binary
+        text/turtle:
+          schema:
+            type: string
+            format: binary
+        text/n3:
+          schema:
+            type: string
+            format: binary
+  responses:
+    RDFLIST200:
+      description: The list of resource(s)
+      content:
+        application/json:
+          schema:
+            type: array
+            items:
+              type: string
+        application/rdf+xml:
+          schema:
+            type: string
+            format: binary
+        application/ld+json:
+          schema:
+            type: string
+            format: binary
+        application/n-triples:
+          schema:
+            type: string
+            format: binary
+        application/n-quads:
+          schema:
+            type: string
+            format: binary
+        application/trig:
+          schema:
+            type: string
+            format: binary
+        application/trix:
+          schema:
+            type: string
+            format: binary
+        text/turtle:
+          schema:
+            type: string
+            format: binary
+        text/n3:
+          schema:
+            type: string
+            format: binary
+    RDF200:
+      description: The resource graph(s)
+      content:
+        application/rdf+xml:
+          schema:
+            type: string
+            format: binary
+        application/ld+json:
+          schema:
+            type: string
+            format: binary
+        application/n-triples:
+          schema:
+            type: string
+            format: binary
+        application/n-quads:
+          schema:
+            type: string
+            format: binary
+        application/trig:
+          schema:
+            type: string
+            format: binary
+        application/trix:
+          schema:
+            type: string
+            format: binary
+        text/turtle:
+          schema:
+            type: string
+            format: binary
+        text/n3:
+          schema:
+            type: string
+            format: binary
+  securitySchemes:
+    ApiKeyAuth:
+      type: apiKey
+      in: header
+      name: X-API-Key
+    BearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT

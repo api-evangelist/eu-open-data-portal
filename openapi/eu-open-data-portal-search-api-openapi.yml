@@ -1,0 +1,598 @@
+openapi: 3.2.0
+info:
+  version: 5.3.11
+  title: hub Search API
+  description: Hub-Search is a powerful search solution designed to function as a Metadata Search Service for the Open Data Portal.
+  x-logo:
+    url: images/logo
+servers:
+- url: ''
+tags:
+- name: Search
+paths:
+  /search:
+    get:
+      description: To retrieve the data, send a GET request to the specified URL of the API endpoint with the resource path "/search" at the end of the URL. See the example here right. To obtain the desired result, use one or more of the parameters listed below. The parameters are pairs of names and their corresponding values, so-called name-value pairs. These are added to the URL with a "?" sign, the name and value are always separated using a '=' sign, the pairs are separated using a '&' sign. A syntactically correct request looks like the following example https://example.org/api/hub/search/search?q=cat&filters=dataset
+      summary: Search
+      operationId: searchGet
+      tags:
+      - Search
+      parameters:
+      - in: query
+        name: q
+        description: The query
+        schema:
+          type: string
+      - in: query
+        name: filter
+        description: Filter queries by document type
+        deprecated: true
+        schema:
+          type: string
+      - in: query
+        name: filters
+        description: Filters queries by one or multiple document types
+        schema:
+          type: array
+          items:
+            type: string
+            enum:
+            - catalogue
+            - dataset
+            - dataservice
+            - datasetseries
+            - series
+            - resource
+            - vocabulary
+            - organization
+            - resource_editorial-content
+          example:
+          - catalogue
+          - dataset
+        explode: false
+      - in: query
+        name: facets
+        description: Filter queries by facets (json as string, e.g. 'facets={"catalog":["catalog-x"]}')
+        schema:
+          type: string
+      - in: query
+        name: includeChildren
+        description: Include datasets assigned to child organizations when filtering by the organization facet
+        schema:
+          type: boolean
+          default: false
+      - in: query
+        name: page
+        description: The page number of matching results
+        schema:
+          type: integer
+          minimum: 0
+          default: 0
+      - in: query
+        name: limit
+        description: The maximum number of matching datasets per page
+        schema:
+          type: integer
+          minimum: 0
+          maximum: 1000
+          default: 10
+      - in: query
+        name: fields
+        description: Filter queries by document fields (e.g. 'fields=title')
+        schema:
+          type: array
+          items:
+            type: string
+        explode: false
+      - in: query
+        name: minDate
+        description: Filter queries by minimum Date
+        schema:
+          type: string
+          format: date-time
+      - in: query
+        name: maxDate
+        description: Filter queries by maximum Date
+        schema:
+          type: string
+          format: date-time
+      - in: query
+        name: dateType
+        description: To be used with `minDate` and `maxDate` query parameters. The default value is defined in the configuration.
+        schema:
+          type: string
+          enum:
+          - issued
+          - modified
+          - temporal
+      - in: query
+        name: boost
+        description: Boost document fields (boost.field=1.0 or boost.field.subfield=1.0, e.g. boost.title=3.0)
+        schema:
+          type: object
+      - in: query
+        name: globalAggregation
+        description: Counting of facets globally or locally (default true)
+        schema:
+          type: boolean
+      - in: query
+        name: facetOperator
+        description: Filtering queries by facets are combined with "AND" or "OR" (default "OR")
+        schema:
+          type: string
+          enum:
+          - AND
+          - OR
+      - in: query
+        name: facetGroupOperator
+        description: Filtering queries by facetgroups are combined with "AND" or "OR" (default "AND")
+        schema:
+          type: string
+          enum:
+          - AND
+          - OR
+      - in: query
+        name: bboxMinLon
+        description: Filter queries by bounding box minimum longitude
+        schema:
+          type: number
+          format: float
+          minimum: -180
+          maximum: 180
+      - in: query
+        name: bboxMaxLon
+        description: Filter queries by bounding box maximum longitude
+        schema:
+          type: number
+          format: float
+          minimum: -180
+          maximum: 180
+      - in: query
+        name: bboxMaxLat
+        description: Filter queries by bounding box maximum latitude
+        schema:
+          type: number
+          format: float
+          minimum: -90
+          maximum: 90
+      - in: query
+        name: bboxMinLat
+        description: Filter queries by bounding box minimum latitude
+        schema:
+          type: number
+          format: float
+          minimum: -90
+          maximum: 90
+      - in: query
+        name: sort
+        description: Sorting of the search result (usage "field+asc" or "field+desc", default is desc)
+        schema:
+          type: array
+          items:
+            type: string
+        explode: false
+      - in: query
+        name: filterDistributions
+        description: If datasets are searched by facets distributions are returned filtered (default false)
+        schema:
+          type: boolean
+      - in: query
+        name: aggregation
+        description: Enables aggregation of facets (default true)
+        schema:
+          type: boolean
+      - in: query
+        name: includes
+        description: Descides which fields are included in the response (default all)
+        schema:
+          type: array
+          items:
+            type: string
+        explode: false
+      - in: query
+        name: scroll
+        description: Enable scroll and return a scroll id
+        schema:
+          type: boolean
+          default: false
+      - in: query
+        name: searchAfter
+        description: Enable searching page by page. Ideal for efficiently navigating through large result sets. Must be set to `true` to get the first page.
+        schema:
+          type: boolean
+          default: false
+      - in: query
+        name: searchAfterSort
+        description: Sort values from the last result. Required to retrieve the next page. Must be combined with `pitId`, otherwise it will be ignored.
+        schema:
+          type: array
+          items:
+            type: string
+        explode: false
+      - in: query
+        name: pitId
+        description: Point-in-Time ID from the previous response. Required to retrieve the next page. Must be combined with `searchAfterSort`, otherwise it will be ignored.
+        schema:
+          type: string
+      - in: query
+        name: minScoring
+        description: Filter by minimum quality measurement scoring value
+        schema:
+          type: integer
+      - in: query
+        name: maxScoring
+        description: Filter by maximum quality measurement scoring value
+        schema:
+          type: integer
+      - in: query
+        name: aggregationAllFields
+        description: Aggregate all facets
+        schema:
+          type: boolean
+          default: true
+      - in: query
+        name: aggregationFields
+        description: Aggregate selected facets (ignored if aggregationAllFields is set true)
+        schema:
+          type: array
+          items:
+            type: string
+        explode: false
+      - in: query
+        name: countryData
+        description: If enabled only datasets from country catalogues are returned. If disabled only datasets from non-country catalogues are returned. If not specified (null), no filtering is performed.
+        schema:
+          type: boolean
+      - in: query
+        name: showScore
+        description: If enabled the score is returned for each result. Disabled as default.
+        schema:
+          type: boolean
+      - in: query
+        name: vocabulary
+        description: Filter by vocabulary id. Only effective when `filters` contains `vocabulary`. For example, `filters=dataset,vocabulary` or `filters=vocabulary`.
+        schema:
+          type: array
+          items:
+            type: string
+        explode: false
+      - in: query
+        name: resource
+        description: Filter by resource types. Only effective when `filters` contains `resource`, for example, `filters=catalogue,resource` or `filters=resource`.
+        schema:
+          type: array
+          items:
+            type: string
+        explode: false
+      - in: query
+        name: dataServices
+        description: Only show datasets which have a distribution with at least one access service (true). Default show all (false).
+        schema:
+          type: boolean
+      - in: query
+        name: autocomplete
+        description: Search with autocomplete style via title field. Default false.
+        schema:
+          type: boolean
+      - in: query
+        name: superCatalogue
+        description: Deprecated. Please use "superCatalog" in the "facets" for filtering datasets or catalogues search result.
+        deprecated: true
+        schema:
+          type: string
+      - in: query
+        name: countOnly
+        description: When set to true, the search result contains only the count of the search result.
+        schema:
+          type: boolean
+          default: false
+      - in: query
+        name: accessControlPermissions
+        description: Filter by access control permissions. Specify the access control permissions (view, edit, publish, delete) required for resources to be returned. If multiple permissions are specified, the resources must have at least one of the specified permissions.
+        schema:
+          type: array
+          items:
+            type: string
+            enum:
+            - view
+            - edit
+            - publish
+            - delete
+        explode: false
+      responses:
+        '200':
+          $ref: '#/components/responses/QuerySuccess'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+    post:
+      description: To retrieve the data, send a POST request to the specified URL of the API endpoint with the resource path "/search" at the end of the URL. See the example here right. To obtain the desired result, use one or more of the parameters listed below. The parameters are pairs of names and their corresponding values, so-called name-value pairs. The request sent to the server with POST is stored in the request body according to Request Body Schema below. See the syntax of the request here on the right.
+      summary: Search
+      operationId: searchPost
+      tags:
+      - Search
+      requestBody:
+        description: Query
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Query'
+      responses:
+        '200':
+          $ref: '#/components/responses/QuerySuccess'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+  /scroll:
+    get:
+      description: Make a GET request to the specified URL of the API endpoint with the resource path "/scroll" at the end of the URL if you want to retrieve large number of results (or even all results) from a single search request. First you have to obtain the required parameter ScrollID (do so using method GET to the specified URL of the API endpoint with the resource path "search" at the end of the URL). Use SCROLL the same way you use cursor on a traditional database.
+      summary: Scroll
+      operationId: scrollGet
+      tags:
+      - Search
+      parameters:
+      - in: query
+        name: scrollId
+        description: The scroll id
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          $ref: '#/components/responses/QuerySuccess'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+components:
+  schemas:
+    Query:
+      description: Query
+      type: object
+      properties:
+        q:
+          type: string
+          description: The query
+        filter:
+          type: string
+          description: Filter queries by document type
+          deprecated: true
+        filters:
+          type: array
+          description: Filters queries by one or multiple document types
+          items:
+            type: string
+            enum:
+            - catalogue
+            - dataset
+            - dataservice
+            - resource
+            - vocabulary
+            - resource_editorial-content
+        facets:
+          type: object
+          description: Filter queries by facets (string as json, e.g. 'facets={"catalog":["catalog-x"]}')
+          additionalProperties:
+            type: array
+            items:
+              type: string
+        includeChildren:
+          type: boolean
+          default: false
+          description: Include datasets assigned to child organizations when filtering by the organization facet
+        page:
+          type: integer
+          minimum: 0
+          description: The page number of matching results
+        limit:
+          type: integer
+          description: The maximum number of matching datasets per page
+          minimum: 0
+          maximum: 1000
+        fields:
+          type: array
+          description: Filter queries by document fields (e.g. 'fields=title')
+          items:
+            type: string
+        searchParams:
+          type: object
+          properties:
+            minDate:
+              type: string
+              description: Filter queries by minimum Date
+              format: date-time
+            maxDate:
+              type: string
+              description: Filter queries by maximum Date
+              format: date-time
+            boundingBox:
+              $ref: '#/components/schemas/BoundingBox'
+            scoring:
+              type: object
+              properties:
+                min:
+                  type: integer
+                max:
+                  type: integer
+        boost:
+          type: object
+          description: Boost document fields
+          additionalProperties:
+            type: number
+            description: Use field or field.subfield
+            format: float
+        globalAggregation:
+          type: boolean
+          description: Counting of facets globally or locally (default true)
+        facetOperator:
+          type: string
+          description: Filtering queries by facets are combined with "AND" or "OR" (default "OR")
+          enum:
+          - AND
+          - OR
+        facetGroupOperator:
+          type: string
+          description: Filtering queries by facetgroups are combined with "AND" or "OR" (default "AND")
+          enum:
+          - AND
+          - OR
+        sort:
+          type: array
+          description: Sorting of the search result (usage "field+asc" or "field+desc", default is desc)
+          items:
+            type: string
+        filterDistributions:
+          type: boolean
+          description: If datasets are searched by facets distributions are returned filtered (default false)
+        aggregation:
+          type: boolean
+          description: Enables aggregation of facets (default true)
+        includes:
+          type: array
+          description: Descides which fields are included in the response (default all)
+          items:
+            type: string
+        scroll:
+          type: boolean
+          description: Enables scroll and returns a scroll id (default true)
+        searchAfter:
+          type: boolean
+          description: Enable searching page by page. Ideal for efficiently navigating through large result sets. Must be set to `true` to get the first page.
+          default: false
+        searchAfterSort:
+          type: array
+          description: Sort values from the last result. Required to retrieve the next page. Must be combined with `pitId`, otherwise it will be ignored.
+          items:
+            type: string
+        pitId:
+          type: string
+          description: Point-in-Time ID from the previous response. Required to retrieve the next page. Must be combined with `searchAfterSort`, otherwise it will be ignored.
+        minScoring:
+          type: integer
+          description: Filter by minimum quality measurement scoring value
+        maxScoring:
+          type: integer
+          description: Filter by maximum quality measurement scoring value
+        aggregationAllFields:
+          type: boolean
+          description: Aggregate all facets (default true)
+        aggregationFields:
+          type: array
+          description: Aggregate selected facets (ignored if aggregationAllFields is set true)
+          items:
+            type: string
+        countryData:
+          type: boolean
+          description: If enabled only datasets from country catalogues are returned. If disabled only datasets from non-country catalogues are returned. If not specified (null), no filtering is performed.
+        vocabulary:
+          type: array
+          description: Filter by vocabulary id. Only effective when `filters` contains `vocabulary`. For example, `filters=dataset,vocabulary` or `filters=vocabulary`.
+          items:
+            type: string
+        resource:
+          type: array
+          description: Filter by resource types. Only effective when `filters` contains `resource`. For example, `filters=catalogue,resource` or `filters=resource`.
+          items:
+            type: string
+        accessControlPermissions:
+          type: array
+          description: Filter by access control permissions. Specify the access control permissions (view, edit, publish, delete) required for resources to be returned. If multiple permissions are specified, the resources must have at least one of the specified permissions.
+          items:
+            type: string
+            enum:
+            - view
+            - edit
+            - publish
+            - delete
+    BoundingBox:
+      type: object
+      description: Filter queries by bounding box
+      properties:
+        minLon:
+          type: number
+          description: Minimum longitude
+          format: float
+          minimum: -180
+          maximum: 180
+        maxLon:
+          type: number
+          description: Maximum longitude
+          format: float
+          minimum: -180
+          maximum: 180
+        maxLat:
+          type: number
+          description: Maximum latitude
+          format: float
+          minimum: -90
+          maximum: 90
+        minLat:
+          type: number
+          description: Minimum latitude
+          format: float
+          minimum: -90
+          maximum: 90
+  responses:
+    BadRequest:
+      description: Validation error / Bad request
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              success:
+                type: boolean
+                default: false
+              message:
+                type: string
+    InternalServerError:
+      description: Internal Server Error
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              success:
+                type: boolean
+                default: false
+              message:
+                type: string
+    QuerySuccess:
+      description: The query was successfully processed
+      content:
+        application/json:
+          schema:
+            type: object
+  securitySchemes:
+    ApiKeyAuth:
+      type: apiKey
+      in: header
+      name: X-API-Key
+    BearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+x-tagGroups:
+- name: Resources
+  tags:
+  - Resources
+  - EditorialContent
+- name: Searching
+  tags:
+  - Search
+  - Feeds
+- name: DCAT-AP
+  tags:
+  - Datasets
+  - Data Services
+  - Dataset Series
+  - Catalogues
+  - Vocabularies
+- name: Misc
+  tags:
+  - Gazetteer
+  - Ckan
+  - Organizations

@@ -1,0 +1,48 @@
+openapi: 3.2.0
+info:
+  version: 4.3.3
+  title: piveau hub-repo service Translation API
+  description: The API simplifies the management of DCAT resources, adhering to the DCAT-AP standard for structured data descriptions.
+  x-logo:
+    url: images/logo
+tags:
+- name: Translation
+paths:
+  /translation:
+    post:
+      description: This function is reserved for internal use only and is not part of our public API offerings. You must be authorized for this operation. As an authorized user you can add a completed translation for catalogues, datasets, distributions.
+      summary: Post a completed translation
+      operationId: postTranslation
+      tags:
+      - Translation
+      security:
+      - ApiKeyAuth: []
+      - BearerAuth: []
+      responses:
+        '204':
+          description: Translation stored
+        '400':
+          description: Bad request
+        '401':
+          description: Unauthorized
+        '403':
+          description: Forbidden
+        '404':
+          description: Resource not found
+      requestBody:
+        description: JSON with the completed translations.
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+components:
+  securitySchemes:
+    ApiKeyAuth:
+      type: apiKey
+      in: header
+      name: X-API-Key
+    BearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT

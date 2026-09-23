@@ -1,0 +1,44 @@
+openapi: 3.2.0
+info:
+  title: hub statistics Data API
+  version: v1.3
+tags:
+- name: Data
+paths:
+  /data:
+    get:
+      description: Retruns an overview about the available dates for further requests.
+      responses: {}
+      tags:
+      - Data
+      summary: Get data
+      x-summary-source: derived
+      operationId: getData
+      x-operation-id-source: derived
+  /data/{identifier}:
+    get:
+      description: Retruns specific dates for identifier.
+      parameters:
+      - description: The identifier of specific data.
+        in: path
+        name: identifier
+        required: true
+        schema:
+          type: string
+      responses: {}
+      tags:
+      - Data
+      summary: Get data by identifier
+      x-summary-source: derived
+      operationId: getDataByIdentifier
+      x-operation-id-source: derived
+  /grab-data:
+    get:
+      description: Initialize the data harvesting.
+      responses: {}
+      tags:
+      - Data
+      summary: Get grab data
+      x-summary-source: derived
+      operationId: getGrabData
+      x-operation-id-source: derived

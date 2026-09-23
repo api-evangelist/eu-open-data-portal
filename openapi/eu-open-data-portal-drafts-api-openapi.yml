@@ -1,0 +1,274 @@
+openapi: 3.2.0
+info:
+  version: 4.3.3
+  title: piveau hub-repo service Drafts API
+  description: The API simplifies the management of DCAT resources, adhering to the DCAT-AP standard for structured data descriptions.
+  x-logo:
+    url: images/logo
+tags:
+- name: Drafts
+  x-displayName: Drafts
+paths:
+  /drafts/datasets:
+    get:
+      description: This function is reserved for internal use only and is not part of our public API offerings. You must be authorized to retrieve drafts of datasets. As an authorized user, you make a GET request to the specified API endpoint URL with the resource path "/drafts/datasets" added at the end of the URL. If successful, the response contains an array of the drafts' ID that the user is authorized to read, update and delete. This endpoint is disabled if the extended rights management feature is enabled. In this case a 405 status code is returned.
+      summary: Get dataset drafts
+      operationId: listDatasetDrafts
+      tags:
+      - Drafts
+      security:
+      - ApiKeyAuth: []
+      - BearerAuth: []
+      parameters:
+      - name: filterByProvider
+        in: query
+        description: By default, all drafts that the user is allowed to read, update and delete are returned. With `filterByProvider=true` only drafts that the user has created are returned.
+        required: false
+        schema:
+          type: boolean
+      responses:
+        '200':
+          description: Request accepted.
+          content:
+            application/json:
+              schema:
+                type: string
+            application/rdf+xml:
+              schema:
+                type: string
+            text/turtle:
+              schema:
+                type: string
+            text/n3:
+              schema:
+                type: string
+            application/trig:
+              schema:
+                type: string
+            application/n-triples:
+              schema:
+                type: string
+        '400':
+          description: Invalid request.
+    post:
+      description: This function is reserved for internal use only and is not part of our public API offerings. You must be authorized to create a draft of a dataset. As an authorized user, you make a POST request to the specified URL of the API endpoint with the resource path "/drafts/datasets" added at the end of the URL. The ID of the catalogue, where the draft is added, is a required query parameter. If successful, the draft ID will be created automatically. This endpoint is disabled if the extended rights management feature is enabled. In this case a 405 status code is returned.
+      summary: Create a dataset draft
+      operationId: createDatasetDraft
+      tags:
+      - Drafts
+      security:
+      - ApiKeyAuth: []
+      - BearerAuth: []
+      parameters:
+      - name: catalogue
+        in: query
+        required: true
+        description: The ID of the catalogue which should contain this dataset draft
+        schema:
+          type: string
+      responses:
+        '201':
+          description: Dataset created.
+        '400':
+          description: Invalid request.
+  /drafts/datasets/{id}:
+    parameters:
+    - name: id
+      in: path
+      description: ID of the draft dataset.
+      required: true
+      schema:
+        type: string
+    get:
+      description: This function is reserved for internal use only and is not part of our public API offerings. You must be authorized to get a dataset draft. As an authorized user, you make a GET request to the specified URL of the API endpoint with the resource path "/drafts/datasets/{id}" at the end of the URL, set the unique ID of the draft as {id} element of the URL. This endpoint is disabled if the extended rights management feature is enabled. In this case a 405 status code is returned.
+      summary: Get a dataset draft
+      operationId: readDatasetDraft
+      tags:
+      - Drafts
+      security:
+      - ApiKeyAuth: []
+      - BearerAuth: []
+      parameters:
+      - name: catalogue
+        in: query
+        required: true
+        description: The ID of the catalogue which should contain this dataset draft
+        schema:
+          type: string
+      responses:
+        '200':
+          description: Request accepted.
+          content:
+            application/ld+json:
+              schema:
+                type: string
+            application/rdf+xml:
+              schema:
+                type: string
+            text/turtle:
+              schema:
+                type: string
+            text/n3:
+              schema:
+                type: string
+            text/plain:
+              schema:
+                type: string
+            application/trig:
+              schema:
+                type: string
+            application/n-triples:
+              schema:
+                type: string
+        '400':
+          description: Invalid request.
+        '404':
+          description: Catalogue or Dataset Draft ID not found.
+    put:
+      description: This function is reserved for internal use only and is not part of our public API offerings. You must be authorized to create or update a dataset draft with given ID. As an authorized user, you make a PUT request to the specified URL of the API endpoint with the resource path "/drafts/datasets/{id}" added at the end of the URL, set the unique ID of the draft as {id} element of the URL. If the request is successful and the ID already exists, the information in the draft will be updated with the newly provided information. If the ID is new, a new draft will be created. This endpoint is disabled if the extended rights management feature is enabled. In this case a 405 status code is returned.
+      summary: Create or Update a dataset draft
+      operationId: createOrUpdateDatasetDraft
+      tags:
+      - Drafts
+      security:
+      - ApiKeyAuth: []
+      - BearerAuth: []
+      parameters:
+      - name: catalogue
+        in: query
+        required: true
+        description: The ID of the catalogue which should contain this dataset draft
+        schema:
+          type: string
+      requestBody:
+        $ref: '#/components/requestBodies/RDFBody'
+      responses:
+        '204':
+          description: Dataset updated.
+        '201':
+          description: Dataset created.
+        '400':
+          description: Invalid request.
+    delete:
+      description: 'This function is reserved for internal use only and is not part of our public API offerings. You must be authorized to delete a dataset draft. As an authorized user, you make a DELETE request to the specified URL of the API endpoint with the resource path "/drafts/datasets/{id}" at the end of the URL, set the unique ID of the draft as {id} element of the URL. Caution: you cannot revert this operation. This endpoint is disabled if the extended rights management feature is enabled. In this case a 405 status code is returned.'
+      summary: Delete a dataset draft
+      operationId: deleteDatasetDraft
+      tags:
+      - Drafts
+      security:
+      - ApiKeyAuth: []
+      - BearerAuth: []
+      parameters:
+      - name: catalogue
+        in: query
+        required: true
+        description: The ID of the catalogue which should contain this dataset draft
+        schema:
+          type: string
+      responses:
+        '200':
+          description: Request accepted.
+        '404':
+          description: Dataset ID not found.
+  /drafts/datasets/publish/{id}:
+    put:
+      description: This function is reserved for internal use only and is not part of our public API offerings. You must be authorized to publish a dataset draft. As an authorized user, you make a PUT request to the specified URL of the API endpoint with the resource path "/drafts/datasets/publish/{id}" added at the end of the URL, set the unique ID of the specified draft as {id} element of the URL. If successful, the draft is published and gets another ID as dataset. This endpoint is disabled if the extended rights management feature is enabled. In this case a 405 status code is returned.
+      summary: Publish a dataset draft
+      operationId: publishDatasetDraft
+      tags:
+      - Drafts
+      security:
+      - ApiKeyAuth: []
+      - BearerAuth: []
+      parameters:
+      - name: id
+        in: path
+        description: ID of the draft dataset.
+        required: true
+        schema:
+          type: string
+      - name: catalogue
+        in: query
+        required: true
+        description: The ID of the catalogue which should contain this dataset draft
+        schema:
+          type: string
+      responses:
+        '204':
+          description: Dataset draft published.
+        '400':
+          description: Invalid request.
+  /drafts/datasets/hide/{id}:
+    put:
+      description: This function is reserved for internal use only and is not part of our public API offerings. You must be authorized to withdraw a published dataset from publication, by setting it into draft. As an authorized user, you make a PUT request to the specified URL of the API endpoint with the resource path "/drafts/datasets/hide/{id}" at the end of the URL, set the unique ID of the specified dataset as {id} element of the URL. If successful, the dataset is retracted and set to the drafts. This endpoint is disabled if the extended rights management feature is enabled. In this case a 405 status code is returned.
+      summary: Hide a published dataset
+      operationId: hideDataset
+      tags:
+      - Drafts
+      security:
+      - ApiKeyAuth: []
+      - BearerAuth: []
+      parameters:
+      - name: id
+        in: path
+        description: ID of the published dataset.
+        required: true
+        schema:
+          type: string
+      - name: catalogue
+        in: query
+        required: true
+        description: The ID of the catalogue which should contain this dataset draft
+        schema:
+          type: string
+      responses:
+        '204':
+          description: Dataset hidden.
+        '400':
+          description: Invalid request.
+components:
+  requestBodies:
+    RDFBody:
+      required: true
+      content:
+        application/rdf+xml:
+          schema:
+            type: string
+            format: binary
+        application/ld+json:
+          schema:
+            type: string
+            format: binary
+        application/n-triples:
+          schema:
+            type: string
+            format: binary
+        application/n-quads:
+          schema:
+            type: string
+            format: binary
+        application/trig:
+          schema:
+            type: string
+            format: binary
+        application/trix:
+          schema:
+            type: string
+            format: binary
+        text/turtle:
+          schema:
+            type: string
+            format: binary
+        text/n3:
+          schema:
+            type: string
+            format: binary
+  securitySchemes:
+    ApiKeyAuth:
+      type: apiKey
+      in: header
+      name: X-API-Key
+    BearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT

@@ -1,0 +1,1791 @@
+openapi: 3.2.0
+info:
+  title: Eu Open Data Portal Catalogues API
+  x-logo:
+    url: images/logo
+  version: '1.0'
+  description: 'Operations tagged Catalogues across 3 of this provider''s published API definitions: eu-open-data-portal-hub-repo-openapi.yaml, eu-open-data-portal-hub-search-openapi.yaml, eu-open-data-portal-mqa-metrics-cache-openapi.yaml. Each path carries the servers of the definition it was published in.'
+tags:
+- name: Catalogues
+  x-displayName: Catalogues
+paths:
+  /catalogues:
+    get:
+      description: To retrieve the list of catalogues, send a GET request to the specified URL of the API with the resource path "catalogues". The query parameter "limit" specifies the number of resources to retrieve, while the query parameter "offset" determines the starting point for counting. Upon success, the response will contain, by default, an array with the URLs of the chosen number of catalogues (with 100 being the default limit). To retrieve identifiers (normalized IDs), metadata, or original IDs (IDs as by data provider) , you can choose a different value for the parameter "valueType".
+      summary: List catalogues
+      operationId: listCatalogues
+      tags:
+      - Catalogues
+      parameters:
+      - $ref: '#/components/parameters/ValueType'
+      - $ref: '#/components/parameters/Offset'
+      - $ref: '#/components/parameters/Limit'
+      responses:
+        '200':
+          $ref: '#/components/responses/RDFLIST200'
+        '400':
+          description: Bad Request
+    head:
+      description: To retrieve only the headers for the list of catalogues, send a HEAD request to the specified URL of the API with the resource path "catalogues". The query parameter "limit" specifies the number of catalogues to retrieve, while the query parameter "offset" determines the starting point for counting. Upon success, the response will contain, by default, the headers for chosen number of catalogues' URLs (with 100 being the default limit). To retrieve the headers for the other data of catalogues select a different value for the parameter "valueType".
+      summary: Headers only for "List catalogues"
+      operationId: headListCatalogues
+      tags:
+      - Catalogues
+      parameters:
+      - $ref: '#/components/parameters/ValueType'
+      - $ref: '#/components/parameters/Offset'
+      - $ref: '#/components/parameters/Limit'
+      responses:
+        '200':
+          description: Headers of list catalogues
+        '400':
+          description: Bad request
+    post:
+      description: This function is reserved for internal use only and is not part of our public API offerings. You must be authorized for this operation.
+      summary: Create a catalogue
+      operationId: createCatalogue
+      tags:
+      - Catalogues
+      parameters:
+      - in: query
+        name: synchronous
+        description: If disabled the execution is asynchronous (response code 202)
+        schema:
+          type: boolean
+          default: true
+      security:
+      - ApiKeyAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Catalogue'
+      responses:
+        '201':
+          $ref: '#/components/responses/CatalogueSuccessId'
+        '202':
+          description: Accepted
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+  /catalogues/{catalogueId}:
+    parameters:
+    - $ref: '#/components/parameters/CatalogueId'
+    get:
+      description: You can get a catalogue making a GET request to the specified URL of the API endpoint with the resource path "catalogues/{catalogueId}" set the unique ID of the catalogue as {catalogueId} element of the URL. If successful, the response contains the information about the specified catalogue.
+      summary: Get catalogue
+      operationId: getCatalogue
+      tags:
+      - Catalogues
+      responses:
+        '200':
+          $ref: '#/components/responses/RDF200'
+        '404':
+          description: Catalogue Not Found
+    head:
+      description: You can get only the headers for catalogue making a HEAD request to the specified URL of the API endpoint with the resource path "catalogues/{catalogueId}" set the unique ID of the catalogue as {catalogueId} element of the URL. If successful, the response contains the headers of the specified catalogue.
+      summary: Headers only for "Get catalogue"
+      operationId: headGetCatalogue
+      tags:
+      - Catalogues
+      responses:
+        '200':
+          description: Headers of get catalogue
+        '404':
+          description: Catalogue Not Found
+    put:
+      description: This function is reserved for internal use only and is not part of our public API offerings. As an authorized user you can create or update the information of a specific catalog. Send a PUT request to the specified URL of the API endpoint, including the unique ID of the catalogue as {catalogueId} element of the URL and the updated information in the request. If the request is successful and the catalogueID already exists, the information in the catalogue will be updated with the newly provided information. If the catalogueID is new, a new catalogue will be created.
+      summary: Create or update catalogue
+      operationId: putCatalogue
+      tags:
+      - Catalogues
+      security:
+      - ApiKeyAuth: []
+      - BearerAuth: []
+      requestBody:
+        $ref: '#/components/requestBodies/RDFBody'
+      responses:
+        '201':
+          description: Catalogue created
+          headers:
+            Location:
+              $ref: '#/components/headers/LocationURIRef'
+        '204':
+          description: Catalogue updated
+        '400':
+          description: Bad Request
+        '401':
+          description: Unauthorized
+        '403':
+          description: Forbidden
+    delete:
+      description: 'This function is reserved for internal use only and is not part of our public API offerings. As an authorized user you can delete a specific catalogue. Send a DELETE request to the specified URL of the API endpoint with the resource path "/catalogues/{catalogueId}" at the end of URL, set the unique ID of the catalogue as {catalogueId} element of the URL. This operation deletes a catalogue''s metadata, as well as the metadata of all referenced datasets, from the repository and the index. It also removes any related quality measurements if they exist. Caution: you cannot revert this operation'
+      summary: Delete catalogue
+      operationId: deleteCatalogue
+      tags:
+      - Catalogues
+      security:
+      - ApiKeyAuth: []
+      - BearerAuth: []
+      responses:
+        '204':
+          description: Catalogue deleted
+        '401':
+          description: Unauthorized
+        '403':
+          description: Forbidden
+        '404':
+          description: Catalogue Not Found
+  /catalogues/{id}:
+    get:
+      description: You can get a catalogue making GET request to the specified URL of the API endpoint with the resource path "catalogues/{id}" at the end of the URL and set the unique ID of the catalogue as {id} element of the URL. If successful, the response contains the Catalogue object for a valid ID.
+      summary: Get a catalogue
+      operationId: readCatalogue
+      tags:
+      - Catalogues
+      parameters:
+      - name: id
+        in: path
+        description: Id of the requested catalogue
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          $ref: '#/components/responses/CatalogueSuccess'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+    put:
+      description: This function is reserved for internal use only and is not part of our public API offerings. You must be authorized for this operation. As an authorized user you can create or update a catalogue, sending PUT request to the specified URL of the API endpoint with the resource path "catalogues/{id}" at the end of the URL, the ID can be freely chosen for every new catalogue. If the catalogue ID already exists, the catalogue with the indicated ID is updated.
+      summary: Create or Update a catalogue
+      operationId: createOrUpdateCatalogue
+      tags:
+      - Catalogues
+      security:
+      - ApiKeyAuth: []
+      parameters:
+      - name: id
+        in: path
+        description: Id of the created or updated catalogue
+        required: true
+        schema:
+          type: string
+      - in: query
+        name: synchronous
+        description: If disbled the execution is asynchronous (response code 202)
+        schema:
+          type: boolean
+          default: true
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Catalogue'
+        required: true
+      responses:
+        '200':
+          $ref: '#/components/responses/CatalogueSuccessId'
+        '201':
+          $ref: '#/components/responses/CatalogueSuccessId'
+        '202':
+          description: Accepted
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+    patch:
+      description: This function is reserved for internal use only and is not part of our public API offerings. You must be authorized for this operation. As an authorized user you can modify a catalogue, sending PATCH request to the specified URL of the API endpoint with the resource path "catalogues/{id}" and specify the unique ID of the catalogue as the {id} element of the URL.
+      summary: Modify a catalogue
+      operationId: modifyCatalogue
+      tags:
+      - Catalogues
+      security:
+      - ApiKeyAuth: []
+      parameters:
+      - name: id
+        in: path
+        description: Id of the modified catalogue
+        required: true
+        schema:
+          type: string
+      - in: query
+        name: synchronous
+        description: If disabled the execution is asynchronous (response code 202)
+        schema:
+          type: boolean
+          default: true
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Catalogue'
+        required: true
+      responses:
+        '200':
+          $ref: '#/components/responses/CatalogueSuccessId'
+        '202':
+          description: Accepted
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+    delete:
+      description: This function is reserved for internal use only and is not part of our public API offerings. You must be authorized for this operation. As an authorized user you can delete a catalogue, sending DELETE request the specified URL of the API endpoint with the resource path "catalogues/{id}" at the end of the URL. Specify the unique ID of the catalogue as the {id} element of the URL.
+      summary: Delete a catalogue
+      operationId: deleteCatalogue
+      tags:
+      - Catalogues
+      security:
+      - ApiKeyAuth: []
+      parameters:
+      - name: id
+        in: path
+        description: Id of the requested catalogue
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          $ref: '#/components/responses/CatalogueSuccessId'
+        '202':
+          description: Accepted
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+    servers:
+    - url: ''
+  /catalogues/history:
+    get:
+      summary: Get historic metrics for all catalogues
+      description: To retrieve the measurement history for all available catalogues' metadata accessible on the portal, aggregated over all catalogues and grouped by catalogue IDs, make a GET request to the specified URL of the API endpoint with the resource path'/catalogues/history' added at the end of the URL. Include the 'startDate' query parameter in the request, providing a valid date value in the correct format. This specifies the start date for retrieving the measurement history. If successful, the response will contain metrics that cover the dimensions of 'findability', 'accessibility', 'interoperability', 'reusability', and 'contextuality'. The catalogue's ID and other relevant information can be found under the attribute name 'info'.
+      operationId: getHistoricCatalogueMetrics
+      parameters:
+      - $ref: '#/components/parameters/filterGlobal'
+      - $ref: '#/components/parameters/startDate'
+      - $ref: '#/components/parameters/endDate'
+      - $ref: '#/components/parameters/resolution'
+      tags:
+      - Catalogues
+      responses:
+        200:
+          description: List of historic country metrics Objects.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  result:
+                    type: object
+                    properties:
+                      count:
+                        type: integer
+                      results:
+                        type: array
+                        items:
+                          $ref: '#/components/schemas/HistoricCatalogueMetrics'
+        400:
+          description: Bad Request (e.g. startDate is later then endDate).
+    servers:
+    - url: ''
+  /catalogues/{id}/history:
+    get:
+      summary: Get historic metrics for a catalogue
+      description: To retrieve the history of measurements for metadata, aggregated over the designated catalogue, make a GET request to the specified URL of the API endpoint with the resource path "/catalogues/{id}/history" at the end of the URL and set the unique ID of the catalogue as {id} element of the URL. If successful, the response will contain metrics that cover the dimensions of "findability," "accessibility," "interoperability," "reusability," and "contextuality." To find a catalogue ID, use, for example, the operation "List of all catalogue metrics".
+      operationId: getHistoricSingleCatalogueMetrics
+      parameters:
+      - $ref: '#/components/parameters/catalogueId'
+      - $ref: '#/components/parameters/filterGlobal'
+      - $ref: '#/components/parameters/startDate'
+      - $ref: '#/components/parameters/endDate'
+      - $ref: '#/components/parameters/resolution'
+      tags:
+      - Catalogues
+      responses:
+        200:
+          description: Historic metrics regarding all available catalogues
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  result:
+                    type: object
+                    properties:
+                      count:
+                        type: integer
+                      results:
+                        type: array
+                        items:
+                          $ref: '#/components/schemas/HistoricCatalogueMetrics'
+        400:
+          description: Bad Request (e.g. startDate is later then endDate).
+        404:
+          description: Catalogue not found.
+    servers:
+    - url: ''
+  /catalogues/{id}/distributions/reachability:
+    get:
+      tags:
+      - Catalogues
+      summary: Get unreachable download and access URLs of a catalogue
+      description: Send a GET request to the specified URL of the API endpoint with the resource path '/catalogues/{id}/distributions/reachability' added at the end of the URL. Set the unique ID of the catalogue as the {id} element of the URL. The API will return the status codes of the access URLs' or download URLs', aggregated for every distribution of the datasets included in the specified catalogue, depending on the format of the data. Pay attention that, the delivered list consists of the access URLs and download URLs, that were not reachable by the last refresh of the metrics. By default, the quantity of returned distributions is limited to 100.
+      operationId: getCatalogueDistributionReachability
+      parameters:
+      - $ref: '#/components/parameters/catalogueId'
+      - in: query
+        name: offset
+        required: false
+        schema:
+          type: integer
+          minimum: 0
+          default: 0
+        description: The number of items to skip before starting to collect the result set
+      - in: query
+        name: limit
+        required: false
+        schema:
+          type: integer
+          minimum: 1
+          default: 100
+        description: The numbers of items to return
+      - in: query
+        name: locale
+        schema:
+          type: string
+        description: The language of the dataset title that should be returned
+      responses:
+        202:
+          description: List of a catalogues' distributions that have errorneous status codes in its access or download URL.
+        404:
+          description: Catalogue not found.
+        500:
+          description: internal server error
+    servers:
+    - url: ''
+  /catalogues/{id}/violations:
+    get:
+      tags:
+      - Catalogues
+      summary: Get DCAT-AP SHACL violations
+      description: To retrieve all the datasets with dcat-ap compliance issues for a specific catalogue, make a GET request to the specified URL of the API endpoint with the resource path "/catalogues/{id}/violations" added at the end of the URL and set the unique ID of the catalogue as {id} element of the URL. By default, the quantity of returned datasets is limited to 100.
+      operationId: getCatalogueViolations
+      parameters:
+      - name: id
+        in: path
+        description: ID of catalogue for which to receive a metric
+        required: true
+        schema:
+          type: string
+      - in: query
+        name: offset
+        required: false
+        schema:
+          type: integer
+          minimum: 0
+          default: 0
+        description: The number of items to skip before starting to collect the result set
+      - in: query
+        name: limit
+        required: false
+        schema:
+          type: integer
+          minimum: 1
+          default: 100
+        description: The numbers of items to return
+      - in: query
+        name: locale
+        schema:
+          type: string
+        description: The language of the dataset title that should be returned
+      responses:
+        200:
+          description: List of SHACL violations.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Violations'
+        404:
+          description: Catalogue not found.
+    servers:
+    - url: ''
+components:
+  headers:
+    LocationURIRef:
+      description: The final URIRef
+      schema:
+        type: string
+        format: uri
+  requestBodies:
+    RDFBody:
+      required: true
+      content:
+        application/rdf+xml:
+          schema:
+            type: string
+            format: binary
+        application/ld+json:
+          schema:
+            type: string
+            format: binary
+        application/n-triples:
+          schema:
+            type: string
+            format: binary
+        application/n-quads:
+          schema:
+            type: string
+            format: binary
+        application/trig:
+          schema:
+            type: string
+            format: binary
+        application/trix:
+          schema:
+            type: string
+            format: binary
+        text/turtle:
+          schema:
+            type: string
+            format: binary
+        text/n3:
+          schema:
+            type: string
+            format: binary
+  parameters:
+    CatalogueId:
+      name: catalogueId
+      description: The catalogue id
+      in: path
+      required: true
+      schema:
+        type: string
+        pattern: '[a-z,0-9,-]+'
+    Offset:
+      name: offset
+      in: query
+      schema:
+        type: number
+        format: int64
+        default: 0
+        minimum: 0
+    ValueType:
+      name: valueType
+      in: query
+      description: Return value type. In case of `urifRefs` and `identifiers` Accept header will be ignored and the return type will always be a JSON array
+      schema:
+        type: string
+        enum:
+        - uriRefs
+        - identifiers
+        - originalIds
+        - metadata
+        default: uriRefs
+    Limit:
+      name: limit
+      in: query
+      schema:
+        type: number
+        format: int64
+        default: 100
+        minimum: 1
+        maximum: 5000
+    endDate:
+      name: endDate
+      in: query
+      description: End date for which to retrieve the history. If no end date is specified, the currend date is used.
+      schema:
+        type: string
+        format: date
+      example: 2012-11-1
+    filterGlobal:
+      name: filter
+      in: query
+      description: Filter for one more multiple specific dimensions and/or the `score` that should be returned. If present,  the document will contain _only_ the specified Dimensions. If this parameter is missing, the complete document will be returned.
+      required: false
+      style: form
+      explode: false
+      schema:
+        type: array
+        items:
+          type: string
+          enum:
+          - findability
+          - accessibility
+          - interoperability
+          - reusability
+          - contextuality
+          - score
+    filter:
+      name: filter
+      in: query
+      description: Filter for one more multiple specific dimensions and/or the `score` and `info` object that should be returned.If present,  the document will contain _only_ the specified Dimensions. If this parameter is missing, the complete document will be returned.
+      required: false
+      style: form
+      explode: false
+      schema:
+        type: array
+        items:
+          type: string
+          enum:
+          - findability
+          - accessibility
+          - interoperability
+          - reusability
+          - contextuality
+          - score
+          - info
+    catalogueId:
+      name: id
+      in: path
+      description: ID of catalogue to retrieve
+      required: true
+      schema:
+        type: string
+    startDate:
+      name: startDate
+      in: query
+      description: Start date for which to retrieve the history formatted as ISO
+      required: true
+      schema:
+        type: string
+        format: date
+      example: 1997-8-25
+    resolution:
+      name: resolution
+      in: query
+      description: Dimension for which to retrieve the history
+      required: false
+      schema:
+        enum:
+        - year
+        - month
+        - day
+        default: month
+  responses:
+    RDFLIST200:
+      description: The list of resource(s)
+      content:
+        application/json:
+          schema:
+            type: array
+            items:
+              type: string
+        application/rdf+xml:
+          schema:
+            type: string
+            format: binary
+        application/ld+json:
+          schema:
+            type: string
+            format: binary
+        application/n-triples:
+          schema:
+            type: string
+            format: binary
+        application/n-quads:
+          schema:
+            type: string
+            format: binary
+        application/trig:
+          schema:
+            type: string
+            format: binary
+        application/trix:
+          schema:
+            type: string
+            format: binary
+        text/turtle:
+          schema:
+            type: string
+            format: binary
+        text/n3:
+          schema:
+            type: string
+            format: binary
+    RDF200:
+      description: The resource graph(s)
+      content:
+        application/rdf+xml:
+          schema:
+            type: string
+            format: binary
+        application/ld+json:
+          schema:
+            type: string
+            format: binary
+        application/n-triples:
+          schema:
+            type: string
+            format: binary
+        application/n-quads:
+          schema:
+            type: string
+            format: binary
+        application/trig:
+          schema:
+            type: string
+            format: binary
+        application/trix:
+          schema:
+            type: string
+            format: binary
+        text/turtle:
+          schema:
+            type: string
+            format: binary
+        text/n3:
+          schema:
+            type: string
+            format: binary
+    BadRequest:
+      description: Validation error / Bad request
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              success:
+                type: boolean
+                default: false
+              message:
+                type: string
+    CatalogueSuccess:
+      description: Catalogue response object
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              success:
+                type: boolean
+                default: true
+              result:
+                $ref: '#/components/schemas/Catalogue'
+    InternalServerError:
+      description: Internal Server Error
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              success:
+                type: boolean
+                default: false
+              message:
+                type: string
+    NotFound:
+      description: Not found
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              success:
+                type: boolean
+                default: false
+              message:
+                type: string
+    CatalogueSuccessId:
+      description: Catalogue response object
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              success:
+                type: boolean
+                default: true
+              result:
+                type: object
+                properties:
+                  id:
+                    type: string
+    CataloguesSuccessArray:
+      description: Catalogues response
+      content:
+        application/json:
+          example:
+          - string1
+          - string2
+          - string3
+          schema:
+            type: array
+            items:
+              type: string
+  schemas:
+    Catalogue:
+      description: Base model for a catalogue
+      type: object
+      properties:
+        description:
+          type: object
+          additionalProperties:
+            type: string
+        creator:
+          type: object
+          properties:
+            type:
+              type: string
+            name:
+              type: string
+            email:
+              type: string
+            homepage:
+              type: string
+            resource:
+              type: string
+        catalogueLogo:
+          type: array
+          items:
+            type: string
+        country:
+          type: object
+          properties:
+            id:
+              type: string
+            label:
+              type: string
+            resource:
+              type: string
+        catalogueInterestingDatasets:
+          type: array
+          items:
+            type: string
+        id:
+          type: string
+        modified:
+          type: string
+        rights:
+          type: object
+          properties:
+            resource:
+              type: string
+            label:
+              type: string
+        catalog:
+          type: array
+          items:
+            type: string
+        catalogueProfile:
+          type: array
+          items:
+            type: string
+        catalogueFavIcon:
+          type: array
+          items:
+            type: string
+        spatial_resource:
+          type: array
+          items:
+            type: object
+            properties:
+              id:
+                type: string
+              label:
+                type: string
+              resource:
+                type: string
+        homepage:
+          type: string
+        has_part:
+          type: array
+          items:
+            type: string
+        language:
+          type: array
+          items:
+            type: object
+            properties:
+              id:
+                type: string
+              resource:
+                type: string
+              label:
+                type: string
+        publisher:
+          type: object
+          properties:
+            type:
+              type: string
+            name:
+              type: string
+            email:
+              type: string
+            homepage:
+              type: string
+            resource:
+              type: string
+        source_type:
+          type: string
+        catalogueBackground:
+          type: array
+          items:
+            type: string
+        is_part_of:
+          type: string
+        license:
+          type: object
+          properties:
+            id:
+              type: string
+            label:
+              type: string
+            description:
+              type: string
+            la_url:
+              type: string
+            resource:
+              type: string
+        spatial:
+          type: array
+          items:
+            type: object
+        title:
+          type: object
+          additionalProperties:
+            type: string
+        theme_taxonomy:
+          type: array
+          items:
+            type: string
+        issued:
+          type: string
+        translation_meta:
+          type: object
+          properties:
+            full_available_languages:
+              type: array
+              items:
+                type: string
+            details:
+              type: object
+              additionalProperties:
+                type: object
+                properties:
+                  machine_translated:
+                    type: boolean
+                  original_language:
+                    type: string
+                  issued:
+                    type: string
+                  received:
+                    type: string
+            status:
+              type: string
+    CatalogueInfo:
+      type: object
+      properties:
+        id:
+          type: string
+        title:
+          type: string
+        description:
+          type: string
+        spatial:
+          type: string
+        type:
+          type: string
+    CatalogueMetrics:
+      type: object
+      properties:
+        info:
+          $ref: '#/components/schemas/CatalogueInfo'
+        findability:
+          $ref: '#/components/schemas/Findability'
+        accessibility:
+          $ref: '#/components/schemas/Accessibility'
+        interoperability:
+          $ref: '#/components/schemas/Interoperability'
+        resusability:
+          $ref: '#/components/schemas/Reusability'
+        contextuality:
+          $ref: '#/components/schemas/Contextuality'
+        score:
+          description: The aggregated score
+          type: number
+          format: int32
+    HistoricReusability:
+      description: Reusability metrics
+      type: object
+      properties:
+        licenceAvailability:
+          type: array
+          items:
+            $ref: '#/components/schemas/HistoricNamedPercentages'
+          example:
+          - '2020-03-02':
+            - name: true
+              percentage: 55.0
+            - name: false
+              percentage: 45.0
+          - '2020-03-03':
+            - name: true
+              percentage: 33.0
+            - name: false
+              percentage: 67.0
+          - '2020-03-04':
+            - name: true
+              percentage: 82.5
+            - name: false
+              percentage: 17.5
+        licenceAlignment:
+          type: array
+          items:
+            $ref: '#/components/schemas/HistoricNamedPercentages'
+          example:
+          - '2020-03-02':
+            - name: true
+              percentage: 55.0
+            - name: false
+              percentage: 45.0
+          - '2020-03-03':
+            - name: true
+              percentage: 33.0
+            - name: false
+              percentage: 67.0
+          - '2020-03-04':
+            - name: true
+              percentage: 82.5
+            - name: false
+              percentage: 17.5
+        accessRightsAvailability:
+          type: array
+          items:
+            $ref: '#/components/schemas/HistoricNamedPercentages'
+          example:
+          - '2020-03-02':
+            - name: true
+              percentage: 55.0
+            - name: false
+              percentage: 45.0
+          - '2020-03-03':
+            - name: true
+              percentage: 33.0
+            - name: false
+              percentage: 67.0
+          - '2020-03-04':
+            - name: true
+              percentage: 82.5
+            - name: false
+              percentage: 17.5
+        accessRightsAlignment:
+          type: array
+          items:
+            $ref: '#/components/schemas/HistoricNamedPercentages'
+          example:
+          - '2020-03-02':
+            - name: true
+              percentage: 55.0
+            - name: false
+              percentage: 45.0
+          - '2020-03-03':
+            - name: true
+              percentage: 33.0
+            - name: false
+              percentage: 67.0
+          - '2020-03-04':
+            - name: true
+              percentage: 82.5
+            - name: false
+              percentage: 17.5
+        contactPointAvailability:
+          type: array
+          items:
+            $ref: '#/components/schemas/HistoricNamedPercentages'
+          example:
+          - '2020-03-02':
+            - name: true
+              percentage: 55.0
+            - name: false
+              percentage: 45.0
+          - '2020-03-03':
+            - name: true
+              percentage: 33.0
+            - name: false
+              percentage: 67.0
+          - '2020-03-04':
+            - name: true
+              percentage: 82.5
+            - name: false
+              percentage: 17.5
+        publisherAvailability:
+          type: array
+          items:
+            $ref: '#/components/schemas/HistoricNamedPercentages'
+          example:
+          - '2020-03-02':
+            - name: true
+              percentage: 55.0
+            - name: false
+              percentage: 45.0
+          - '2020-03-03':
+            - name: true
+              percentage: 33.0
+            - name: false
+              percentage: 67.0
+          - '2020-03-04':
+            - name: true
+              percentage: 82.5
+            - name: false
+              percentage: 17.5
+        score:
+          $ref: '#/components/schemas/HistoricScore'
+    Violations:
+      description: SHACL violations, List of dcat-ap compliance issues
+      type: object
+      properties:
+        success:
+          type: string
+        result:
+          type: object
+          properties:
+            count:
+              type: integer
+            results:
+              type: array
+              items:
+                type: object
+                properties:
+                  resultPath:
+                    type: string
+                  resultMessage:
+                    type: string
+                  value:
+                    type: string
+                  title:
+                    type: string
+                  reference:
+                    type: string
+    HistoricCatalogueMetrics:
+      type: object
+      properties:
+        info:
+          $ref: '#/components/schemas/CatalogueInfo'
+        findability:
+          $ref: '#/components/schemas/HistoricFindability'
+        accessibility:
+          $ref: '#/components/schemas/HistoricAccessibility'
+        interoperability:
+          $ref: '#/components/schemas/HistoricInteroperability'
+        resusability:
+          $ref: '#/components/schemas/HistoricReusability'
+        contextuality:
+          $ref: '#/components/schemas/HistoricContextuality'
+        score:
+          $ref: '#/components/schemas/HistoricScore'
+    HistoricFindability:
+      description: Findability metrics
+      type: object
+      properties:
+        keywordAvailability:
+          type: array
+          items:
+            $ref: '#/components/schemas/HistoricNamedPercentages'
+          example:
+          - '2020-03-02':
+            - name: true
+              percentage: 55.0
+            - name: false
+              percentage: 45.0
+          - '2020-03-03':
+            - name: true
+              percentage: 33.0
+            - name: false
+              percentage: 67.0
+          - '2020-03-04':
+            - name: true
+              percentage: 82.5
+            - name: false
+              percentage: 17.5
+        categoryAvailability:
+          type: array
+          items:
+            $ref: '#/components/schemas/HistoricNamedPercentages'
+          example:
+          - '2020-03-02':
+            - name: true
+              percentage: 55.0
+            - name: false
+              percentage: 45.0
+          - '2020-03-03':
+            - name: true
+              percentage: 33.0
+            - name: false
+              percentage: 67.0
+          - '2020-03-04':
+            - name: true
+              percentage: 82.5
+            - name: false
+              percentage: 17.5
+        spatialAvailability:
+          type: array
+          items:
+            $ref: '#/components/schemas/HistoricNamedPercentages'
+          example:
+          - '2020-03-02':
+            - name: true
+              percentage: 55.0
+            - name: false
+              percentage: 45.0
+          - '2020-03-03':
+            - name: true
+              percentage: 33.0
+            - name: false
+              percentage: 67.0
+          - '2020-03-04':
+            - name: true
+              percentage: 82.5
+            - name: false
+              percentage: 17.5
+        temporalAvailability:
+          type: array
+          items:
+            $ref: '#/components/schemas/HistoricNamedPercentages'
+          example:
+          - '2020-03-02':
+            - name: true
+              percentage: 55.0
+            - name: false
+              percentage: 45.0
+          - '2020-03-03':
+            - name: true
+              percentage: 33.0
+            - name: false
+              percentage: 67.0
+          - '2020-03-04':
+            - name: true
+              percentage: 82.5
+            - name: false
+              percentage: 17.5
+        score:
+          $ref: '#/components/schemas/HistoricScore'
+    Contextuality:
+      description: Contextuality metrics
+      type: object
+      properties:
+        rightsAvailability:
+          type: array
+          items:
+            $ref: '#/components/schemas/NamedPercentage'
+          example:
+          - name: true
+            percentage: 55.0
+          - name: false
+            percentage: 45.0
+        byteSizeAvailability:
+          type: array
+          items:
+            $ref: '#/components/schemas/NamedPercentage'
+          example:
+          - name: true
+            percentage: 55.0
+          - name: false
+            percentage: 45.0
+        dateIssuedAvailability:
+          type: array
+          items:
+            $ref: '#/components/schemas/NamedPercentage'
+          example:
+          - name: true
+            percentage: 55.0
+          - name: false
+            percentage: 45.0
+        dateModifiedAvailability:
+          type: array
+          items:
+            $ref: '#/components/schemas/NamedPercentage'
+          example:
+          - name: true
+            percentage: 55.0
+          - name: false
+            percentage: 45.0
+        score:
+          description: The aggregated score
+          type: object
+          items:
+            $ref: '#/components/schemas/PointPercentageMax'
+          example:
+            point: 55.0
+            percentage: 55.0
+            max: 80.0
+    Accessibility:
+      description: Accessibility metrics
+      type: object
+      properties:
+        accessUrlStatusCodes:
+          type: array
+          items:
+            $ref: '#/components/schemas/NamedPercentage'
+          example:
+          - name: 200
+            percentage: 92.0
+          - name: 400
+            percentage: 1.0
+          - name: 404
+            percentage: 1.0
+          - name: 1300
+            percentage: 2.0
+          - name: 405
+            percentage: 3.0
+          - name: 1100
+            percentage: 1.0
+        downloadUrlAvailability:
+          type: array
+          items:
+            $ref: '#/components/schemas/NamedPercentage'
+          example:
+          - name: true
+            percentage: 55.0
+          - name: false
+            percentage: 45.0
+        downloadUrlStatusCodes:
+          type: array
+          items:
+            $ref: '#/components/schemas/NamedPercentage'
+        score:
+          description: The aggregated score
+          type: object
+          items:
+            $ref: '#/components/schemas/PointPercentageMax'
+          example:
+            point: 55.0
+            percentage: 55.0
+            max: 80.0
+    HistoricContextuality:
+      description: Contextuality metrics
+      type: object
+      properties:
+        rightsAvailability:
+          type: array
+          items:
+            $ref: '#/components/schemas/HistoricNamedPercentages'
+          example:
+          - '2020-03-02':
+            - name: true
+              percentage: 55.0
+            - name: false
+              percentage: 45.0
+          - '2020-03-03':
+            - name: true
+              percentage: 33.0
+            - name: false
+              percentage: 67.0
+          - '2020-03-04':
+            - name: true
+              percentage: 82.5
+            - name: false
+              percentage: 17.5
+        byteSizeAvailability:
+          type: array
+          items:
+            $ref: '#/components/schemas/HistoricNamedPercentages'
+          example:
+          - '2020-03-02':
+            - name: true
+              percentage: 55.0
+            - name: false
+              percentage: 45.0
+          - '2020-03-03':
+            - name: true
+              percentage: 33.0
+            - name: false
+              percentage: 67.0
+          - '2020-03-04':
+            - name: true
+              percentage: 82.5
+            - name: false
+              percentage: 17.5
+        dateIssuedAvailability:
+          type: array
+          items:
+            $ref: '#/components/schemas/HistoricNamedPercentages'
+          example:
+          - '2020-03-02':
+            - name: true
+              percentage: 55.0
+            - name: false
+              percentage: 45.0
+          - '2020-03-03':
+            - name: true
+              percentage: 33.0
+            - name: false
+              percentage: 67.0
+          - '2020-03-04':
+            - name: true
+              percentage: 82.5
+            - name: false
+              percentage: 17.5
+        dateModifiedAvailability:
+          type: array
+          items:
+            $ref: '#/components/schemas/HistoricNamedPercentages'
+          example:
+          - '2020-03-02':
+            - name: true
+              percentage: 55.0
+            - name: false
+              percentage: 45.0
+          - '2020-03-03':
+            - name: true
+              percentage: 33.0
+            - name: false
+              percentage: 67.0
+          - '2020-03-04':
+            - name: true
+              percentage: 82.5
+            - name: false
+              percentage: 17.5
+        score:
+          $ref: '#/components/schemas/HistoricScore'
+    HistoricAccessibility:
+      description: Accessibility metrics
+      type: object
+      properties:
+        accessUrlStatusCodes:
+          type: array
+          items:
+            $ref: '#/components/schemas/HistoricNamedPercentages'
+          example:
+          - '2020-03-02':
+            - name: 200
+              percentage: 55.0
+            - name: 404
+              percentage: 45.0
+          - '2020-03-03':
+            - name: 200
+              percentage: 33.0
+            - name: 404
+              percentage: 67.0
+          - '2020-03-04':
+            - name: 200
+              percentage: 82.5
+            - name: 500
+              percentage: 17.5
+        downloadUrlAvailability:
+          type: array
+          items:
+            $ref: '#/components/schemas/HistoricNamedPercentages'
+          example:
+          - '2020-03-02':
+            - name: true
+              percentage: 55.0
+            - name: false
+              percentage: 45.0
+          - '2020-03-03':
+            - name: true
+              percentage: 33.0
+            - name: false
+              percentage: 67.0
+          - '2020-03-04':
+            - name: true
+              percentage: 82.5
+            - name: false
+              percentage: 17.5
+        downloadUrlStatusCodes:
+          type: array
+          items:
+            $ref: '#/components/schemas/HistoricNamedPercentages'
+          example:
+          - '2020-03-02':
+            - name: 200
+              percentage: 55.0
+            - name: 404
+              percentage: 45.0
+          - '2020-03-03':
+            - name: 404
+              percentage: 33.0
+            - name: 500
+              percentage: 67.0
+          - '2020-03-04':
+            - name: 200
+              percentage: 82.5
+            - name: 500
+              percentage: 17.5
+        score:
+          $ref: '#/components/schemas/HistoricScore'
+    PointPercentageMax:
+      description: Point Percentage Max
+      type: object
+      properties:
+        point:
+          type: number
+          format: double
+          example: 50.5
+        percentage:
+          type: number
+          format: double
+          example: 50.5
+        max:
+          type: number
+          format: double
+          example: 80.0
+    Reusability:
+      description: Reusability metrics
+      type: object
+      properties:
+        licenceAvailability:
+          type: array
+          items:
+            $ref: '#/components/schemas/NamedPercentage'
+          example:
+          - name: true
+            percentage: 55.0
+          - name: false
+            percentage: 45.0
+        licenceAlignment:
+          type: array
+          items:
+            $ref: '#/components/schemas/NamedPercentage'
+          example:
+          - name: true
+            percentage: 55.0
+          - name: false
+            percentage: 45.0
+        accessRightsAvailability:
+          type: array
+          items:
+            $ref: '#/components/schemas/NamedPercentage'
+          example:
+          - name: true
+            percentage: 55.0
+          - name: false
+            percentage: 45.0
+        accessRightsAlignment:
+          type: array
+          items:
+            $ref: '#/components/schemas/NamedPercentage'
+          example:
+          - name: true
+            percentage: 55.0
+          - name: false
+            percentage: 45.0
+        contactPointAvailability:
+          type: array
+          items:
+            $ref: '#/components/schemas/NamedPercentage'
+          example:
+          - name: true
+            percentage: 55.0
+          - name: false
+            percentage: 45.0
+        publisherAvailability:
+          type: array
+          items:
+            $ref: '#/components/schemas/NamedPercentage'
+          example:
+          - name: true
+            percentage: 55.0
+          - name: false
+            percentage: 45.0
+        score:
+          description: The aggregated score
+          type: object
+          items:
+            $ref: '#/components/schemas/PointPercentageMax'
+          example:
+            point: 55.0
+            percentage: 55.0
+            max: 80.0
+    HistoricScore:
+      description: List of name value pairs, where key is the date and value is the score.
+      type: object
+      properties:
+        score:
+          type: array
+          items:
+            type: object
+            additionalProperties:
+              type: integer
+      example:
+      - '2020-03-02': 200.0
+      - '2020-03-03': 221.0
+      - '2020-03-04': 221.0
+    HistoricNamedPercentages:
+      description: A history of named percentages.
+      type: object
+      additionalProperties:
+        $ref: '#/components/schemas/NamedPercentage'
+      minProperties: 1
+    Interoperability:
+      description: Interoperability metrics
+      type: object
+      properties:
+        formatAvailability:
+          type: array
+          items:
+            $ref: '#/components/schemas/NamedPercentage'
+          example:
+          - name: true
+            percentage: 55.0
+          - name: false
+            percentage: 45.0
+        mediaTypeAvailability:
+          type: array
+          items:
+            $ref: '#/components/schemas/NamedPercentage'
+          example:
+          - name: true
+            percentage: 55.0
+          - name: false
+            percentage: 45.0
+        formatMediaTypeAlignment:
+          type: array
+          items:
+            $ref: '#/components/schemas/NamedPercentage'
+          example:
+          - name: true
+            percentage: 55.0
+          - name: false
+            percentage: 45.0
+        formatMediaTypeNonProprietary:
+          type: array
+          items:
+            $ref: '#/components/schemas/NamedPercentage'
+          example:
+          - name: true
+            percentage: 55.0
+          - name: false
+            percentage: 45.0
+        formatMediaTypeMachineReadable:
+          type: array
+          items:
+            $ref: '#/components/schemas/NamedPercentage'
+          example:
+          - name: true
+            percentage: 55.0
+          - name: false
+            percentage: 45.0
+        dcatApCompliance:
+          type: array
+          items:
+            $ref: '#/components/schemas/NamedPercentage'
+          example:
+          - name: true
+            percentage: 55.0
+          - name: false
+            percentage: 45.0
+        score:
+          description: The aggregated score
+          type: object
+          items:
+            $ref: '#/components/schemas/PointPercentageMax'
+          example:
+            point: 55.0
+            percentage: 55.0
+            max: 80.0
+    HistoricInteroperability:
+      description: Interoperability metrics
+      type: object
+      properties:
+        formatAvailability:
+          type: array
+          items:
+            $ref: '#/components/schemas/HistoricNamedPercentages'
+          example:
+          - '2020-03-02':
+            - name: true
+              percentage: 55.0
+            - name: false
+              percentage: 45.0
+          - '2020-03-03':
+            - name: true
+              percentage: 33.0
+            - name: false
+              percentage: 67.0
+          - '2020-03-04':
+            - name: true
+              percentage: 82.5
+            - name: false
+              percentage: 17.5
+        mediaTypeAvailability:
+          type: array
+          items:
+            $ref: '#/components/schemas/HistoricNamedPercentages'
+          example:
+          - '2020-03-02':
+            - name: true
+              percentage: 55.0
+            - name: false
+              percentage: 45.0
+          - '2020-03-03':
+            - name: true
+              percentage: 33.0
+            - name: false
+              percentage: 67.0
+          - '2020-03-04':
+            - name: true
+              percentage: 82.5
+            - name: false
+              percentage: 17.5
+        formatMediaTypeAlignment:
+          type: array
+          items:
+            $ref: '#/components/schemas/HistoricNamedPercentages'
+          example:
+          - '2020-03-02':
+            - name: true
+              percentage: 55.0
+            - name: false
+              percentage: 45.0
+          - '2020-03-03':
+            - name: true
+              percentage: 33.0
+            - name: false
+              percentage: 67.0
+          - '2020-03-04':
+            - name: true
+              percentage: 82.5
+            - name: false
+              percentage: 17.5
+        formatMediaTypeNonProprietary:
+          type: array
+          items:
+            $ref: '#/components/schemas/HistoricNamedPercentages'
+          example:
+          - '2020-03-02':
+            - name: true
+              percentage: 55.0
+            - name: false
+              percentage: 45.0
+          - '2020-03-03':
+            - name: true
+              percentage: 33.0
+            - name: false
+              percentage: 67.0
+          - '2020-03-04':
+            - name: true
+              percentage: 82.5
+            - name: false
+              percentage: 17.5
+        formatMediaTypeMachineReadable:
+          type: array
+          items:
+            $ref: '#/components/schemas/HistoricNamedPercentages'
+          example:
+          - '2020-03-02':
+            - name: true
+              percentage: 55.0
+            - name: false
+              percentage: 45.0
+          - '2020-03-03':
+            - name: true
+              percentage: 33.0
+            - name: false
+              percentage: 67.0
+          - '2020-03-04':
+            - name: true
+              percentage: 82.5
+            - name: false
+              percentage: 17.5
+        dcatApCompliance:
+          type: array
+          items:
+            $ref: '#/components/schemas/HistoricNamedPercentages'
+          example:
+          - '2020-03-02':
+            - name: true
+              percentage: 55.0
+            - name: false
+              percentage: 45.0
+          - '2020-03-03':
+            - name: true
+              percentage: 33.0
+            - name: false
+              percentage: 67.0
+          - '2020-03-04':
+            - name: true
+              percentage: 82.5
+            - name: false
+              percentage: 17.5
+        score:
+          $ref: '#/components/schemas/HistoricScore'
+    NamedPercentage:
+      description: Named percentage
+      type: object
+      properties:
+        name:
+          type: string
+          example: true
+        percentage:
+          type: number
+          format: double
+          example: 50.5
+    Findability:
+      description: Findability metrics
+      type: object
+      properties:
+        keywordAvailability:
+          type: array
+          items:
+            $ref: '#/components/schemas/NamedPercentage'
+          example:
+          - name: true
+            percentage: 55.0
+          - name: false
+            percentage: 45.0
+        categoryAvailability:
+          type: array
+          items:
+            $ref: '#/components/schemas/NamedPercentage'
+          example:
+          - name: true
+            percentage: 55.0
+          - name: false
+            percentage: 45.0
+        spatialAvailability:
+          type: array
+          items:
+            $ref: '#/components/schemas/NamedPercentage'
+          example:
+          - name: true
+            percentage: 55.0
+          - name: false
+            percentage: 45.0
+        temporalAvailability:
+          type: array
+          items:
+            $ref: '#/components/schemas/NamedPercentage'
+          example:
+          - name: true
+            percentage: 55.0
+          - name: false
+            percentage: 45.0
+        score:
+          description: The aggregated score
+          type: object
+          items:
+            $ref: '#/components/schemas/PointPercentageMax'
+          example:
+            point: 55.0
+            percentage: 55.0
+            max: 80.0
+  securitySchemes:
+    ApiKeyAuth:
+      type: apiKey
+      in: header
+      name: X-API-Key
+    BearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+x-refined-from:
+- eu-open-data-portal-hub-repo-openapi.yaml
+- eu-open-data-portal-hub-search-openapi.yaml
+- eu-open-data-portal-mqa-metrics-cache-openapi.yaml

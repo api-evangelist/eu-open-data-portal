@@ -1,0 +1,396 @@
+openapi: 3.2.0
+info:
+  title: Eu Open Data Portal Distributions API
+  x-logo:
+    url: images/logo
+  version: '1.0'
+  description: 'Operations tagged Distributions across 2 of this provider''s published API definitions: eu-open-data-portal-hub-repo-openapi.yaml, eu-open-data-portal-mqa-metrics-cache-openapi.yaml. Each path carries the servers of the definition it was published in.'
+tags:
+- name: Distributions
+  x-displayName: Distributions
+  description: '**Deprecated !** Will be removed completely in the future'
+paths:
+  /distributions/{distributionId}:
+    description: Deprecated!
+    parameters:
+    - $ref: '#/components/parameters/DistributionId'
+    get:
+      deprecated: true
+      description: You can get a specific distribution of a dataset making a GET request to the specified URL of the API endpoint with the resource path "/distributions/{distributionId}" at the end of the URL, set the unique ID of the distribution as {distributionId} element of the URL.
+      summary: Get distribution
+      operationId: getDistribution
+      tags:
+      - Distributions
+      security:
+      - ApiKeyAuth: []
+      - BearerAuth: []
+      responses:
+        '200':
+          $ref: '#/components/responses/RDF200'
+        '404':
+          description: Distribution not found
+    head:
+      deprecated: true
+      description: To retrieve only the headers for a specific distribution of a dataset make a HEAD request to the specified URL of the API endpoint with the resource path "/distributions/{distributionId}" at the end of the URL, set the unique ID of the distribution as {distributionId} element of the URL.
+      summary: Headers only for "Get distribution"
+      operationId: headGetDistribution
+      tags:
+      - Distributions
+      security:
+      - ApiKeyAuth: []
+      - BearerAuth: []
+      responses:
+        '200':
+          description: Headers of get distribution
+        '404':
+          description: Distribution Not Found
+    put:
+      deprecated: true
+      description: This function is reserved for internal use only and is not part of our public API offerings. You must be authorized to create or update a dataset's distribution. As an authorized user, you make a PUT request to the specified URL of the API endpoint with the resource path "/distributions/{distributionId}" at the end of the URL. Specify the unique ID of the distribution as the {distributionId}. If the distribution with this ID already exists, it will be updated.
+      summary: Update distribution
+      operationId: putDistribution
+      tags:
+      - Distributions
+      security:
+      - ApiKeyAuth: []
+      - BearerAuth: []
+      requestBody:
+        $ref: '#/components/requestBodies/RDFBody'
+      responses:
+        '204':
+          description: Distribution updated
+        '400':
+          description: Bad Request
+        '401':
+          description: Unauthorized
+        '403':
+          description: Forbidden
+        '404':
+          description: Distribution Not Found
+    delete:
+      deprecated: true
+      description: This function is reserved for internal use only and is not part of our public API offerings. As an authorized user you can delete a specific distribution. Send a DELETE request to the specified URL of the API endpoint with the resource path "/distributions/{distributionId}" at the end of the URL. Specify the unique ID of the distribution as the {distributionId}. The specified distribution will be deleted.
+      summary: Delete distribution
+      operationId: deleteDistribution
+      tags:
+      - Distributions
+      security:
+      - ApiKeyAuth: []
+      - BearerAuth: []
+      responses:
+        '204':
+          description: Distribution deleted
+        '401':
+          description: Unauthorized
+        '403':
+          description: Forbidden
+        '404':
+          description: Distribution Not Found
+  /datasets/{id}/distributions:
+    get:
+      tags:
+      - Distributions
+      summary: Get metrics for all distributions of a dataset
+      description: To retrieve metrics for all distributions of a designated dataset, make a GET request to the specified URL of the API endpoint with the resource path '/datasets/{id}/distributions' added at the end of the URL and set the unique ID of the dataset as the {id} element of the URL. If successful, the response will contain metrics that cover the dimensions of "findability," "accessibility," "interoperability," "reusability," and "contextuality."
+      operationId: getDistributionMetricsv2
+      parameters:
+      - $ref: '#/components/parameters/datasetId'
+      - in: query
+        name: locale
+        schema:
+          type: string
+        description: The language of the distribution that should be returned
+      responses:
+        200:
+          description: Catalogue metrics
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  result:
+                    type: object
+                    properties:
+                      count:
+                        type: integer
+                      results:
+                        type: array
+                        items:
+                          $ref: '#/components/schemas/DistributionMetrics'
+        404:
+          description: Dataset not found
+    servers:
+    - url: ''
+  /distributions/{id}:
+    get:
+      deprecated: true
+      tags:
+      - Distributions
+      summary: use /datasets/{id}/distributions instead
+      description: Metrics that cover the dimensions 'accessibility', 'interoperability', 'reusability' and 'contextuality'.
+      operationId: getDistributionMetrics
+      parameters:
+      - $ref: '#/components/parameters/datasetId'
+      - in: query
+        name: locale
+        schema:
+          type: string
+        description: The language of the distribution that should be returned
+      responses:
+        200:
+          description: Catalogue metrics
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  result:
+                    type: object
+                    properties:
+                      count:
+                        type: integer
+                      results:
+                        type: array
+                        items:
+                          $ref: '#/components/schemas/DistributionMetrics'
+        404:
+          description: Dataset not found
+    servers:
+    - url: ''
+  /distributions/{id}/validations:
+    get:
+      tags:
+      - Distributions
+      summary: Get the validations present for all distributions of a dataset
+      description: Result of the linting of this CSV file
+      operationId: getDistributionValidationCsv
+      parameters:
+      - $ref: '#/components/parameters/datasetId'
+      responses:
+        200:
+          description: Catalogue metrics
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ValidationCsv'
+        404:
+          description: Dataset not found
+    servers:
+    - url: ''
+components:
+  requestBodies:
+    RDFBody:
+      required: true
+      content:
+        application/rdf+xml:
+          schema:
+            type: string
+            format: binary
+        application/ld+json:
+          schema:
+            type: string
+            format: binary
+        application/n-triples:
+          schema:
+            type: string
+            format: binary
+        application/n-quads:
+          schema:
+            type: string
+            format: binary
+        application/trig:
+          schema:
+            type: string
+            format: binary
+        application/trix:
+          schema:
+            type: string
+            format: binary
+        text/turtle:
+          schema:
+            type: string
+            format: binary
+        text/n3:
+          schema:
+            type: string
+            format: binary
+  parameters:
+    DistributionId:
+      name: distributionId
+      description: The distribution id
+      in: path
+      required: true
+      schema:
+        type: string
+        pattern: '[a-z,0-9,-,~]+'
+    datasetId:
+      name: id
+      in: path
+      description: ID of dataset to retrieve
+      required: true
+      schema:
+        type: string
+  responses:
+    RDF200:
+      description: The resource graph(s)
+      content:
+        application/rdf+xml:
+          schema:
+            type: string
+            format: binary
+        application/ld+json:
+          schema:
+            type: string
+            format: binary
+        application/n-triples:
+          schema:
+            type: string
+            format: binary
+        application/n-quads:
+          schema:
+            type: string
+            format: binary
+        application/trig:
+          schema:
+            type: string
+            format: binary
+        application/trix:
+          schema:
+            type: string
+            format: binary
+        text/turtle:
+          schema:
+            type: string
+            format: binary
+        text/n3:
+          schema:
+            type: string
+            format: binary
+  schemas:
+    DistributionInteroperability:
+      description: Interoperability metrics
+      type: object
+      properties:
+        formatAvailability:
+          type: boolean
+        mediaTypeAvailability:
+          type: boolean
+        formatMediaTypeVocabularyAlignment:
+          type: boolean
+    DistributionContextuality:
+      description: Contextuality metrics
+      type: object
+      properties:
+        rightsAvailability:
+          type: boolean
+        byteSizeAvailability:
+          type: boolean
+        dateModifiedAvailability:
+          type: boolean
+        dateIssuedAvailability:
+          type: boolean
+    DistributionInfo:
+      type: object
+      properties:
+        distribution-id:
+          type: string
+        distribution-uri:
+          type: string
+    DistributionAccessibility:
+      description: Accessibility metrics
+      type: object
+      properties:
+        accessUrlStatusCodes:
+          type: boolean
+        downloadUrlAvailability:
+          type: boolean
+        downloadUrlStatusCodes:
+          type: boolean
+    ValidationCsv:
+      type: object
+      properties:
+        passed:
+          type: boolean
+        item_count:
+          type: integer
+        row_count:
+          type: integer
+        errors:
+          type: object
+          properties:
+            count:
+              type: integer
+            items:
+              type: array
+              items:
+                $ref: '#/components/schemas/IndicatorItem'
+        warnings:
+          type: object
+          properties:
+            count:
+              type: integer
+            items:
+              type: array
+              items:
+                $ref: '#/components/schemas/IndicatorItem'
+        infos:
+          type: object
+          properties:
+            count:
+              type: integer
+            items:
+              type: array
+              items:
+                $ref: '#/components/schemas/IndicatorItem'
+    DistributionReusability:
+      description: Reusability metrics
+      type: object
+      properties:
+        licenceAvailability:
+          type: boolean
+    IndicatorItem:
+      type: object
+      properties:
+        row:
+          type: integer
+        column:
+          type: integer
+        columnName:
+          type: string
+        message:
+          type: string
+        message_header:
+          type: string
+        indicator:
+          type: string
+    DistributionMetrics:
+      type: object
+      properties:
+        info:
+          $ref: '#/components/schemas/DistributionInfo'
+        accessibility:
+          $ref: '#/components/schemas/DistributionAccessibility'
+        interoperability:
+          $ref: '#/components/schemas/DistributionInteroperability'
+        resusability:
+          $ref: '#/components/schemas/DistributionReusability'
+        contextuality:
+          $ref: '#/components/schemas/DistributionContextuality'
+        validation:
+          $ref: '#/components/schemas/ValidationCsv'
+  securitySchemes:
+    ApiKeyAuth:
+      type: apiKey
+      in: header
+      name: X-API-Key
+    BearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+x-refined-from:
+- eu-open-data-portal-hub-repo-openapi.yaml
+- eu-open-data-portal-mqa-metrics-cache-openapi.yaml

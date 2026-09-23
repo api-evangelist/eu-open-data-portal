@@ -1,0 +1,17 @@
+openapi: 3.2.0
+info:
+  title: hub statistics Test API
+  version: v1.3
+tags:
+- name: Test
+paths:
+  /test:
+    put:
+      description: Execute a test case for data upload.
+      responses: {}
+      tags:
+      - Test
+      summary: Replace test
+      x-summary-source: derived
+      operationId: putTest
+      x-operation-id-source: derived

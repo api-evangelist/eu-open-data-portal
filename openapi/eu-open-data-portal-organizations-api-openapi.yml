@@ -1,0 +1,420 @@
+openapi: 3.2.0
+info:
+  title: Eu Open Data Portal Organizations API
+  x-logo:
+    url: images/logo
+  version: '1.0'
+  description: 'Operations tagged Organizations across 2 of this provider''s published API definitions: eu-open-data-portal-hub-repo-openapi.yaml, eu-open-data-portal-hub-search-openapi.yaml. Each path carries the servers of the definition it was published in.'
+tags:
+- name: Organizations
+  x-displayName: Organizations
+paths:
+  /organizations:
+    get:
+      summary: List organizations
+      operationId: listOrganizations
+      tags:
+      - Organizations
+      parameters:
+      - $ref: '#/components/parameters/ValueType'
+      - $ref: '#/components/parameters/Offset'
+      - $ref: '#/components/parameters/Limit'
+      responses:
+        '200':
+          $ref: '#/components/responses/RDFLIST200'
+        '400':
+          description: Bad Request
+    head:
+      summary: Headers only for "List organizations"
+      operationId: headListOrganizations
+      tags:
+      - Organizations
+      parameters:
+      - $ref: '#/components/parameters/ValueType'
+      - $ref: '#/components/parameters/Offset'
+      - $ref: '#/components/parameters/Limit'
+      responses:
+        '200':
+          description: Headers of list organizations
+        '400':
+          description: Bad Request
+    post:
+      summary: Create an organization
+      operationId: postOrganization
+      tags:
+      - Organizations
+      security:
+      - ApiKeyAuth: []
+      requestBody:
+        $ref: '#/components/requestBodies/RDFBody_2'
+      responses:
+        '201':
+          description: Created
+        '202':
+          description: Accepted
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+  /organizations/{organizationId}:
+    parameters:
+    - $ref: '#/components/parameters/OrganizationId'
+    get:
+      summary: Get organization
+      operationId: getOrganization
+      tags:
+      - Organizations
+      responses:
+        '200':
+          $ref: '#/components/responses/RDF200'
+        '404':
+          description: Organization Not Found
+    head:
+      summary: Headers only for "Get organization"
+      operationId: headGetOrganization
+      tags:
+      - Organizations
+      responses:
+        '200':
+          description: Headers of get organization
+        '404':
+          description: Organization Not Found
+    put:
+      summary: Create or update organization
+      operationId: putOrganization
+      tags:
+      - Organizations
+      security:
+      - ApiKeyAuth: []
+      - BearerAuth: []
+      requestBody:
+        $ref: '#/components/requestBodies/RDFBody'
+      responses:
+        '201':
+          description: Organization created
+          headers:
+            Location:
+              $ref: '#/components/headers/LocationURIRef'
+        '204':
+          description: Organization updated
+        '400':
+          description: Bad Request
+        '401':
+          description: Unauthorized
+        '403':
+          description: Forbidden
+    delete:
+      summary: Delete organization
+      operationId: deleteOrganization
+      tags:
+      - Organizations
+      security:
+      - ApiKeyAuth: []
+      - BearerAuth: []
+      responses:
+        '204':
+          description: Organization deleted
+        '401':
+          description: Unauthorized
+        '403':
+          description: Forbidden
+        '404':
+          description: Organization Not Found
+  /organizations/{id}:
+    get:
+      summary: Get an organization
+      operationId: readOrganization
+      tags:
+      - Organizations
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: Success
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+    put:
+      summary: Create or Update an Organization
+      operationId: putOrganization
+      tags:
+      - Organizations
+      security:
+      - ApiKeyAuth: []
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+      requestBody:
+        $ref: '#/components/requestBodies/RDFBody_2'
+      responses:
+        '201':
+          description: Organization created or updated successfully
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+    delete:
+      summary: Delete an organization
+      operationId: deleteOrganization
+      tags:
+      - Organizations
+      security:
+      - ApiKeyAuth: []
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        '204':
+          description: Deleted
+        '202':
+          description: Accepted
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+    servers:
+    - url: ''
+components:
+  headers:
+    LocationURIRef:
+      description: The final URIRef
+      schema:
+        type: string
+        format: uri
+  requestBodies:
+    RDFBody:
+      required: true
+      content:
+        application/rdf+xml:
+          schema:
+            type: string
+            format: binary
+        application/ld+json:
+          schema:
+            type: string
+            format: binary
+        application/n-triples:
+          schema:
+            type: string
+            format: binary
+        application/n-quads:
+          schema:
+            type: string
+            format: binary
+        application/trig:
+          schema:
+            type: string
+            format: binary
+        application/trix:
+          schema:
+            type: string
+            format: binary
+        text/turtle:
+          schema:
+            type: string
+            format: binary
+        text/n3:
+          schema:
+            type: string
+            format: binary
+    RDFBody_2:
+      required: true
+      content:
+        application/ld+json:
+          schema:
+            type: object
+        application/n-triples:
+          schema:
+            type: string
+        application/n-quads:
+          schema:
+            type: string
+        application/trig:
+          schema:
+            type: string
+        application/trix:
+          schema:
+            type: string
+        text/turtle:
+          schema:
+            type: string
+        text/n3:
+          schema:
+            type: string
+  parameters:
+    OrganizationId:
+      name: organizationId
+      description: The organization id
+      in: path
+      required: true
+      schema:
+        type: string
+        pattern: '[a-z,0-9,-]+'
+    Offset:
+      name: offset
+      in: query
+      schema:
+        type: number
+        format: int64
+        default: 0
+        minimum: 0
+    ValueType:
+      name: valueType
+      in: query
+      description: Return value type. In case of `urifRefs` and `identifiers` Accept header will be ignored and the return type will always be a JSON array
+      schema:
+        type: string
+        enum:
+        - uriRefs
+        - identifiers
+        - originalIds
+        - metadata
+        default: uriRefs
+    Limit:
+      name: limit
+      in: query
+      schema:
+        type: number
+        format: int64
+        default: 100
+        minimum: 1
+        maximum: 5000
+  responses:
+    RDFLIST200:
+      description: The list of resource(s)
+      content:
+        application/json:
+          schema:
+            type: array
+            items:
+              type: string
+        application/rdf+xml:
+          schema:
+            type: string
+            format: binary
+        application/ld+json:
+          schema:
+            type: string
+            format: binary
+        application/n-triples:
+          schema:
+            type: string
+            format: binary
+        application/n-quads:
+          schema:
+            type: string
+            format: binary
+        application/trig:
+          schema:
+            type: string
+            format: binary
+        application/trix:
+          schema:
+            type: string
+            format: binary
+        text/turtle:
+          schema:
+            type: string
+            format: binary
+        text/n3:
+          schema:
+            type: string
+            format: binary
+    RDF200:
+      description: The resource graph(s)
+      content:
+        application/rdf+xml:
+          schema:
+            type: string
+            format: binary
+        application/ld+json:
+          schema:
+            type: string
+            format: binary
+        application/n-triples:
+          schema:
+            type: string
+            format: binary
+        application/n-quads:
+          schema:
+            type: string
+            format: binary
+        application/trig:
+          schema:
+            type: string
+            format: binary
+        application/trix:
+          schema:
+            type: string
+            format: binary
+        text/turtle:
+          schema:
+            type: string
+            format: binary
+        text/n3:
+          schema:
+            type: string
+            format: binary
+    BadRequest:
+      description: Validation error / Bad request
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              success:
+                type: boolean
+                default: false
+              message:
+                type: string
+    NotFound:
+      description: Not found
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              success:
+                type: boolean
+                default: false
+              message:
+                type: string
+    InternalServerError:
+      description: Internal Server Error
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              success:
+                type: boolean
+                default: false
+              message:
+                type: string
+  securitySchemes:
+    ApiKeyAuth:
+      type: apiKey
+      in: header
+      name: X-API-Key
+    BearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+x-refined-from:
+- eu-open-data-portal-hub-repo-openapi.yaml
+- eu-open-data-portal-hub-search-openapi.yaml
