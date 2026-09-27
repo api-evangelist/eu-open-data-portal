@@ -143,7 +143,7 @@ paths:
           $ref: '#/components/responses/InternalServerError'
     put:
       summary: Create or Update an Organization
-      operationId: putOrganization
+      operationId: putOrganizationsById
       tags:
       - Organizations
       security:
@@ -163,9 +163,11 @@ paths:
           $ref: '#/components/responses/BadRequest'
         '500':
           $ref: '#/components/responses/InternalServerError'
+      x-operation-id-source: normalized
+      x-operation-id-original: putOrganization
     delete:
       summary: Delete an organization
-      operationId: deleteOrganization
+      operationId: deleteOrganizationsById
       tags:
       - Organizations
       security:
@@ -187,15 +189,49 @@ paths:
           $ref: '#/components/responses/NotFound'
         '500':
           $ref: '#/components/responses/InternalServerError'
+      x-operation-id-source: normalized
+      x-operation-id-original: deleteOrganization
     servers:
     - url: ''
 components:
-  headers:
-    LocationURIRef:
-      description: The final URIRef
+  parameters:
+    Offset:
+      name: offset
+      in: query
+      schema:
+        type: number
+        format: int64
+        default: 0
+        minimum: 0
+    ValueType:
+      name: valueType
+      in: query
+      description: Return value type. In case of `urifRefs` and `identifiers` Accept header will be ignored and the return type will always be a JSON array
       schema:
         type: string
-        format: uri
+        enum:
+        - uriRefs
+        - identifiers
+        - originalIds
+        - metadata
+        default: uriRefs
+    OrganizationId:
+      name: organizationId
+      description: The organization id
+      in: path
+      required: true
+      schema:
+        type: string
+        pattern: '[a-z,0-9,-]+'
+    Limit:
+      name: limit
+      in: query
+      schema:
+        type: number
+        format: int64
+        default: 100
+        minimum: 1
+        maximum: 5000
   requestBodies:
     RDFBody:
       required: true
@@ -256,45 +292,42 @@ components:
         text/n3:
           schema:
             type: string
-  parameters:
-    OrganizationId:
-      name: organizationId
-      description: The organization id
-      in: path
-      required: true
-      schema:
-        type: string
-        pattern: '[a-z,0-9,-]+'
-    Offset:
-      name: offset
-      in: query
-      schema:
-        type: number
-        format: int64
-        default: 0
-        minimum: 0
-    ValueType:
-      name: valueType
-      in: query
-      description: Return value type. In case of `urifRefs` and `identifiers` Accept header will be ignored and the return type will always be a JSON array
-      schema:
-        type: string
-        enum:
-        - uriRefs
-        - identifiers
-        - originalIds
-        - metadata
-        default: uriRefs
-    Limit:
-      name: limit
-      in: query
-      schema:
-        type: number
-        format: int64
-        default: 100
-        minimum: 1
-        maximum: 5000
   responses:
+    RDF200:
+      description: The resource graph(s)
+      content:
+        application/rdf+xml:
+          schema:
+            type: string
+            format: binary
+        application/ld+json:
+          schema:
+            type: string
+            format: binary
+        application/n-triples:
+          schema:
+            type: string
+            format: binary
+        application/n-quads:
+          schema:
+            type: string
+            format: binary
+        application/trig:
+          schema:
+            type: string
+            format: binary
+        application/trix:
+          schema:
+            type: string
+            format: binary
+        text/turtle:
+          schema:
+            type: string
+            format: binary
+        text/n3:
+          schema:
+            type: string
+            format: binary
     RDFLIST200:
       description: The list of resource(s)
       content:
@@ -335,43 +368,8 @@ components:
           schema:
             type: string
             format: binary
-    RDF200:
-      description: The resource graph(s)
-      content:
-        application/rdf+xml:
-          schema:
-            type: string
-            format: binary
-        application/ld+json:
-          schema:
-            type: string
-            format: binary
-        application/n-triples:
-          schema:
-            type: string
-            format: binary
-        application/n-quads:
-          schema:
-            type: string
-            format: binary
-        application/trig:
-          schema:
-            type: string
-            format: binary
-        application/trix:
-          schema:
-            type: string
-            format: binary
-        text/turtle:
-          schema:
-            type: string
-            format: binary
-        text/n3:
-          schema:
-            type: string
-            format: binary
-    BadRequest:
-      description: Validation error / Bad request
+    NotFound:
+      description: Not found
       content:
         application/json:
           schema:
@@ -382,8 +380,8 @@ components:
                 default: false
               message:
                 type: string
-    NotFound:
-      description: Not found
+    BadRequest:
+      description: Validation error / Bad request
       content:
         application/json:
           schema:
@@ -406,6 +404,12 @@ components:
                 default: false
               message:
                 type: string
+  headers:
+    LocationURIRef:
+      description: The final URIRef
+      schema:
+        type: string
+        format: uri
   securitySchemes:
     ApiKeyAuth:
       type: apiKey

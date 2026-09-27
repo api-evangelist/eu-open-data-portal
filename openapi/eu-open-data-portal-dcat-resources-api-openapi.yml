@@ -474,36 +474,7 @@ paths:
         '404':
           description: DCAT resource or its metrics not found
 components:
-  headers:
-    LocationURIRef:
-      description: The final URIRef
-      schema:
-        type: string
-        format: uri
   parameters:
-    ResourceId:
-      name: resourceId
-      description: The DCAT resource id
-      in: path
-      required: true
-      schema:
-        type: string
-        pattern: '[a-z,0-9,-,~]+'
-    UsePagedCollection:
-      name: usePagedCollection
-      in: query
-      description: Set to 'true' to use the legacy PagedCollection format for pagination. By default, the response will use the updated PartialCollectionView format. This parameter is provided for backward compatibility with clients that expect the old format.
-      schema:
-        type: boolean
-        default: false
-    CatalogueId:
-      name: catalogueId
-      description: The catalogue id
-      in: path
-      required: true
-      schema:
-        type: string
-        pattern: '[a-z,0-9,-]+'
     Offset:
       name: offset
       in: query
@@ -512,6 +483,14 @@ components:
         format: int64
         default: 0
         minimum: 0
+    CatalogueId:
+      name: catalogueId
+      description: The catalogue id
+      in: path
+      required: true
+      schema:
+        type: string
+        pattern: '[a-z,0-9,-]+'
     ValueType:
       name: valueType
       in: query
@@ -533,6 +512,21 @@ components:
         default: 100
         minimum: 1
         maximum: 5000
+    UsePagedCollection:
+      name: usePagedCollection
+      in: query
+      description: Set to 'true' to use the legacy PagedCollection format for pagination. By default, the response will use the updated PartialCollectionView format. This parameter is provided for backward compatibility with clients that expect the old format.
+      schema:
+        type: boolean
+        default: false
+    ResourceId:
+      name: resourceId
+      description: The DCAT resource id
+      in: path
+      required: true
+      schema:
+        type: string
+        pattern: '[a-z,0-9,-,~]+'
   requestBodies:
     RDFBody:
       required: true
@@ -570,6 +564,41 @@ components:
             type: string
             format: binary
   responses:
+    RDF200:
+      description: The resource graph(s)
+      content:
+        application/rdf+xml:
+          schema:
+            type: string
+            format: binary
+        application/ld+json:
+          schema:
+            type: string
+            format: binary
+        application/n-triples:
+          schema:
+            type: string
+            format: binary
+        application/n-quads:
+          schema:
+            type: string
+            format: binary
+        application/trig:
+          schema:
+            type: string
+            format: binary
+        application/trix:
+          schema:
+            type: string
+            format: binary
+        text/turtle:
+          schema:
+            type: string
+            format: binary
+        text/n3:
+          schema:
+            type: string
+            format: binary
     RDFLIST200:
       description: The list of resource(s)
       content:
@@ -610,41 +639,12 @@ components:
           schema:
             type: string
             format: binary
-    RDF200:
-      description: The resource graph(s)
-      content:
-        application/rdf+xml:
-          schema:
-            type: string
-            format: binary
-        application/ld+json:
-          schema:
-            type: string
-            format: binary
-        application/n-triples:
-          schema:
-            type: string
-            format: binary
-        application/n-quads:
-          schema:
-            type: string
-            format: binary
-        application/trig:
-          schema:
-            type: string
-            format: binary
-        application/trix:
-          schema:
-            type: string
-            format: binary
-        text/turtle:
-          schema:
-            type: string
-            format: binary
-        text/n3:
-          schema:
-            type: string
-            format: binary
+  headers:
+    LocationURIRef:
+      description: The final URIRef
+      schema:
+        type: string
+        format: uri
   securitySchemes:
     ApiKeyAuth:
       type: apiKey

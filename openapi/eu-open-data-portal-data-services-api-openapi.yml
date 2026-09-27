@@ -90,6 +90,21 @@ paths:
           $ref: '#/components/responses/InternalServerError'
 components:
   responses:
+    DatasetSuccessId:
+      description: Dataset response ID
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              success:
+                type: boolean
+                default: true
+              result:
+                type: object
+                properties:
+                  id:
+                    type: string
     BadRequest:
       description: Validation error / Bad request
       content:
@@ -114,18 +129,6 @@ components:
                 default: false
               message:
                 type: string
-    NotFound:
-      description: Not found
-      content:
-        application/json:
-          schema:
-            type: object
-            properties:
-              success:
-                type: boolean
-                default: false
-              message:
-                type: string
     DataServiceSuccess:
       description: DataService response object
       content:
@@ -138,8 +141,8 @@ components:
                 default: true
               result:
                 $ref: '#/components/schemas/DataService'
-    DatasetSuccessId:
-      description: Dataset response ID
+    NotFound:
+      description: Not found
       content:
         application/json:
           schema:
@@ -147,12 +150,34 @@ components:
             properties:
               success:
                 type: boolean
-                default: true
-              result:
-                type: object
-                properties:
-                  id:
-                    type: string
+                default: false
+              message:
+                type: string
+  requestBodies:
+    RDFBody:
+      required: true
+      content:
+        application/ld+json:
+          schema:
+            type: object
+        application/n-triples:
+          schema:
+            type: string
+        application/n-quads:
+          schema:
+            type: string
+        application/trig:
+          schema:
+            type: string
+        application/trix:
+          schema:
+            type: string
+        text/turtle:
+          schema:
+            type: string
+        text/n3:
+          schema:
+            type: string
   schemas:
     DataService:
       description: Base model for a data service
@@ -432,31 +457,6 @@ components:
         endpoint_url:
           type: array
           items:
-            type: string
-  requestBodies:
-    RDFBody:
-      required: true
-      content:
-        application/ld+json:
-          schema:
-            type: object
-        application/n-triples:
-          schema:
-            type: string
-        application/n-quads:
-          schema:
-            type: string
-        application/trig:
-          schema:
-            type: string
-        application/trix:
-          schema:
-            type: string
-        text/turtle:
-          schema:
-            type: string
-        text/n3:
-          schema:
             type: string
   securitySchemes:
     ApiKeyAuth:

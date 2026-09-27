@@ -84,6 +84,21 @@ paths:
           $ref: '#/components/responses/InternalServerError'
 components:
   responses:
+    DatasetSuccessId:
+      description: Dataset response ID
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              success:
+                type: boolean
+                default: true
+              result:
+                type: object
+                properties:
+                  id:
+                    type: string
     BadRequest:
       description: Validation error / Bad request
       content:
@@ -108,33 +123,6 @@ components:
                 default: false
               message:
                 type: string
-    NotFound:
-      description: Not found
-      content:
-        application/json:
-          schema:
-            type: object
-            properties:
-              success:
-                type: boolean
-                default: false
-              message:
-                type: string
-    DatasetSuccessId:
-      description: Dataset response ID
-      content:
-        application/json:
-          schema:
-            type: object
-            properties:
-              success:
-                type: boolean
-                default: true
-              result:
-                type: object
-                properties:
-                  id:
-                    type: string
     DatasetSeriesSuccess:
       description: Dataset Series response object
       content:
@@ -147,6 +135,18 @@ components:
                 default: true
               result:
                 type: object
+    NotFound:
+      description: Not found
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              success:
+                type: boolean
+                default: false
+              message:
+                type: string
   requestBodies:
     RDFBody:
       required: true

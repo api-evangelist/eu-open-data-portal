@@ -280,9 +280,9 @@ paths:
         '404':
           description: Custom resource type or resource id not found.
 components:
-  requestBodies:
-    RDFBody:
-      required: true
+  responses:
+    RDF200:
+      description: The resource graph(s)
       content:
         application/rdf+xml:
           schema:
@@ -316,7 +316,6 @@ components:
           schema:
             type: string
             format: binary
-  responses:
     RDFLIST200:
       description: The list of resource(s)
       content:
@@ -357,8 +356,9 @@ components:
           schema:
             type: string
             format: binary
-    RDF200:
-      description: The resource graph(s)
+  requestBodies:
+    RDFBody:
+      required: true
       content:
         application/rdf+xml:
           schema:

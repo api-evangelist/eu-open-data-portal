@@ -194,7 +194,7 @@ paths:
     put:
       description: This function is reserved for internal use only and is not part of our public API offerings. You must be authorized for this operation. As an authorized user you can create or update a vocabulary, sending PUT request to the specified URL of the API endpoint with the resource path "vocabularies/{vocabulary}" at the end of the URL. Set the unique ID of the vocabulary as {vocabulary} element of the URL, if the vocabulary ID already exists, the vocabulary is updated.
       summary: Create or Update a vocabulary
-      operationId: createOrUpdateVocabulary
+      operationId: putVocabulariesByVocabulary
       tags:
       - Vocabularies
       security:
@@ -231,10 +231,12 @@ paths:
           $ref: '#/components/responses/NotFound'
         '500':
           $ref: '#/components/responses/InternalServerError'
+      x-operation-id-source: normalized
+      x-operation-id-original: createOrUpdateVocabulary
     delete:
       description: This function is reserved for internal use only and is not part of our public API offerings. You must be authorized for this operation. As an authorized user you can delete a vocabulary by sending your DELETE request to the specified URL of the API endpoint with the resource path "/vocabularies/{vocabulary}". Set the {vocabulary} as the unique ID of the vocabulary you want to delete.
       summary: Delete a vocabulary
-      operationId: deleteVocabulary
+      operationId: deleteVocabulariesByVocabulary
       tags:
       - Vocabularies
       security:
@@ -257,6 +259,8 @@ paths:
           $ref: '#/components/responses/NotFound'
         '500':
           $ref: '#/components/responses/InternalServerError'
+      x-operation-id-source: normalized
+      x-operation-id-original: deleteVocabulary
     post:
       description: This function is reserved for internal use only and is not part of our public API offerings. You must be authorized for this operation. As an authorized user you can add a term to a vocabulary sending a POST request to the specified URL of the API endpoint with the resource path "/vocabularies/{vocabulary}". Set the unique ID of the vocabulary as {vocabulary} element of the URL.
       summary: Create a vocable
@@ -481,14 +485,6 @@ paths:
     - url: ''
 components:
   parameters:
-    VocabularyId:
-      name: vocabularyId
-      description: The vocabulary id
-      in: path
-      required: true
-      schema:
-        type: string
-        pattern: ^[a-z0-9\-~]+$
     Offset:
       name: offset
       in: query
@@ -518,12 +514,14 @@ components:
         default: 100
         minimum: 1
         maximum: 5000
-  headers:
-    LocationURIRef:
-      description: The final URIRef
+    VocabularyId:
+      name: vocabularyId
+      description: The vocabulary id
+      in: path
+      required: true
       schema:
         type: string
-        format: uri
+        pattern: ^[a-z0-9\-~]+$
   requestBodies:
     RDFBody:
       required: true
@@ -561,6 +559,41 @@ components:
             type: string
             format: binary
   responses:
+    RDF200:
+      description: The resource graph(s)
+      content:
+        application/rdf+xml:
+          schema:
+            type: string
+            format: binary
+        application/ld+json:
+          schema:
+            type: string
+            format: binary
+        application/n-triples:
+          schema:
+            type: string
+            format: binary
+        application/n-quads:
+          schema:
+            type: string
+            format: binary
+        application/trig:
+          schema:
+            type: string
+            format: binary
+        application/trix:
+          schema:
+            type: string
+            format: binary
+        text/turtle:
+          schema:
+            type: string
+            format: binary
+        text/n3:
+          schema:
+            type: string
+            format: binary
     RDFLIST200:
       description: The list of resource(s)
       content:
@@ -601,41 +634,21 @@ components:
           schema:
             type: string
             format: binary
-    RDF200:
-      description: The resource graph(s)
+    VocableSuccessId:
+      description: Vocabulary response object
       content:
-        application/rdf+xml:
+        application/json:
           schema:
-            type: string
-            format: binary
-        application/ld+json:
-          schema:
-            type: string
-            format: binary
-        application/n-triples:
-          schema:
-            type: string
-            format: binary
-        application/n-quads:
-          schema:
-            type: string
-            format: binary
-        application/trig:
-          schema:
-            type: string
-            format: binary
-        application/trix:
-          schema:
-            type: string
-            format: binary
-        text/turtle:
-          schema:
-            type: string
-            format: binary
-        text/n3:
-          schema:
-            type: string
-            format: binary
+            type: object
+            properties:
+              success:
+                type: boolean
+                default: true
+              result:
+                type: object
+                properties:
+                  id:
+                    type: string
     BadRequest:
       description: Validation error / Bad request
       content:
@@ -648,19 +661,7 @@ components:
                 default: false
               message:
                 type: string
-    VocableSuccess:
-      description: Vocabulary response object
-      content:
-        application/json:
-          schema:
-            type: object
-            properties:
-              success:
-                type: boolean
-                default: true
-              result:
-                $ref: '#/components/schemas/Vocable'
-    VocableSuccessId:
+    VocabularySuccessId:
       description: Vocabulary response object
       content:
         application/json:
@@ -687,21 +688,6 @@ components:
                 default: false
               message:
                 type: string
-    VocabularySuccessId:
-      description: Vocabulary response object
-      content:
-        application/json:
-          schema:
-            type: object
-            properties:
-              success:
-                type: boolean
-                default: true
-              result:
-                type: object
-                properties:
-                  id:
-                    type: string
     NotFound:
       description: Not found
       content:
@@ -734,17 +720,25 @@ components:
                       type: string
                     id:
                       type: string
+    VocableSuccess:
+      description: Vocabulary response object
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              success:
+                type: boolean
+                default: true
+              result:
+                $ref: '#/components/schemas/Vocable'
+  headers:
+    LocationURIRef:
+      description: The final URIRef
+      schema:
+        type: string
+        format: uri
   schemas:
-    Vocabulary:
-      description: A representation of a Vocabulary
-      type: object
-      required:
-      - vocab
-      properties:
-        vocab:
-          type: array
-          items:
-            $ref: '#/components/schemas/Vocable'
     Vocable:
       description: A representation of a vocable
       type: object
@@ -757,6 +751,16 @@ components:
             type: string
         resource:
           type: string
+    Vocabulary:
+      description: A representation of a Vocabulary
+      type: object
+      required:
+      - vocab
+      properties:
+        vocab:
+          type: array
+          items:
+            $ref: '#/components/schemas/Vocable'
   securitySchemes:
     ApiKeyAuth:
       type: apiKey
