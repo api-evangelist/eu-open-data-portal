@@ -142,6 +142,614 @@ paths:
           description: Country not found
 components:
   schemas:
+    Reusability:
+      description: Reusability metrics
+      type: object
+      properties:
+        licenceAvailability:
+          type: array
+          items:
+            $ref: '#/components/schemas/NamedPercentage'
+          example:
+          - name: 'yes'
+            percentage: 55.0
+          - name: 'no'
+            percentage: 45.0
+        licenceAlignment:
+          type: array
+          items:
+            $ref: '#/components/schemas/NamedPercentage'
+          example:
+          - name: 'yes'
+            percentage: 55.0
+          - name: 'no'
+            percentage: 45.0
+        accessRightsAvailability:
+          type: array
+          items:
+            $ref: '#/components/schemas/NamedPercentage'
+          example:
+          - name: 'yes'
+            percentage: 55.0
+          - name: 'no'
+            percentage: 45.0
+        accessRightsAlignment:
+          type: array
+          items:
+            $ref: '#/components/schemas/NamedPercentage'
+          example:
+          - name: 'yes'
+            percentage: 55.0
+          - name: 'no'
+            percentage: 45.0
+        contactPointAvailability:
+          type: array
+          items:
+            $ref: '#/components/schemas/NamedPercentage'
+          example:
+          - name: 'yes'
+            percentage: 55.0
+          - name: 'no'
+            percentage: 45.0
+        publisherAvailability:
+          type: array
+          items:
+            $ref: '#/components/schemas/NamedPercentage'
+          example:
+          - name: 'yes'
+            percentage: 55.0
+          - name: 'no'
+            percentage: 45.0
+        score:
+          description: The aggregated score
+          type: object
+          items:
+            $ref: '#/components/schemas/PointPercentageMax'
+          example:
+            point: 55.0
+            percentage: 55.0
+            max: 80.0
+    Findability:
+      description: Findability metrics
+      type: object
+      properties:
+        keywordAvailability:
+          type: array
+          items:
+            $ref: '#/components/schemas/NamedPercentage'
+          example:
+          - name: 'yes'
+            percentage: 55.0
+          - name: 'no'
+            percentage: 45.0
+        categoryAvailability:
+          type: array
+          items:
+            $ref: '#/components/schemas/NamedPercentage'
+          example:
+          - name: 'yes'
+            percentage: 55.0
+          - name: 'no'
+            percentage: 45.0
+        spatialAvailability:
+          type: array
+          items:
+            $ref: '#/components/schemas/NamedPercentage'
+          example:
+          - name: 'yes'
+            percentage: 55.0
+          - name: 'no'
+            percentage: 45.0
+        temporalAvailability:
+          type: array
+          items:
+            $ref: '#/components/schemas/NamedPercentage'
+          example:
+          - name: 'yes'
+            percentage: 55.0
+          - name: 'no'
+            percentage: 45.0
+        score:
+          description: The aggregated score
+          type: object
+          items:
+            $ref: '#/components/schemas/PointPercentageMax'
+          example:
+            point: 55.0
+            percentage: 55.0
+            max: 80.0
+    HistoricNamedPercentages:
+      description: A history of named percentages.
+      type: object
+      additionalProperties:
+        $ref: '#/components/schemas/NamedPercentage'
+      minProperties: 1
+    NamedPercentage:
+      description: Named percentage
+      type: object
+      properties:
+        name:
+          type: string
+          example: 'yes'
+        percentage:
+          type: number
+          format: double
+          example: 50.5
+    HistoricFindability:
+      description: Findability metrics
+      type: object
+      properties:
+        keywordAvailability:
+          type: array
+          items:
+            $ref: '#/components/schemas/HistoricNamedPercentages'
+          example:
+          - '2020-03-02':
+            - name: 'yes'
+              percentage: 55.0
+            - name: 'no'
+              percentage: 45.0
+          - '2020-03-03':
+            - name: 'yes'
+              percentage: 33.0
+            - name: 'no'
+              percentage: 67.0
+          - '2020-03-04':
+            - name: 'yes'
+              percentage: 82.5
+            - name: 'no'
+              percentage: 17.5
+        categoryAvailability:
+          type: array
+          items:
+            $ref: '#/components/schemas/HistoricNamedPercentages'
+          example:
+          - '2020-03-02':
+            - name: 'yes'
+              percentage: 55.0
+            - name: 'no'
+              percentage: 45.0
+          - '2020-03-03':
+            - name: 'yes'
+              percentage: 33.0
+            - name: 'no'
+              percentage: 67.0
+          - '2020-03-04':
+            - name: 'yes'
+              percentage: 82.5
+            - name: 'no'
+              percentage: 17.5
+        spatialAvailability:
+          type: array
+          items:
+            $ref: '#/components/schemas/HistoricNamedPercentages'
+          example:
+          - '2020-03-02':
+            - name: 'yes'
+              percentage: 55.0
+            - name: 'no'
+              percentage: 45.0
+          - '2020-03-03':
+            - name: 'yes'
+              percentage: 33.0
+            - name: 'no'
+              percentage: 67.0
+          - '2020-03-04':
+            - name: 'yes'
+              percentage: 82.5
+            - name: 'no'
+              percentage: 17.5
+        temporalAvailability:
+          type: array
+          items:
+            $ref: '#/components/schemas/HistoricNamedPercentages'
+          example:
+          - '2020-03-02':
+            - name: 'yes'
+              percentage: 55.0
+            - name: 'no'
+              percentage: 45.0
+          - '2020-03-03':
+            - name: 'yes'
+              percentage: 33.0
+            - name: 'no'
+              percentage: 67.0
+          - '2020-03-04':
+            - name: 'yes'
+              percentage: 82.5
+            - name: 'no'
+              percentage: 17.5
+        score:
+          $ref: '#/components/schemas/HistoricScore'
+    HistoricCountryMetrics:
+      type: object
+      properties:
+        info:
+          type: string
+          example: DEU
+        findability:
+          $ref: '#/components/schemas/HistoricFindability'
+        accessibility:
+          $ref: '#/components/schemas/HistoricAccessibility'
+        interoperability:
+          $ref: '#/components/schemas/HistoricInteroperability'
+        resusability:
+          $ref: '#/components/schemas/HistoricReusability'
+        contextuality:
+          $ref: '#/components/schemas/HistoricContextuality'
+        score:
+          $ref: '#/components/schemas/HistoricScore'
+    HistoricReusability:
+      description: Reusability metrics
+      type: object
+      properties:
+        licenceAvailability:
+          type: array
+          items:
+            $ref: '#/components/schemas/HistoricNamedPercentages'
+          example:
+          - '2020-03-02':
+            - name: 'yes'
+              percentage: 55.0
+            - name: 'no'
+              percentage: 45.0
+          - '2020-03-03':
+            - name: 'yes'
+              percentage: 33.0
+            - name: 'no'
+              percentage: 67.0
+          - '2020-03-04':
+            - name: 'yes'
+              percentage: 82.5
+            - name: 'no'
+              percentage: 17.5
+        licenceAlignment:
+          type: array
+          items:
+            $ref: '#/components/schemas/HistoricNamedPercentages'
+          example:
+          - '2020-03-02':
+            - name: 'yes'
+              percentage: 55.0
+            - name: 'no'
+              percentage: 45.0
+          - '2020-03-03':
+            - name: 'yes'
+              percentage: 33.0
+            - name: 'no'
+              percentage: 67.0
+          - '2020-03-04':
+            - name: 'yes'
+              percentage: 82.5
+            - name: 'no'
+              percentage: 17.5
+        accessRightsAvailability:
+          type: array
+          items:
+            $ref: '#/components/schemas/HistoricNamedPercentages'
+          example:
+          - '2020-03-02':
+            - name: 'yes'
+              percentage: 55.0
+            - name: 'no'
+              percentage: 45.0
+          - '2020-03-03':
+            - name: 'yes'
+              percentage: 33.0
+            - name: 'no'
+              percentage: 67.0
+          - '2020-03-04':
+            - name: 'yes'
+              percentage: 82.5
+            - name: 'no'
+              percentage: 17.5
+        accessRightsAlignment:
+          type: array
+          items:
+            $ref: '#/components/schemas/HistoricNamedPercentages'
+          example:
+          - '2020-03-02':
+            - name: 'yes'
+              percentage: 55.0
+            - name: 'no'
+              percentage: 45.0
+          - '2020-03-03':
+            - name: 'yes'
+              percentage: 33.0
+            - name: 'no'
+              percentage: 67.0
+          - '2020-03-04':
+            - name: 'yes'
+              percentage: 82.5
+            - name: 'no'
+              percentage: 17.5
+        contactPointAvailability:
+          type: array
+          items:
+            $ref: '#/components/schemas/HistoricNamedPercentages'
+          example:
+          - '2020-03-02':
+            - name: 'yes'
+              percentage: 55.0
+            - name: 'no'
+              percentage: 45.0
+          - '2020-03-03':
+            - name: 'yes'
+              percentage: 33.0
+            - name: 'no'
+              percentage: 67.0
+          - '2020-03-04':
+            - name: 'yes'
+              percentage: 82.5
+            - name: 'no'
+              percentage: 17.5
+        publisherAvailability:
+          type: array
+          items:
+            $ref: '#/components/schemas/HistoricNamedPercentages'
+          example:
+          - '2020-03-02':
+            - name: 'yes'
+              percentage: 55.0
+            - name: 'no'
+              percentage: 45.0
+          - '2020-03-03':
+            - name: 'yes'
+              percentage: 33.0
+            - name: 'no'
+              percentage: 67.0
+          - '2020-03-04':
+            - name: 'yes'
+              percentage: 82.5
+            - name: 'no'
+              percentage: 17.5
+        score:
+          $ref: '#/components/schemas/HistoricScore'
+    HistoricContextuality:
+      description: Contextuality metrics
+      type: object
+      properties:
+        rightsAvailability:
+          type: array
+          items:
+            $ref: '#/components/schemas/HistoricNamedPercentages'
+          example:
+          - '2020-03-02':
+            - name: 'yes'
+              percentage: 55.0
+            - name: 'no'
+              percentage: 45.0
+          - '2020-03-03':
+            - name: 'yes'
+              percentage: 33.0
+            - name: 'no'
+              percentage: 67.0
+          - '2020-03-04':
+            - name: 'yes'
+              percentage: 82.5
+            - name: 'no'
+              percentage: 17.5
+        byteSizeAvailability:
+          type: array
+          items:
+            $ref: '#/components/schemas/HistoricNamedPercentages'
+          example:
+          - '2020-03-02':
+            - name: 'yes'
+              percentage: 55.0
+            - name: 'no'
+              percentage: 45.0
+          - '2020-03-03':
+            - name: 'yes'
+              percentage: 33.0
+            - name: 'no'
+              percentage: 67.0
+          - '2020-03-04':
+            - name: 'yes'
+              percentage: 82.5
+            - name: 'no'
+              percentage: 17.5
+        dateIssuedAvailability:
+          type: array
+          items:
+            $ref: '#/components/schemas/HistoricNamedPercentages'
+          example:
+          - '2020-03-02':
+            - name: 'yes'
+              percentage: 55.0
+            - name: 'no'
+              percentage: 45.0
+          - '2020-03-03':
+            - name: 'yes'
+              percentage: 33.0
+            - name: 'no'
+              percentage: 67.0
+          - '2020-03-04':
+            - name: 'yes'
+              percentage: 82.5
+            - name: 'no'
+              percentage: 17.5
+        dateModifiedAvailability:
+          type: array
+          items:
+            $ref: '#/components/schemas/HistoricNamedPercentages'
+          example:
+          - '2020-03-02':
+            - name: 'yes'
+              percentage: 55.0
+            - name: 'no'
+              percentage: 45.0
+          - '2020-03-03':
+            - name: 'yes'
+              percentage: 33.0
+            - name: 'no'
+              percentage: 67.0
+          - '2020-03-04':
+            - name: 'yes'
+              percentage: 82.5
+            - name: 'no'
+              percentage: 17.5
+        score:
+          $ref: '#/components/schemas/HistoricScore'
+    Accessibility:
+      description: Accessibility metrics
+      type: object
+      properties:
+        accessUrlStatusCodes:
+          type: array
+          items:
+            $ref: '#/components/schemas/NamedPercentage'
+          example:
+          - name: 200
+            percentage: 92.0
+          - name: 400
+            percentage: 1.0
+          - name: 404
+            percentage: 1.0
+          - name: 1300
+            percentage: 2.0
+          - name: 405
+            percentage: 3.0
+          - name: 1100
+            percentage: 1.0
+        downloadUrlAvailability:
+          type: array
+          items:
+            $ref: '#/components/schemas/NamedPercentage'
+          example:
+          - name: 'yes'
+            percentage: 55.0
+          - name: 'no'
+            percentage: 45.0
+        downloadUrlStatusCodes:
+          type: array
+          items:
+            $ref: '#/components/schemas/NamedPercentage'
+        score:
+          description: The aggregated score
+          type: object
+          items:
+            $ref: '#/components/schemas/PointPercentageMax'
+          example:
+            point: 55.0
+            percentage: 55.0
+            max: 80.0
+    CountryMetrics:
+      type: object
+      properties:
+        info:
+          type: string
+        findability:
+          $ref: '#/components/schemas/Findability'
+        accessibility:
+          $ref: '#/components/schemas/Accessibility'
+        interoperability:
+          $ref: '#/components/schemas/Interoperability'
+        resusability:
+          $ref: '#/components/schemas/Reusability'
+        contextuality:
+          $ref: '#/components/schemas/Contextuality'
+        score:
+          description: The aggregated score
+          type: number
+          format: int32
+    Interoperability:
+      description: Interoperability metrics
+      type: object
+      properties:
+        formatAvailability:
+          type: array
+          items:
+            $ref: '#/components/schemas/NamedPercentage'
+          example:
+          - name: 'yes'
+            percentage: 55.0
+          - name: 'no'
+            percentage: 45.0
+        mediaTypeAvailability:
+          type: array
+          items:
+            $ref: '#/components/schemas/NamedPercentage'
+          example:
+          - name: 'yes'
+            percentage: 55.0
+          - name: 'no'
+            percentage: 45.0
+        formatMediaTypeAlignment:
+          type: array
+          items:
+            $ref: '#/components/schemas/NamedPercentage'
+          example:
+          - name: 'yes'
+            percentage: 55.0
+          - name: 'no'
+            percentage: 45.0
+        formatMediaTypeNonProprietary:
+          type: array
+          items:
+            $ref: '#/components/schemas/NamedPercentage'
+          example:
+          - name: 'yes'
+            percentage: 55.0
+          - name: 'no'
+            percentage: 45.0
+        formatMediaTypeMachineReadable:
+          type: array
+          items:
+            $ref: '#/components/schemas/NamedPercentage'
+          example:
+          - name: 'yes'
+            percentage: 55.0
+          - name: 'no'
+            percentage: 45.0
+        dcatApCompliance:
+          type: array
+          items:
+            $ref: '#/components/schemas/NamedPercentage'
+          example:
+          - name: 'yes'
+            percentage: 55.0
+          - name: 'no'
+            percentage: 45.0
+        score:
+          description: The aggregated score
+          type: object
+          items:
+            $ref: '#/components/schemas/PointPercentageMax'
+          example:
+            point: 55.0
+            percentage: 55.0
+            max: 80.0
+    PointPercentageMax:
+      description: Point Percentage Max
+      type: object
+      properties:
+        point:
+          type: number
+          format: double
+          example: 50.5
+        percentage:
+          type: number
+          format: double
+          example: 50.5
+        max:
+          type: number
+          format: double
+          example: 80.0
+    HistoricScore:
+      description: List of name value pairs, where key is the date and value is the score.
+      type: object
+      properties:
+        score:
+          type: array
+          items:
+            type: object
+            additionalProperties:
+              type: integer
+      example:
+      - '2020-03-02': 200.0
+      - '2020-03-03': 221.0
+      - '2020-03-04': 221.0
     HistoricAccessibility:
       description: Accessibility metrics
       type: object
@@ -172,19 +780,19 @@ components:
             $ref: '#/components/schemas/HistoricNamedPercentages'
           example:
           - '2020-03-02':
-            - name: true
+            - name: 'yes'
               percentage: 55.0
-            - name: false
+            - name: 'no'
               percentage: 45.0
           - '2020-03-03':
-            - name: true
+            - name: 'yes'
               percentage: 33.0
-            - name: false
+            - name: 'no'
               percentage: 67.0
           - '2020-03-04':
-            - name: true
+            - name: 'yes'
               percentage: 82.5
-            - name: false
+            - name: 'no'
               percentage: 17.5
         downloadUrlStatusCodes:
           type: array
@@ -208,285 +816,6 @@ components:
               percentage: 17.5
         score:
           $ref: '#/components/schemas/HistoricScore'
-    HistoricScore:
-      description: List of name value pairs, where key is the date and value is the score.
-      type: object
-      properties:
-        score:
-          type: array
-          items:
-            type: object
-            additionalProperties:
-              type: integer
-      example:
-      - '2020-03-02': 200.0
-      - '2020-03-03': 221.0
-      - '2020-03-04': 221.0
-    Accessibility:
-      description: Accessibility metrics
-      type: object
-      properties:
-        accessUrlStatusCodes:
-          type: array
-          items:
-            $ref: '#/components/schemas/NamedPercentage'
-          example:
-          - name: 200
-            percentage: 92.0
-          - name: 400
-            percentage: 1.0
-          - name: 404
-            percentage: 1.0
-          - name: 1300
-            percentage: 2.0
-          - name: 405
-            percentage: 3.0
-          - name: 1100
-            percentage: 1.0
-        downloadUrlAvailability:
-          type: array
-          items:
-            $ref: '#/components/schemas/NamedPercentage'
-          example:
-          - name: true
-            percentage: 55.0
-          - name: false
-            percentage: 45.0
-        downloadUrlStatusCodes:
-          type: array
-          items:
-            $ref: '#/components/schemas/NamedPercentage'
-        score:
-          description: The aggregated score
-          type: object
-          items:
-            $ref: '#/components/schemas/PointPercentageMax'
-          example:
-            point: 55.0
-            percentage: 55.0
-            max: 80.0
-    HistoricCountryMetrics:
-      type: object
-      properties:
-        info:
-          type: string
-          example: DEU
-        findability:
-          $ref: '#/components/schemas/HistoricFindability'
-        accessibility:
-          $ref: '#/components/schemas/HistoricAccessibility'
-        interoperability:
-          $ref: '#/components/schemas/HistoricInteroperability'
-        resusability:
-          $ref: '#/components/schemas/HistoricReusability'
-        contextuality:
-          $ref: '#/components/schemas/HistoricContextuality'
-        score:
-          $ref: '#/components/schemas/HistoricScore'
-    HistoricReusability:
-      description: Reusability metrics
-      type: object
-      properties:
-        licenceAvailability:
-          type: array
-          items:
-            $ref: '#/components/schemas/HistoricNamedPercentages'
-          example:
-          - '2020-03-02':
-            - name: true
-              percentage: 55.0
-            - name: false
-              percentage: 45.0
-          - '2020-03-03':
-            - name: true
-              percentage: 33.0
-            - name: false
-              percentage: 67.0
-          - '2020-03-04':
-            - name: true
-              percentage: 82.5
-            - name: false
-              percentage: 17.5
-        licenceAlignment:
-          type: array
-          items:
-            $ref: '#/components/schemas/HistoricNamedPercentages'
-          example:
-          - '2020-03-02':
-            - name: true
-              percentage: 55.0
-            - name: false
-              percentage: 45.0
-          - '2020-03-03':
-            - name: true
-              percentage: 33.0
-            - name: false
-              percentage: 67.0
-          - '2020-03-04':
-            - name: true
-              percentage: 82.5
-            - name: false
-              percentage: 17.5
-        accessRightsAvailability:
-          type: array
-          items:
-            $ref: '#/components/schemas/HistoricNamedPercentages'
-          example:
-          - '2020-03-02':
-            - name: true
-              percentage: 55.0
-            - name: false
-              percentage: 45.0
-          - '2020-03-03':
-            - name: true
-              percentage: 33.0
-            - name: false
-              percentage: 67.0
-          - '2020-03-04':
-            - name: true
-              percentage: 82.5
-            - name: false
-              percentage: 17.5
-        accessRightsAlignment:
-          type: array
-          items:
-            $ref: '#/components/schemas/HistoricNamedPercentages'
-          example:
-          - '2020-03-02':
-            - name: true
-              percentage: 55.0
-            - name: false
-              percentage: 45.0
-          - '2020-03-03':
-            - name: true
-              percentage: 33.0
-            - name: false
-              percentage: 67.0
-          - '2020-03-04':
-            - name: true
-              percentage: 82.5
-            - name: false
-              percentage: 17.5
-        contactPointAvailability:
-          type: array
-          items:
-            $ref: '#/components/schemas/HistoricNamedPercentages'
-          example:
-          - '2020-03-02':
-            - name: true
-              percentage: 55.0
-            - name: false
-              percentage: 45.0
-          - '2020-03-03':
-            - name: true
-              percentage: 33.0
-            - name: false
-              percentage: 67.0
-          - '2020-03-04':
-            - name: true
-              percentage: 82.5
-            - name: false
-              percentage: 17.5
-        publisherAvailability:
-          type: array
-          items:
-            $ref: '#/components/schemas/HistoricNamedPercentages'
-          example:
-          - '2020-03-02':
-            - name: true
-              percentage: 55.0
-            - name: false
-              percentage: 45.0
-          - '2020-03-03':
-            - name: true
-              percentage: 33.0
-            - name: false
-              percentage: 67.0
-          - '2020-03-04':
-            - name: true
-              percentage: 82.5
-            - name: false
-              percentage: 17.5
-        score:
-          $ref: '#/components/schemas/HistoricScore'
-    NamedPercentage:
-      description: Named percentage
-      type: object
-      properties:
-        name:
-          type: string
-          example: true
-        percentage:
-          type: number
-          format: double
-          example: 50.5
-    Reusability:
-      description: Reusability metrics
-      type: object
-      properties:
-        licenceAvailability:
-          type: array
-          items:
-            $ref: '#/components/schemas/NamedPercentage'
-          example:
-          - name: true
-            percentage: 55.0
-          - name: false
-            percentage: 45.0
-        licenceAlignment:
-          type: array
-          items:
-            $ref: '#/components/schemas/NamedPercentage'
-          example:
-          - name: true
-            percentage: 55.0
-          - name: false
-            percentage: 45.0
-        accessRightsAvailability:
-          type: array
-          items:
-            $ref: '#/components/schemas/NamedPercentage'
-          example:
-          - name: true
-            percentage: 55.0
-          - name: false
-            percentage: 45.0
-        accessRightsAlignment:
-          type: array
-          items:
-            $ref: '#/components/schemas/NamedPercentage'
-          example:
-          - name: true
-            percentage: 55.0
-          - name: false
-            percentage: 45.0
-        contactPointAvailability:
-          type: array
-          items:
-            $ref: '#/components/schemas/NamedPercentage'
-          example:
-          - name: true
-            percentage: 55.0
-          - name: false
-            percentage: 45.0
-        publisherAvailability:
-          type: array
-          items:
-            $ref: '#/components/schemas/NamedPercentage'
-          example:
-          - name: true
-            percentage: 55.0
-          - name: false
-            percentage: 45.0
-        score:
-          description: The aggregated score
-          type: object
-          items:
-            $ref: '#/components/schemas/PointPercentageMax'
-          example:
-            point: 55.0
-            percentage: 55.0
-            max: 80.0
     HistoricInteroperability:
       description: Interoperability metrics
       type: object
@@ -497,19 +826,19 @@ components:
             $ref: '#/components/schemas/HistoricNamedPercentages'
           example:
           - '2020-03-02':
-            - name: true
+            - name: 'yes'
               percentage: 55.0
-            - name: false
+            - name: 'no'
               percentage: 45.0
           - '2020-03-03':
-            - name: true
+            - name: 'yes'
               percentage: 33.0
-            - name: false
+            - name: 'no'
               percentage: 67.0
           - '2020-03-04':
-            - name: true
+            - name: 'yes'
               percentage: 82.5
-            - name: false
+            - name: 'no'
               percentage: 17.5
         mediaTypeAvailability:
           type: array
@@ -517,19 +846,19 @@ components:
             $ref: '#/components/schemas/HistoricNamedPercentages'
           example:
           - '2020-03-02':
-            - name: true
+            - name: 'yes'
               percentage: 55.0
-            - name: false
+            - name: 'no'
               percentage: 45.0
           - '2020-03-03':
-            - name: true
+            - name: 'yes'
               percentage: 33.0
-            - name: false
+            - name: 'no'
               percentage: 67.0
           - '2020-03-04':
-            - name: true
+            - name: 'yes'
               percentage: 82.5
-            - name: false
+            - name: 'no'
               percentage: 17.5
         formatMediaTypeAlignment:
           type: array
@@ -537,19 +866,19 @@ components:
             $ref: '#/components/schemas/HistoricNamedPercentages'
           example:
           - '2020-03-02':
-            - name: true
+            - name: 'yes'
               percentage: 55.0
-            - name: false
+            - name: 'no'
               percentage: 45.0
           - '2020-03-03':
-            - name: true
+            - name: 'yes'
               percentage: 33.0
-            - name: false
+            - name: 'no'
               percentage: 67.0
           - '2020-03-04':
-            - name: true
+            - name: 'yes'
               percentage: 82.5
-            - name: false
+            - name: 'no'
               percentage: 17.5
         formatMediaTypeNonProprietary:
           type: array
@@ -557,19 +886,19 @@ components:
             $ref: '#/components/schemas/HistoricNamedPercentages'
           example:
           - '2020-03-02':
-            - name: true
+            - name: 'yes'
               percentage: 55.0
-            - name: false
+            - name: 'no'
               percentage: 45.0
           - '2020-03-03':
-            - name: true
+            - name: 'yes'
               percentage: 33.0
-            - name: false
+            - name: 'no'
               percentage: 67.0
           - '2020-03-04':
-            - name: true
+            - name: 'yes'
               percentage: 82.5
-            - name: false
+            - name: 'no'
               percentage: 17.5
         formatMediaTypeMachineReadable:
           type: array
@@ -577,19 +906,19 @@ components:
             $ref: '#/components/schemas/HistoricNamedPercentages'
           example:
           - '2020-03-02':
-            - name: true
+            - name: 'yes'
               percentage: 55.0
-            - name: false
+            - name: 'no'
               percentage: 45.0
           - '2020-03-03':
-            - name: true
+            - name: 'yes'
               percentage: 33.0
-            - name: false
+            - name: 'no'
               percentage: 67.0
           - '2020-03-04':
-            - name: true
+            - name: 'yes'
               percentage: 82.5
-            - name: false
+            - name: 'no'
               percentage: 17.5
         dcatApCompliance:
           type: array
@@ -597,19 +926,19 @@ components:
             $ref: '#/components/schemas/HistoricNamedPercentages'
           example:
           - '2020-03-02':
-            - name: true
+            - name: 'yes'
               percentage: 55.0
-            - name: false
+            - name: 'no'
               percentage: 45.0
           - '2020-03-03':
-            - name: true
+            - name: 'yes'
               percentage: 33.0
-            - name: false
+            - name: 'no'
               percentage: 67.0
           - '2020-03-04':
-            - name: true
+            - name: 'yes'
               percentage: 82.5
-            - name: false
+            - name: 'no'
               percentage: 17.5
         score:
           $ref: '#/components/schemas/HistoricScore'
@@ -622,365 +951,36 @@ components:
           items:
             $ref: '#/components/schemas/NamedPercentage'
           example:
-          - name: true
+          - name: 'yes'
             percentage: 55.0
-          - name: false
+          - name: 'no'
             percentage: 45.0
         byteSizeAvailability:
           type: array
           items:
             $ref: '#/components/schemas/NamedPercentage'
           example:
-          - name: true
+          - name: 'yes'
             percentage: 55.0
-          - name: false
+          - name: 'no'
             percentage: 45.0
         dateIssuedAvailability:
           type: array
           items:
             $ref: '#/components/schemas/NamedPercentage'
           example:
-          - name: true
+          - name: 'yes'
             percentage: 55.0
-          - name: false
+          - name: 'no'
             percentage: 45.0
         dateModifiedAvailability:
           type: array
           items:
             $ref: '#/components/schemas/NamedPercentage'
           example:
-          - name: true
+          - name: 'yes'
             percentage: 55.0
-          - name: false
-            percentage: 45.0
-        score:
-          description: The aggregated score
-          type: object
-          items:
-            $ref: '#/components/schemas/PointPercentageMax'
-          example:
-            point: 55.0
-            percentage: 55.0
-            max: 80.0
-    HistoricContextuality:
-      description: Contextuality metrics
-      type: object
-      properties:
-        rightsAvailability:
-          type: array
-          items:
-            $ref: '#/components/schemas/HistoricNamedPercentages'
-          example:
-          - '2020-03-02':
-            - name: true
-              percentage: 55.0
-            - name: false
-              percentage: 45.0
-          - '2020-03-03':
-            - name: true
-              percentage: 33.0
-            - name: false
-              percentage: 67.0
-          - '2020-03-04':
-            - name: true
-              percentage: 82.5
-            - name: false
-              percentage: 17.5
-        byteSizeAvailability:
-          type: array
-          items:
-            $ref: '#/components/schemas/HistoricNamedPercentages'
-          example:
-          - '2020-03-02':
-            - name: true
-              percentage: 55.0
-            - name: false
-              percentage: 45.0
-          - '2020-03-03':
-            - name: true
-              percentage: 33.0
-            - name: false
-              percentage: 67.0
-          - '2020-03-04':
-            - name: true
-              percentage: 82.5
-            - name: false
-              percentage: 17.5
-        dateIssuedAvailability:
-          type: array
-          items:
-            $ref: '#/components/schemas/HistoricNamedPercentages'
-          example:
-          - '2020-03-02':
-            - name: true
-              percentage: 55.0
-            - name: false
-              percentage: 45.0
-          - '2020-03-03':
-            - name: true
-              percentage: 33.0
-            - name: false
-              percentage: 67.0
-          - '2020-03-04':
-            - name: true
-              percentage: 82.5
-            - name: false
-              percentage: 17.5
-        dateModifiedAvailability:
-          type: array
-          items:
-            $ref: '#/components/schemas/HistoricNamedPercentages'
-          example:
-          - '2020-03-02':
-            - name: true
-              percentage: 55.0
-            - name: false
-              percentage: 45.0
-          - '2020-03-03':
-            - name: true
-              percentage: 33.0
-            - name: false
-              percentage: 67.0
-          - '2020-03-04':
-            - name: true
-              percentage: 82.5
-            - name: false
-              percentage: 17.5
-        score:
-          $ref: '#/components/schemas/HistoricScore'
-    PointPercentageMax:
-      description: Point Percentage Max
-      type: object
-      properties:
-        point:
-          type: number
-          format: double
-          example: 50.5
-        percentage:
-          type: number
-          format: double
-          example: 50.5
-        max:
-          type: number
-          format: double
-          example: 80.0
-    HistoricFindability:
-      description: Findability metrics
-      type: object
-      properties:
-        keywordAvailability:
-          type: array
-          items:
-            $ref: '#/components/schemas/HistoricNamedPercentages'
-          example:
-          - '2020-03-02':
-            - name: true
-              percentage: 55.0
-            - name: false
-              percentage: 45.0
-          - '2020-03-03':
-            - name: true
-              percentage: 33.0
-            - name: false
-              percentage: 67.0
-          - '2020-03-04':
-            - name: true
-              percentage: 82.5
-            - name: false
-              percentage: 17.5
-        categoryAvailability:
-          type: array
-          items:
-            $ref: '#/components/schemas/HistoricNamedPercentages'
-          example:
-          - '2020-03-02':
-            - name: true
-              percentage: 55.0
-            - name: false
-              percentage: 45.0
-          - '2020-03-03':
-            - name: true
-              percentage: 33.0
-            - name: false
-              percentage: 67.0
-          - '2020-03-04':
-            - name: true
-              percentage: 82.5
-            - name: false
-              percentage: 17.5
-        spatialAvailability:
-          type: array
-          items:
-            $ref: '#/components/schemas/HistoricNamedPercentages'
-          example:
-          - '2020-03-02':
-            - name: true
-              percentage: 55.0
-            - name: false
-              percentage: 45.0
-          - '2020-03-03':
-            - name: true
-              percentage: 33.0
-            - name: false
-              percentage: 67.0
-          - '2020-03-04':
-            - name: true
-              percentage: 82.5
-            - name: false
-              percentage: 17.5
-        temporalAvailability:
-          type: array
-          items:
-            $ref: '#/components/schemas/HistoricNamedPercentages'
-          example:
-          - '2020-03-02':
-            - name: true
-              percentage: 55.0
-            - name: false
-              percentage: 45.0
-          - '2020-03-03':
-            - name: true
-              percentage: 33.0
-            - name: false
-              percentage: 67.0
-          - '2020-03-04':
-            - name: true
-              percentage: 82.5
-            - name: false
-              percentage: 17.5
-        score:
-          $ref: '#/components/schemas/HistoricScore'
-    Interoperability:
-      description: Interoperability metrics
-      type: object
-      properties:
-        formatAvailability:
-          type: array
-          items:
-            $ref: '#/components/schemas/NamedPercentage'
-          example:
-          - name: true
-            percentage: 55.0
-          - name: false
-            percentage: 45.0
-        mediaTypeAvailability:
-          type: array
-          items:
-            $ref: '#/components/schemas/NamedPercentage'
-          example:
-          - name: true
-            percentage: 55.0
-          - name: false
-            percentage: 45.0
-        formatMediaTypeAlignment:
-          type: array
-          items:
-            $ref: '#/components/schemas/NamedPercentage'
-          example:
-          - name: true
-            percentage: 55.0
-          - name: false
-            percentage: 45.0
-        formatMediaTypeNonProprietary:
-          type: array
-          items:
-            $ref: '#/components/schemas/NamedPercentage'
-          example:
-          - name: true
-            percentage: 55.0
-          - name: false
-            percentage: 45.0
-        formatMediaTypeMachineReadable:
-          type: array
-          items:
-            $ref: '#/components/schemas/NamedPercentage'
-          example:
-          - name: true
-            percentage: 55.0
-          - name: false
-            percentage: 45.0
-        dcatApCompliance:
-          type: array
-          items:
-            $ref: '#/components/schemas/NamedPercentage'
-          example:
-          - name: true
-            percentage: 55.0
-          - name: false
-            percentage: 45.0
-        score:
-          description: The aggregated score
-          type: object
-          items:
-            $ref: '#/components/schemas/PointPercentageMax'
-          example:
-            point: 55.0
-            percentage: 55.0
-            max: 80.0
-    CountryMetrics:
-      type: object
-      properties:
-        info:
-          type: string
-        findability:
-          $ref: '#/components/schemas/Findability'
-        accessibility:
-          $ref: '#/components/schemas/Accessibility'
-        interoperability:
-          $ref: '#/components/schemas/Interoperability'
-        resusability:
-          $ref: '#/components/schemas/Reusability'
-        contextuality:
-          $ref: '#/components/schemas/Contextuality'
-        score:
-          description: The aggregated score
-          type: number
-          format: int32
-    HistoricNamedPercentages:
-      description: A history of named percentages.
-      type: object
-      additionalProperties:
-        $ref: '#/components/schemas/NamedPercentage'
-      minProperties: 1
-    Findability:
-      description: Findability metrics
-      type: object
-      properties:
-        keywordAvailability:
-          type: array
-          items:
-            $ref: '#/components/schemas/NamedPercentage'
-          example:
-          - name: true
-            percentage: 55.0
-          - name: false
-            percentage: 45.0
-        categoryAvailability:
-          type: array
-          items:
-            $ref: '#/components/schemas/NamedPercentage'
-          example:
-          - name: true
-            percentage: 55.0
-          - name: false
-            percentage: 45.0
-        spatialAvailability:
-          type: array
-          items:
-            $ref: '#/components/schemas/NamedPercentage'
-          example:
-          - name: true
-            percentage: 55.0
-          - name: false
-            percentage: 45.0
-        temporalAvailability:
-          type: array
-          items:
-            $ref: '#/components/schemas/NamedPercentage'
-          example:
-          - name: true
-            percentage: 55.0
-          - name: false
+          - name: 'no'
             percentage: 45.0
         score:
           description: The aggregated score
@@ -992,25 +992,6 @@ components:
             percentage: 55.0
             max: 80.0
   parameters:
-    filter:
-      name: filter
-      in: query
-      description: Filter for one more multiple specific dimensions and/or the `score` and `info` object that should be returned.If present,  the document will contain _only_ the specified Dimensions. If this parameter is missing, the complete document will be returned.
-      required: false
-      style: form
-      explode: false
-      schema:
-        type: array
-        items:
-          type: string
-          enum:
-          - findability
-          - accessibility
-          - interoperability
-          - reusability
-          - contextuality
-          - score
-          - info
     resolution:
       name: resolution
       in: query
@@ -1030,6 +1011,14 @@ components:
         type: string
         format: date
       example: 2012-11-1
+    countryId:
+      name: id
+      in: path
+      description: ISO 3166-1 ALPHA-3 Code of the country to retrieve
+      required: true
+      schema:
+        type: string
+      example: ESP
     startDate:
       name: startDate
       in: query
@@ -1039,14 +1028,25 @@ components:
         type: string
         format: date
       example: 1997-8-25
-    countryId:
-      name: id
-      in: path
-      description: ISO 3166-1 ALPHA-3 Code of the country to retrieve
-      required: true
+    filter:
+      name: filter
+      in: query
+      description: Filter for one more multiple specific dimensions and/or the `score` and `info` object that should be returned.If present,  the document will contain _only_ the specified Dimensions. If this parameter is missing, the complete document will be returned.
+      required: false
+      style: form
+      explode: false
       schema:
-        type: string
-      example: ESP
+        type: array
+        items:
+          type: string
+          enum:
+          - findability
+          - accessibility
+          - interoperability
+          - reusability
+          - contextuality
+          - score
+          - info
   securitySchemes:
     ApiKeyAuth:
       type: apiKey

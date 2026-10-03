@@ -56,6 +56,32 @@ paths:
           description: In case of an omitted `id` correlator
 components:
   schemas:
+    JSON-RPCError:
+      description: JSON-RPC Error Response
+      type: object
+      required:
+      - error
+      allOf:
+      - $ref: '#/components/schemas/JSON-RPCBase'
+      - type: object
+        properties:
+          error:
+            $ref: '#/components/schemas/JSON-RPCErrorInfo'
+        additionalProperties: false
+    JSON-RPCSuccess:
+      description: JSON-RPC Success Response
+      type: object
+      required:
+      - result
+      allOf:
+      - $ref: '#/components/schemas/JSON-RPCBase'
+      - type: object
+        properties:
+          result:
+            description: Depending of the called method, the result can look differently.
+            oneOf:
+            - $ref: '#/components/schemas/refreshScopeResult'
+        additionalProperties: false
     refreshScopeResult:
       description: Result in case of refreshScope request
       type: object
@@ -66,6 +92,31 @@ components:
           type: string
           enum:
           - accepted
+      additionalProperties: false
+    JSON-RPCErrorInfo:
+      description: Error Information Object
+      type: object
+      required:
+      - code
+      - message
+      properties:
+        code:
+          description: '* `-1` Means "Upsala"
+
+            * `-7` Means "That''s not funny, I will not do it."
+
+            * `-9` Means "I don''t know what you mean..."
+
+            '
+          type: integer
+          enum:
+          - -1
+          - -7
+          - -9
+        message:
+          type: string
+        data:
+          type: object
       additionalProperties: false
     refreshScope:
       description: Run Pipe Request
@@ -112,57 +163,6 @@ components:
         id:
           description: Optional client side defined correlator.
           type: string
-      additionalProperties: false
-    JSON-RPCError:
-      description: JSON-RPC Error Response
-      type: object
-      required:
-      - error
-      allOf:
-      - $ref: '#/components/schemas/JSON-RPCBase'
-      - type: object
-        properties:
-          error:
-            $ref: '#/components/schemas/JSON-RPCErrorInfo'
-        additionalProperties: false
-    JSON-RPCSuccess:
-      description: JSON-RPC Success Response
-      type: object
-      required:
-      - result
-      allOf:
-      - $ref: '#/components/schemas/JSON-RPCBase'
-      - type: object
-        properties:
-          result:
-            description: Depending of the called method, the result can look differently.
-            oneOf:
-            - $ref: '#/components/schemas/refreshScopeResult'
-        additionalProperties: false
-    JSON-RPCErrorInfo:
-      description: Error Information Object
-      type: object
-      required:
-      - code
-      - message
-      properties:
-        code:
-          description: '* `-1` Means "Upsala"
-
-            * `-7` Means "That''s not funny, I will not do it."
-
-            * `-9` Means "I don''t know what you mean..."
-
-            '
-          type: integer
-          enum:
-          - -1
-          - -7
-          - -9
-        message:
-          type: string
-        data:
-          type: object
       additionalProperties: false
   securitySchemes:
     ApiKeyAuth:

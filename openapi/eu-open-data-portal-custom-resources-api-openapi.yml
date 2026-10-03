@@ -281,9 +281,14 @@ paths:
           description: Custom resource type or resource id not found.
 components:
   responses:
-    RDF200:
-      description: The resource graph(s)
+    RDFLIST200:
+      description: The list of resource(s)
       content:
+        application/json:
+          schema:
+            type: array
+            items:
+              type: string
         application/rdf+xml:
           schema:
             type: string
@@ -316,14 +321,9 @@ components:
           schema:
             type: string
             format: binary
-    RDFLIST200:
-      description: The list of resource(s)
+    RDF200:
+      description: The resource graph(s)
       content:
-        application/json:
-          schema:
-            type: array
-            items:
-              type: string
         application/rdf+xml:
           schema:
             type: string

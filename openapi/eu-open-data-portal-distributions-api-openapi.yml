@@ -198,42 +198,6 @@ components:
       required: true
       schema:
         type: string
-  responses:
-    RDF200:
-      description: The resource graph(s)
-      content:
-        application/rdf+xml:
-          schema:
-            type: string
-            format: binary
-        application/ld+json:
-          schema:
-            type: string
-            format: binary
-        application/n-triples:
-          schema:
-            type: string
-            format: binary
-        application/n-quads:
-          schema:
-            type: string
-            format: binary
-        application/trig:
-          schema:
-            type: string
-            format: binary
-        application/trix:
-          schema:
-            type: string
-            format: binary
-        text/turtle:
-          schema:
-            type: string
-            format: binary
-        text/n3:
-          schema:
-            type: string
-            format: binary
   requestBodies:
     RDFBody:
       required: true
@@ -270,32 +234,53 @@ components:
           schema:
             type: string
             format: binary
+  responses:
+    RDF200:
+      description: The resource graph(s)
+      content:
+        application/rdf+xml:
+          schema:
+            type: string
+            format: binary
+        application/ld+json:
+          schema:
+            type: string
+            format: binary
+        application/n-triples:
+          schema:
+            type: string
+            format: binary
+        application/n-quads:
+          schema:
+            type: string
+            format: binary
+        application/trig:
+          schema:
+            type: string
+            format: binary
+        application/trix:
+          schema:
+            type: string
+            format: binary
+        text/turtle:
+          schema:
+            type: string
+            format: binary
+        text/n3:
+          schema:
+            type: string
+            format: binary
   schemas:
-    DistributionInteroperability:
-      description: Interoperability metrics
+    DistributionAccessibility:
+      description: Accessibility metrics
       type: object
       properties:
-        formatAvailability:
+        accessUrlStatusCodes:
           type: boolean
-        mediaTypeAvailability:
+        downloadUrlAvailability:
           type: boolean
-        formatMediaTypeVocabularyAlignment:
+        downloadUrlStatusCodes:
           type: boolean
-    DistributionMetrics:
-      type: object
-      properties:
-        info:
-          $ref: '#/components/schemas/DistributionInfo'
-        accessibility:
-          $ref: '#/components/schemas/DistributionAccessibility'
-        interoperability:
-          $ref: '#/components/schemas/DistributionInteroperability'
-        resusability:
-          $ref: '#/components/schemas/DistributionReusability'
-        contextuality:
-          $ref: '#/components/schemas/DistributionContextuality'
-        validation:
-          $ref: '#/components/schemas/ValidationCsv'
     ValidationCsv:
       type: object
       properties:
@@ -332,28 +317,6 @@ components:
               type: array
               items:
                 $ref: '#/components/schemas/IndicatorItem'
-    DistributionContextuality:
-      description: Contextuality metrics
-      type: object
-      properties:
-        rightsAvailability:
-          type: boolean
-        byteSizeAvailability:
-          type: boolean
-        dateModifiedAvailability:
-          type: boolean
-        dateIssuedAvailability:
-          type: boolean
-    DistributionAccessibility:
-      description: Accessibility metrics
-      type: object
-      properties:
-        accessUrlStatusCodes:
-          type: boolean
-        downloadUrlAvailability:
-          type: boolean
-        downloadUrlStatusCodes:
-          type: boolean
     DistributionReusability:
       description: Reusability metrics
       type: object
@@ -367,6 +330,31 @@ components:
           type: string
         distribution-uri:
           type: string
+    DistributionInteroperability:
+      description: Interoperability metrics
+      type: object
+      properties:
+        formatAvailability:
+          type: boolean
+        mediaTypeAvailability:
+          type: boolean
+        formatMediaTypeVocabularyAlignment:
+          type: boolean
+    DistributionMetrics:
+      type: object
+      properties:
+        info:
+          $ref: '#/components/schemas/DistributionInfo'
+        accessibility:
+          $ref: '#/components/schemas/DistributionAccessibility'
+        interoperability:
+          $ref: '#/components/schemas/DistributionInteroperability'
+        resusability:
+          $ref: '#/components/schemas/DistributionReusability'
+        contextuality:
+          $ref: '#/components/schemas/DistributionContextuality'
+        validation:
+          $ref: '#/components/schemas/ValidationCsv'
     IndicatorItem:
       type: object
       properties:
@@ -382,6 +370,18 @@ components:
           type: string
         indicator:
           type: string
+    DistributionContextuality:
+      description: Contextuality metrics
+      type: object
+      properties:
+        rightsAvailability:
+          type: boolean
+        byteSizeAvailability:
+          type: boolean
+        dateModifiedAvailability:
+          type: boolean
+        dateIssuedAvailability:
+          type: boolean
   securitySchemes:
     ApiKeyAuth:
       type: apiKey

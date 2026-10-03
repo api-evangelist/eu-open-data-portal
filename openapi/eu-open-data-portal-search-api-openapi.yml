@@ -348,66 +348,7 @@ paths:
         '500':
           $ref: '#/components/responses/InternalServerError'
 components:
-  responses:
-    QuerySuccess:
-      description: The query was successfully processed
-      content:
-        application/json:
-          schema:
-            type: object
-    BadRequest:
-      description: Validation error / Bad request
-      content:
-        application/json:
-          schema:
-            type: object
-            properties:
-              success:
-                type: boolean
-                default: false
-              message:
-                type: string
-    InternalServerError:
-      description: Internal Server Error
-      content:
-        application/json:
-          schema:
-            type: object
-            properties:
-              success:
-                type: boolean
-                default: false
-              message:
-                type: string
   schemas:
-    BoundingBox:
-      type: object
-      description: Filter queries by bounding box
-      properties:
-        minLon:
-          type: number
-          description: Minimum longitude
-          format: float
-          minimum: -180
-          maximum: 180
-        maxLon:
-          type: number
-          description: Maximum longitude
-          format: float
-          minimum: -180
-          maximum: 180
-        maxLat:
-          type: number
-          description: Maximum latitude
-          format: float
-          minimum: -90
-          maximum: 90
-        minLat:
-          type: number
-          description: Minimum latitude
-          format: float
-          minimum: -90
-          maximum: 90
     Query:
       description: Query
       type: object
@@ -566,6 +507,65 @@ components:
             - edit
             - publish
             - delete
+    BoundingBox:
+      type: object
+      description: Filter queries by bounding box
+      properties:
+        minLon:
+          type: number
+          description: Minimum longitude
+          format: float
+          minimum: -180
+          maximum: 180
+        maxLon:
+          type: number
+          description: Maximum longitude
+          format: float
+          minimum: -180
+          maximum: 180
+        maxLat:
+          type: number
+          description: Maximum latitude
+          format: float
+          minimum: -90
+          maximum: 90
+        minLat:
+          type: number
+          description: Minimum latitude
+          format: float
+          minimum: -90
+          maximum: 90
+  responses:
+    BadRequest:
+      description: Validation error / Bad request
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              success:
+                type: boolean
+                default: false
+              message:
+                type: string
+    InternalServerError:
+      description: Internal Server Error
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              success:
+                type: boolean
+                default: false
+              message:
+                type: string
+    QuerySuccess:
+      description: The query was successfully processed
+      content:
+        application/json:
+          schema:
+            type: object
   securitySchemes:
     ApiKeyAuth:
       type: apiKey

@@ -145,35 +145,6 @@ components:
         configs:
           description: An object containing configurations to merge into specific segments
           type: object
-    CronTrigger:
-      description: A cron based trigger definition
-      type: object
-      required:
-      - cron
-      allOf:
-      - $ref: '#/components/schemas/Trigger'
-      properties:
-        cron:
-          description: The cron syntax
-          type: string
-        next:
-          description: The first trigger
-          type: string
-          format: date-time
-    SpecificTrigger:
-      description: A list of specific trigger times
-      type: object
-      required:
-      - specific
-      allOf:
-      - $ref: '#/components/schemas/Trigger'
-      properties:
-        specific:
-          description: List of specific date and time triggers
-          type: array
-          items:
-            type: string
-            format: date-time
     IntervalTrigger:
       description: Am interval based trigger
       type: object
@@ -204,6 +175,35 @@ components:
           description: The first trigger
           type: string
           format: date-time
+    CronTrigger:
+      description: A cron based trigger definition
+      type: object
+      required:
+      - cron
+      allOf:
+      - $ref: '#/components/schemas/Trigger'
+      properties:
+        cron:
+          description: The cron syntax
+          type: string
+        next:
+          description: The first trigger
+          type: string
+          format: date-time
+    SpecificTrigger:
+      description: A list of specific trigger times
+      type: object
+      required:
+      - specific
+      allOf:
+      - $ref: '#/components/schemas/Trigger'
+      properties:
+        specific:
+          description: List of specific date and time triggers
+          type: array
+          items:
+            type: string
+            format: date-time
   securitySchemes:
     ApiKeyAuth:
       type: apiKey

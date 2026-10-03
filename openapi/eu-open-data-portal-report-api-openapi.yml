@@ -39,7 +39,7 @@ paths:
           - lv
           - mt
           - nl
-          - false
+          - 'no'
           - pl
           - pt
           - ro
@@ -102,7 +102,7 @@ paths:
           - lv
           - mt
           - nl
-          - false
+          - 'no'
           - pl
           - pt
           - ro

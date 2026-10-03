@@ -41,7 +41,7 @@ paths:
             - lv
             - mt
             - nl
-            - false
+            - 'no'
             - pl
             - pt
             - ro

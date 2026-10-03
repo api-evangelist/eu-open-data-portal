@@ -117,6 +117,18 @@ paths:
           $ref: '#/components/responses/InternalServerError'
 components:
   responses:
+    NotFound:
+      description: Not found
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              success:
+                type: boolean
+                default: false
+              message:
+                type: string
     QuerySuccess:
       description: The query was successfully processed
       content:
@@ -137,18 +149,6 @@ components:
                 type: string
     InternalServerError:
       description: Internal Server Error
-      content:
-        application/json:
-          schema:
-            type: object
-            properties:
-              success:
-                type: boolean
-                default: false
-              message:
-                type: string
-    NotFound:
-      description: Not found
       content:
         application/json:
           schema:

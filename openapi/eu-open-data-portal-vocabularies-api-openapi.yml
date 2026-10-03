@@ -485,6 +485,15 @@ paths:
     - url: ''
 components:
   parameters:
+    Limit:
+      name: limit
+      in: query
+      schema:
+        type: number
+        format: int64
+        default: 100
+        minimum: 1
+        maximum: 5000
     Offset:
       name: offset
       in: query
@@ -505,15 +514,6 @@ components:
         - originalIds
         - metadata
         default: uriRefs
-    Limit:
-      name: limit
-      in: query
-      schema:
-        type: number
-        format: int64
-        default: 100
-        minimum: 1
-        maximum: 5000
     VocabularyId:
       name: vocabularyId
       description: The vocabulary id
@@ -522,78 +522,7 @@ components:
       schema:
         type: string
         pattern: ^[a-z0-9\-~]+$
-  requestBodies:
-    RDFBody:
-      required: true
-      content:
-        application/rdf+xml:
-          schema:
-            type: string
-            format: binary
-        application/ld+json:
-          schema:
-            type: string
-            format: binary
-        application/n-triples:
-          schema:
-            type: string
-            format: binary
-        application/n-quads:
-          schema:
-            type: string
-            format: binary
-        application/trig:
-          schema:
-            type: string
-            format: binary
-        application/trix:
-          schema:
-            type: string
-            format: binary
-        text/turtle:
-          schema:
-            type: string
-            format: binary
-        text/n3:
-          schema:
-            type: string
-            format: binary
   responses:
-    RDF200:
-      description: The resource graph(s)
-      content:
-        application/rdf+xml:
-          schema:
-            type: string
-            format: binary
-        application/ld+json:
-          schema:
-            type: string
-            format: binary
-        application/n-triples:
-          schema:
-            type: string
-            format: binary
-        application/n-quads:
-          schema:
-            type: string
-            format: binary
-        application/trig:
-          schema:
-            type: string
-            format: binary
-        application/trix:
-          schema:
-            type: string
-            format: binary
-        text/turtle:
-          schema:
-            type: string
-            format: binary
-        text/n3:
-          schema:
-            type: string
-            format: binary
     RDFLIST200:
       description: The list of resource(s)
       content:
@@ -634,72 +563,41 @@ components:
           schema:
             type: string
             format: binary
-    VocableSuccessId:
-      description: Vocabulary response object
+    RDF200:
+      description: The resource graph(s)
       content:
-        application/json:
+        application/rdf+xml:
           schema:
-            type: object
-            properties:
-              success:
-                type: boolean
-                default: true
-              result:
-                type: object
-                properties:
-                  id:
-                    type: string
-    BadRequest:
-      description: Validation error / Bad request
-      content:
-        application/json:
+            type: string
+            format: binary
+        application/ld+json:
           schema:
-            type: object
-            properties:
-              success:
-                type: boolean
-                default: false
-              message:
-                type: string
-    VocabularySuccessId:
-      description: Vocabulary response object
-      content:
-        application/json:
+            type: string
+            format: binary
+        application/n-triples:
           schema:
-            type: object
-            properties:
-              success:
-                type: boolean
-                default: true
-              result:
-                type: object
-                properties:
-                  id:
-                    type: string
-    InternalServerError:
-      description: Internal Server Error
-      content:
-        application/json:
+            type: string
+            format: binary
+        application/n-quads:
           schema:
-            type: object
-            properties:
-              success:
-                type: boolean
-                default: false
-              message:
-                type: string
-    NotFound:
-      description: Not found
-      content:
-        application/json:
+            type: string
+            format: binary
+        application/trig:
           schema:
-            type: object
-            properties:
-              success:
-                type: boolean
-                default: false
-              message:
-                type: string
+            type: string
+            format: binary
+        application/trix:
+          schema:
+            type: string
+            format: binary
+        text/turtle:
+          schema:
+            type: string
+            format: binary
+        text/n3:
+          schema:
+            type: string
+            format: binary
     VocabularySuccess:
       description: Vocabulary response
       content:
@@ -720,6 +618,57 @@ components:
                       type: string
                     id:
                       type: string
+    NotFound:
+      description: Not found
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              success:
+                type: boolean
+                default: false
+              message:
+                type: string
+    BadRequest:
+      description: Validation error / Bad request
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              success:
+                type: boolean
+                default: false
+              message:
+                type: string
+    InternalServerError:
+      description: Internal Server Error
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              success:
+                type: boolean
+                default: false
+              message:
+                type: string
+    VocableSuccessId:
+      description: Vocabulary response object
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              success:
+                type: boolean
+                default: true
+              result:
+                type: object
+                properties:
+                  id:
+                    type: string
     VocableSuccess:
       description: Vocabulary response object
       content:
@@ -732,13 +681,74 @@ components:
                 default: true
               result:
                 $ref: '#/components/schemas/Vocable'
+    VocabularySuccessId:
+      description: Vocabulary response object
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              success:
+                type: boolean
+                default: true
+              result:
+                type: object
+                properties:
+                  id:
+                    type: string
   headers:
     LocationURIRef:
       description: The final URIRef
       schema:
         type: string
         format: uri
+  requestBodies:
+    RDFBody:
+      required: true
+      content:
+        application/rdf+xml:
+          schema:
+            type: string
+            format: binary
+        application/ld+json:
+          schema:
+            type: string
+            format: binary
+        application/n-triples:
+          schema:
+            type: string
+            format: binary
+        application/n-quads:
+          schema:
+            type: string
+            format: binary
+        application/trig:
+          schema:
+            type: string
+            format: binary
+        application/trix:
+          schema:
+            type: string
+            format: binary
+        text/turtle:
+          schema:
+            type: string
+            format: binary
+        text/n3:
+          schema:
+            type: string
+            format: binary
   schemas:
+    Vocabulary:
+      description: A representation of a Vocabulary
+      type: object
+      required:
+      - vocab
+      properties:
+        vocab:
+          type: array
+          items:
+            $ref: '#/components/schemas/Vocable'
     Vocable:
       description: A representation of a vocable
       type: object
@@ -751,16 +761,6 @@ components:
             type: string
         resource:
           type: string
-    Vocabulary:
-      description: A representation of a Vocabulary
-      type: object
-      required:
-      - vocab
-      properties:
-        vocab:
-          type: array
-          items:
-            $ref: '#/components/schemas/Vocable'
   securitySchemes:
     ApiKeyAuth:
       type: apiKey
