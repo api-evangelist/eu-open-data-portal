@@ -117,6 +117,30 @@ paths:
           $ref: '#/components/responses/InternalServerError'
 components:
   responses:
+    InternalServerError:
+      description: Internal Server Error
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              success:
+                type: boolean
+                default: false
+              message:
+                type: string
+    BadRequest:
+      description: Validation error / Bad request
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              success:
+                type: boolean
+                default: false
+              message:
+                type: string
     NotFound:
       description: Not found
       content:
@@ -135,30 +159,6 @@ components:
         application/json:
           schema:
             type: object
-    BadRequest:
-      description: Validation error / Bad request
-      content:
-        application/json:
-          schema:
-            type: object
-            properties:
-              success:
-                type: boolean
-                default: false
-              message:
-                type: string
-    InternalServerError:
-      description: Internal Server Error
-      content:
-        application/json:
-          schema:
-            type: object
-            properties:
-              success:
-                type: boolean
-                default: false
-              message:
-                type: string
   securitySchemes:
     ApiKeyAuth:
       type: apiKey

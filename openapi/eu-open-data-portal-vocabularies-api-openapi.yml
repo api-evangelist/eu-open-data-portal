@@ -485,15 +485,14 @@ paths:
     - url: ''
 components:
   parameters:
-    Limit:
-      name: limit
-      in: query
+    VocabularyId:
+      name: vocabularyId
+      description: The vocabulary id
+      in: path
+      required: true
       schema:
-        type: number
-        format: int64
-        default: 100
-        minimum: 1
-        maximum: 5000
+        type: string
+        pattern: ^[a-z0-9\-~]+$
     Offset:
       name: offset
       in: query
@@ -514,14 +513,51 @@ components:
         - originalIds
         - metadata
         default: uriRefs
-    VocabularyId:
-      name: vocabularyId
-      description: The vocabulary id
-      in: path
-      required: true
+    Limit:
+      name: limit
+      in: query
       schema:
-        type: string
-        pattern: ^[a-z0-9\-~]+$
+        type: number
+        format: int64
+        default: 100
+        minimum: 1
+        maximum: 5000
+  requestBodies:
+    RDFBody:
+      required: true
+      content:
+        application/rdf+xml:
+          schema:
+            type: string
+            format: binary
+        application/ld+json:
+          schema:
+            type: string
+            format: binary
+        application/n-triples:
+          schema:
+            type: string
+            format: binary
+        application/n-quads:
+          schema:
+            type: string
+            format: binary
+        application/trig:
+          schema:
+            type: string
+            format: binary
+        application/trix:
+          schema:
+            type: string
+            format: binary
+        text/turtle:
+          schema:
+            type: string
+            format: binary
+        text/n3:
+          schema:
+            type: string
+            format: binary
   responses:
     RDFLIST200:
       description: The list of resource(s)
@@ -618,6 +654,18 @@ components:
                       type: string
                     id:
                       type: string
+    VocableSuccess:
+      description: Vocabulary response object
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              success:
+                type: boolean
+                default: true
+              result:
+                $ref: '#/components/schemas/Vocable'
     NotFound:
       description: Not found
       content:
@@ -642,45 +690,6 @@ components:
                 default: false
               message:
                 type: string
-    InternalServerError:
-      description: Internal Server Error
-      content:
-        application/json:
-          schema:
-            type: object
-            properties:
-              success:
-                type: boolean
-                default: false
-              message:
-                type: string
-    VocableSuccessId:
-      description: Vocabulary response object
-      content:
-        application/json:
-          schema:
-            type: object
-            properties:
-              success:
-                type: boolean
-                default: true
-              result:
-                type: object
-                properties:
-                  id:
-                    type: string
-    VocableSuccess:
-      description: Vocabulary response object
-      content:
-        application/json:
-          schema:
-            type: object
-            properties:
-              success:
-                type: boolean
-                default: true
-              result:
-                $ref: '#/components/schemas/Vocable'
     VocabularySuccessId:
       description: Vocabulary response object
       content:
@@ -696,59 +705,40 @@ components:
                 properties:
                   id:
                     type: string
+    VocableSuccessId:
+      description: Vocabulary response object
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              success:
+                type: boolean
+                default: true
+              result:
+                type: object
+                properties:
+                  id:
+                    type: string
+    InternalServerError:
+      description: Internal Server Error
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              success:
+                type: boolean
+                default: false
+              message:
+                type: string
   headers:
     LocationURIRef:
       description: The final URIRef
       schema:
         type: string
         format: uri
-  requestBodies:
-    RDFBody:
-      required: true
-      content:
-        application/rdf+xml:
-          schema:
-            type: string
-            format: binary
-        application/ld+json:
-          schema:
-            type: string
-            format: binary
-        application/n-triples:
-          schema:
-            type: string
-            format: binary
-        application/n-quads:
-          schema:
-            type: string
-            format: binary
-        application/trig:
-          schema:
-            type: string
-            format: binary
-        application/trix:
-          schema:
-            type: string
-            format: binary
-        text/turtle:
-          schema:
-            type: string
-            format: binary
-        text/n3:
-          schema:
-            type: string
-            format: binary
   schemas:
-    Vocabulary:
-      description: A representation of a Vocabulary
-      type: object
-      required:
-      - vocab
-      properties:
-        vocab:
-          type: array
-          items:
-            $ref: '#/components/schemas/Vocable'
     Vocable:
       description: A representation of a vocable
       type: object
@@ -761,6 +751,16 @@ components:
             type: string
         resource:
           type: string
+    Vocabulary:
+      description: A representation of a Vocabulary
+      type: object
+      required:
+      - vocab
+      properties:
+        vocab:
+          type: array
+          items:
+            $ref: '#/components/schemas/Vocable'
   securitySchemes:
     ApiKeyAuth:
       type: apiKey

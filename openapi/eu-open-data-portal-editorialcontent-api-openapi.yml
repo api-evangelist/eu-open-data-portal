@@ -190,18 +190,6 @@ paths:
               $ref: '#/components/schemas/EditorialContentArray'
 components:
   schemas:
-    EditorialContentArray:
-      description: An array of EditorialContent
-      type: object
-      required:
-      - editorial-content
-      properties:
-        editorial-content:
-          type: array
-          items:
-            $ref: '#/components/schemas/EditorialContent'
-          minItems: 1
-          maxItems: 500
     EditorialContent:
       description: Editorial Content
       type: object
@@ -227,19 +215,21 @@ components:
         path:
           type: string
       additionalProperties: false
+    EditorialContentArray:
+      description: An array of EditorialContent
+      type: object
+      required:
+      - editorial-content
+      properties:
+        editorial-content:
+          type: array
+          items:
+            $ref: '#/components/schemas/EditorialContent'
+          minItems: 1
+          maxItems: 500
   responses:
-    NotFound:
-      description: Not found
-      content:
-        application/json:
-          schema:
-            type: object
-            properties:
-              success:
-                type: boolean
-                default: false
-              message:
-                type: string
+    Created:
+      description: Created
     BadRequest:
       description: Validation error / Bad request
       content:
@@ -252,6 +242,22 @@ components:
                 default: false
               message:
                 type: string
+    NoContent:
+      description: No content
+    NotFound:
+      description: Not found
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              success:
+                type: boolean
+                default: false
+              message:
+                type: string
+    Accepted:
+      description: Accepted
     InternalServerError:
       description: Internal Server Error
       content:
@@ -264,12 +270,6 @@ components:
                 default: false
               message:
                 type: string
-    Created:
-      description: Created
-    NoContent:
-      description: No content
-    Accepted:
-      description: Accepted
   securitySchemes:
     ApiKeyAuth:
       type: apiKey

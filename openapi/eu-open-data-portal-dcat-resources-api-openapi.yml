@@ -475,23 +475,13 @@ paths:
           description: DCAT resource or its metrics not found
 components:
   parameters:
-    ResourceId:
-      name: resourceId
-      description: The DCAT resource id
-      in: path
-      required: true
-      schema:
-        type: string
-        pattern: '[a-z,0-9,-,~]+'
-    Limit:
-      name: limit
+    UsePagedCollection:
+      name: usePagedCollection
       in: query
+      description: Set to 'true' to use the legacy PagedCollection format for pagination. By default, the response will use the updated PartialCollectionView format. This parameter is provided for backward compatibility with clients that expect the old format.
       schema:
-        type: number
-        format: int64
-        default: 100
-        minimum: 1
-        maximum: 5000
+        type: boolean
+        default: false
     CatalogueId:
       name: catalogueId
       description: The catalogue id
@@ -500,6 +490,14 @@ components:
       schema:
         type: string
         pattern: '[a-z,0-9,-]+'
+    ResourceId:
+      name: resourceId
+      description: The DCAT resource id
+      in: path
+      required: true
+      schema:
+        type: string
+        pattern: '[a-z,0-9,-,~]+'
     Offset:
       name: offset
       in: query
@@ -508,13 +506,6 @@ components:
         format: int64
         default: 0
         minimum: 0
-    UsePagedCollection:
-      name: usePagedCollection
-      in: query
-      description: Set to 'true' to use the legacy PagedCollection format for pagination. By default, the response will use the updated PartialCollectionView format. This parameter is provided for backward compatibility with clients that expect the old format.
-      schema:
-        type: boolean
-        default: false
     ValueType:
       name: valueType
       in: query
@@ -527,6 +518,51 @@ components:
         - originalIds
         - metadata
         default: uriRefs
+    Limit:
+      name: limit
+      in: query
+      schema:
+        type: number
+        format: int64
+        default: 100
+        minimum: 1
+        maximum: 5000
+  requestBodies:
+    RDFBody:
+      required: true
+      content:
+        application/rdf+xml:
+          schema:
+            type: string
+            format: binary
+        application/ld+json:
+          schema:
+            type: string
+            format: binary
+        application/n-triples:
+          schema:
+            type: string
+            format: binary
+        application/n-quads:
+          schema:
+            type: string
+            format: binary
+        application/trig:
+          schema:
+            type: string
+            format: binary
+        application/trix:
+          schema:
+            type: string
+            format: binary
+        text/turtle:
+          schema:
+            type: string
+            format: binary
+        text/n3:
+          schema:
+            type: string
+            format: binary
   responses:
     RDFLIST200:
       description: The list of resource(s)
@@ -609,42 +645,6 @@ components:
       schema:
         type: string
         format: uri
-  requestBodies:
-    RDFBody:
-      required: true
-      content:
-        application/rdf+xml:
-          schema:
-            type: string
-            format: binary
-        application/ld+json:
-          schema:
-            type: string
-            format: binary
-        application/n-triples:
-          schema:
-            type: string
-            format: binary
-        application/n-quads:
-          schema:
-            type: string
-            format: binary
-        application/trig:
-          schema:
-            type: string
-            format: binary
-        application/trix:
-          schema:
-            type: string
-            format: binary
-        text/turtle:
-          schema:
-            type: string
-            format: binary
-        text/n3:
-          schema:
-            type: string
-            format: binary
   securitySchemes:
     ApiKeyAuth:
       type: apiKey

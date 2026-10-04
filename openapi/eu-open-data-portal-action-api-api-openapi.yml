@@ -56,18 +56,17 @@ paths:
           description: In case of an omitted `id` correlator
 components:
   schemas:
-    JSON-RPCError:
-      description: JSON-RPC Error Response
+    refreshScopeResult:
+      description: Result in case of refreshScope request
       type: object
       required:
-      - error
-      allOf:
-      - $ref: '#/components/schemas/JSON-RPCBase'
-      - type: object
-        properties:
-          error:
-            $ref: '#/components/schemas/JSON-RPCErrorInfo'
-        additionalProperties: false
+      - status
+      properties:
+        status:
+          type: string
+          enum:
+          - accepted
+      additionalProperties: false
     JSON-RPCSuccess:
       description: JSON-RPC Success Response
       type: object
@@ -82,17 +81,33 @@ components:
             oneOf:
             - $ref: '#/components/schemas/refreshScopeResult'
         additionalProperties: false
-    refreshScopeResult:
-      description: Result in case of refreshScope request
+    JSON-RPCBase:
+      description: JSON-RPC Base Schema
       type: object
       required:
-      - status
+      - jsonrpc
       properties:
-        status:
+        jsonrpc:
+          description: JSON-RPC Version `2.0`
           type: string
           enum:
-          - accepted
+          - '2.0'
+        id:
+          description: Optional client side defined correlator.
+          type: string
       additionalProperties: false
+    JSON-RPCError:
+      description: JSON-RPC Error Response
+      type: object
+      required:
+      - error
+      allOf:
+      - $ref: '#/components/schemas/JSON-RPCBase'
+      - type: object
+        properties:
+          error:
+            $ref: '#/components/schemas/JSON-RPCErrorInfo'
+        additionalProperties: false
     JSON-RPCErrorInfo:
       description: Error Information Object
       type: object
@@ -149,21 +164,6 @@ components:
                 type: string
             additionalProperties: false
         additionalProperties: false
-    JSON-RPCBase:
-      description: JSON-RPC Base Schema
-      type: object
-      required:
-      - jsonrpc
-      properties:
-        jsonrpc:
-          description: JSON-RPC Version `2.0`
-          type: string
-          enum:
-          - '2.0'
-        id:
-          description: Optional client side defined correlator.
-          type: string
-      additionalProperties: false
   securitySchemes:
     ApiKeyAuth:
       type: apiKey

@@ -117,34 +117,6 @@ paths:
           description: Pipe or trigger not found
 components:
   schemas:
-    Trigger:
-      description: A trigger object.
-      type: object
-      required:
-      - id
-      - status
-      properties:
-        id:
-          description: A unique identifier within the scope of the pipe
-          type: string
-        status:
-          description: Indicating the status of the trigger
-          type: string
-          enum:
-          - enabled
-          - disabled
-        startMode:
-          description: Behavior when the pipe is already running. Start anyway, do nothing, cancel and restart, or wait until current run has finished (previously waiting triggers will be dropped).
-          type: string
-          enum:
-          - drop
-          - restart
-          - append
-          - concurrent
-          default: drop
-        configs:
-          description: An object containing configurations to merge into specific segments
-          type: object
     IntervalTrigger:
       description: Am interval based trigger
       type: object
@@ -190,6 +162,34 @@ components:
           description: The first trigger
           type: string
           format: date-time
+    Trigger:
+      description: A trigger object.
+      type: object
+      required:
+      - id
+      - status
+      properties:
+        id:
+          description: A unique identifier within the scope of the pipe
+          type: string
+        status:
+          description: Indicating the status of the trigger
+          type: string
+          enum:
+          - enabled
+          - disabled
+        startMode:
+          description: Behavior when the pipe is already running. Start anyway, do nothing, cancel and restart, or wait until current run has finished (previously waiting triggers will be dropped).
+          type: string
+          enum:
+          - drop
+          - restart
+          - append
+          - concurrent
+          default: drop
+        configs:
+          description: An object containing configurations to merge into specific segments
+          type: object
     SpecificTrigger:
       description: A list of specific trigger times
       type: object

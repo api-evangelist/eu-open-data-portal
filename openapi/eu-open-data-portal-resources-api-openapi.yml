@@ -34,8 +34,8 @@ paths:
                   type: string
 components:
   responses:
-    NotFound:
-      description: Not found
+    InternalServerError:
+      description: Internal Server Error
       content:
         application/json:
           schema:
@@ -58,8 +58,8 @@ components:
                 default: false
               message:
                 type: string
-    InternalServerError:
-      description: Internal Server Error
+    NotFound:
+      description: Not found
       content:
         application/json:
           schema:

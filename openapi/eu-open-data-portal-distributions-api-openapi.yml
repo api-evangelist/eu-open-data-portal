@@ -271,6 +271,46 @@ components:
             type: string
             format: binary
   schemas:
+    DistributionMetrics:
+      type: object
+      properties:
+        info:
+          $ref: '#/components/schemas/DistributionInfo'
+        accessibility:
+          $ref: '#/components/schemas/DistributionAccessibility'
+        interoperability:
+          $ref: '#/components/schemas/DistributionInteroperability'
+        resusability:
+          $ref: '#/components/schemas/DistributionReusability'
+        contextuality:
+          $ref: '#/components/schemas/DistributionContextuality'
+        validation:
+          $ref: '#/components/schemas/ValidationCsv'
+    DistributionInteroperability:
+      description: Interoperability metrics
+      type: object
+      properties:
+        formatAvailability:
+          type: boolean
+        mediaTypeAvailability:
+          type: boolean
+        formatMediaTypeVocabularyAlignment:
+          type: boolean
+    IndicatorItem:
+      type: object
+      properties:
+        row:
+          type: integer
+        column:
+          type: integer
+        columnName:
+          type: string
+        message:
+          type: string
+        message_header:
+          type: string
+        indicator:
+          type: string
     DistributionAccessibility:
       description: Accessibility metrics
       type: object
@@ -280,6 +320,19 @@ components:
         downloadUrlAvailability:
           type: boolean
         downloadUrlStatusCodes:
+          type: boolean
+    DistributionInfo:
+      type: object
+      properties:
+        distribution-id:
+          type: string
+        distribution-uri:
+          type: string
+    DistributionReusability:
+      description: Reusability metrics
+      type: object
+      properties:
+        licenceAvailability:
           type: boolean
     ValidationCsv:
       type: object
@@ -317,59 +370,6 @@ components:
               type: array
               items:
                 $ref: '#/components/schemas/IndicatorItem'
-    DistributionReusability:
-      description: Reusability metrics
-      type: object
-      properties:
-        licenceAvailability:
-          type: boolean
-    DistributionInfo:
-      type: object
-      properties:
-        distribution-id:
-          type: string
-        distribution-uri:
-          type: string
-    DistributionInteroperability:
-      description: Interoperability metrics
-      type: object
-      properties:
-        formatAvailability:
-          type: boolean
-        mediaTypeAvailability:
-          type: boolean
-        formatMediaTypeVocabularyAlignment:
-          type: boolean
-    DistributionMetrics:
-      type: object
-      properties:
-        info:
-          $ref: '#/components/schemas/DistributionInfo'
-        accessibility:
-          $ref: '#/components/schemas/DistributionAccessibility'
-        interoperability:
-          $ref: '#/components/schemas/DistributionInteroperability'
-        resusability:
-          $ref: '#/components/schemas/DistributionReusability'
-        contextuality:
-          $ref: '#/components/schemas/DistributionContextuality'
-        validation:
-          $ref: '#/components/schemas/ValidationCsv'
-    IndicatorItem:
-      type: object
-      properties:
-        row:
-          type: integer
-        column:
-          type: integer
-        columnName:
-          type: string
-        message:
-          type: string
-        message_header:
-          type: string
-        indicator:
-          type: string
     DistributionContextuality:
       description: Contextuality metrics
       type: object

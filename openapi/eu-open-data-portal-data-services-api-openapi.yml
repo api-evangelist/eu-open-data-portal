@@ -90,8 +90,8 @@ paths:
           $ref: '#/components/responses/InternalServerError'
 components:
   responses:
-    DataServiceSuccess:
-      description: DataService response object
+    BadRequest:
+      description: Validation error / Bad request
       content:
         application/json:
           schema:
@@ -99,9 +99,21 @@ components:
             properties:
               success:
                 type: boolean
-                default: true
-              result:
-                $ref: '#/components/schemas/DataService'
+                default: false
+              message:
+                type: string
+    NotFound:
+      description: Not found
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              success:
+                type: boolean
+                default: false
+              message:
+                type: string
     DatasetSuccessId:
       description: Dataset response ID
       content:
@@ -117,30 +129,6 @@ components:
                 properties:
                   id:
                     type: string
-    NotFound:
-      description: Not found
-      content:
-        application/json:
-          schema:
-            type: object
-            properties:
-              success:
-                type: boolean
-                default: false
-              message:
-                type: string
-    BadRequest:
-      description: Validation error / Bad request
-      content:
-        application/json:
-          schema:
-            type: object
-            properties:
-              success:
-                type: boolean
-                default: false
-              message:
-                type: string
     InternalServerError:
       description: Internal Server Error
       content:
@@ -153,6 +141,18 @@ components:
                 default: false
               message:
                 type: string
+    DataServiceSuccess:
+      description: DataService response object
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              success:
+                type: boolean
+                default: true
+              result:
+                $ref: '#/components/schemas/DataService'
   requestBodies:
     RDFBody:
       required: true

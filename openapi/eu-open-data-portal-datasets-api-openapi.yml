@@ -1192,41 +1192,8 @@ paths:
     - url: ''
 components:
   parameters:
-    Limit:
-      name: limit
-      in: query
-      schema:
-        type: number
-        format: int64
-        default: 100
-        minimum: 1
-        maximum: 5000
-    CatalogueId:
-      name: catalogueId
-      description: The catalogue id
-      in: path
-      required: true
-      schema:
-        type: string
-        pattern: '[a-z,0-9,-]+'
     DatasetId:
       name: datasetId
-      description: The dataset id
-      in: path
-      required: true
-      schema:
-        type: string
-        pattern: '[a-z,0-9,-,~]+'
-    Offset:
-      name: offset
-      in: query
-      schema:
-        type: number
-        format: int64
-        default: 0
-        minimum: 0
-    RevisionId:
-      name: revisionId
       description: The dataset id
       in: path
       required: true
@@ -1240,6 +1207,22 @@ components:
       schema:
         type: boolean
         default: false
+    CatalogueId:
+      name: catalogueId
+      description: The catalogue id
+      in: path
+      required: true
+      schema:
+        type: string
+        pattern: '[a-z,0-9,-]+'
+    Offset:
+      name: offset
+      in: query
+      schema:
+        type: number
+        format: int64
+        default: 0
+        minimum: 0
     ValueType:
       name: valueType
       in: query
@@ -1252,6 +1235,23 @@ components:
         - originalIds
         - metadata
         default: uriRefs
+    RevisionId:
+      name: revisionId
+      description: The dataset id
+      in: path
+      required: true
+      schema:
+        type: string
+        pattern: '[a-z,0-9,-,~]+'
+    Limit:
+      name: limit
+      in: query
+      schema:
+        type: number
+        format: int64
+        default: 100
+        minimum: 1
+        maximum: 5000
     datasetId:
       name: id
       in: path
@@ -1259,6 +1259,42 @@ components:
       required: true
       schema:
         type: string
+  requestBodies:
+    RDFBody:
+      required: true
+      content:
+        application/rdf+xml:
+          schema:
+            type: string
+            format: binary
+        application/ld+json:
+          schema:
+            type: string
+            format: binary
+        application/n-triples:
+          schema:
+            type: string
+            format: binary
+        application/n-quads:
+          schema:
+            type: string
+            format: binary
+        application/trig:
+          schema:
+            type: string
+            format: binary
+        application/trix:
+          schema:
+            type: string
+            format: binary
+        text/turtle:
+          schema:
+            type: string
+            format: binary
+        text/n3:
+          schema:
+            type: string
+            format: binary
   responses:
     RDFLIST200:
       description: The list of resource(s)
@@ -1335,69 +1371,6 @@ components:
           schema:
             type: string
             format: binary
-    DatasetSuccessId:
-      description: Dataset response ID
-      content:
-        application/json:
-          schema:
-            type: object
-            properties:
-              success:
-                type: boolean
-                default: true
-              result:
-                type: object
-                properties:
-                  id:
-                    type: string
-    NotFound:
-      description: Not found
-      content:
-        application/json:
-          schema:
-            type: object
-            properties:
-              success:
-                type: boolean
-                default: false
-              message:
-                type: string
-    BadRequest:
-      description: Validation error / Bad request
-      content:
-        application/json:
-          schema:
-            type: object
-            properties:
-              success:
-                type: boolean
-                default: false
-              message:
-                type: string
-    InternalServerError:
-      description: Internal Server Error
-      content:
-        application/json:
-          schema:
-            type: object
-            properties:
-              success:
-                type: boolean
-                default: false
-              message:
-                type: string
-    DatasetSuccess:
-      description: Dataset response object
-      content:
-        application/json:
-          schema:
-            type: object
-            properties:
-              success:
-                type: boolean
-                default: true
-              result:
-                $ref: '#/components/schemas/Dataset'
     DatasetSuccessBulk:
       description: Dataset response bulk
       content:
@@ -1433,48 +1406,75 @@ components:
                 properties:
                   id:
                     type: string
+    BadRequest:
+      description: Validation error / Bad request
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              success:
+                type: boolean
+                default: false
+              message:
+                type: string
+    NotFound:
+      description: Not found
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              success:
+                type: boolean
+                default: false
+              message:
+                type: string
+    DatasetSuccessId:
+      description: Dataset response ID
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              success:
+                type: boolean
+                default: true
+              result:
+                type: object
+                properties:
+                  id:
+                    type: string
+    InternalServerError:
+      description: Internal Server Error
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              success:
+                type: boolean
+                default: false
+              message:
+                type: string
+    DatasetSuccess:
+      description: Dataset response object
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              success:
+                type: boolean
+                default: true
+              result:
+                $ref: '#/components/schemas/Dataset'
   headers:
     LocationURIRef:
       description: The final URIRef
       schema:
         type: string
         format: uri
-  requestBodies:
-    RDFBody:
-      required: true
-      content:
-        application/rdf+xml:
-          schema:
-            type: string
-            format: binary
-        application/ld+json:
-          schema:
-            type: string
-            format: binary
-        application/n-triples:
-          schema:
-            type: string
-            format: binary
-        application/n-quads:
-          schema:
-            type: string
-            format: binary
-        application/trig:
-          schema:
-            type: string
-            format: binary
-        application/trix:
-          schema:
-            type: string
-            format: binary
-        text/turtle:
-          schema:
-            type: string
-            format: binary
-        text/n3:
-          schema:
-            type: string
-            format: binary
   schemas:
     DatasetArray:
       description: A array of datasets
@@ -2312,6 +2312,29 @@ components:
           type: array
           items:
             type: string
+    NamedPercentage:
+      description: Named percentage
+      type: object
+      properties:
+        name:
+          type: string
+          example: 'yes'
+        percentage:
+          type: number
+          format: double
+          example: 50.5
+    DatasetFindability:
+      description: Findability metrics
+      type: object
+      properties:
+        keywordAvailability:
+          type: boolean
+        categoryAvailability:
+          type: boolean
+        spatialAvailability:
+          type: boolean
+        temporalAvailability:
+          type: boolean
     DatasetInfo:
       type: object
       properties:
@@ -2325,51 +2348,6 @@ components:
           type: array
           items:
             type: string
-    NamedPercentage:
-      description: Named percentage
-      type: object
-      properties:
-        name:
-          type: string
-          example: 'yes'
-        percentage:
-          type: number
-          format: double
-          example: 50.5
-    DatasetAccessibility:
-      description: Accessibility metrics
-      type: object
-      properties:
-        accessUrlStatusCodes:
-          type: array
-          items:
-            $ref: '#/components/schemas/NamedPercentage'
-          example:
-          - name: 200
-            percentage: 92.0
-          - name: 400
-            percentage: 1.0
-          - name: 404
-            percentage: 1.0
-          - name: 1300
-            percentage: 2.0
-          - name: 405
-            percentage: 3.0
-          - name: 1100
-            percentage: 1.0
-        downloadUrlAvailability:
-          type: array
-          items:
-            $ref: '#/components/schemas/NamedPercentage'
-          example:
-          - name: 'yes'
-            percentage: 55.0
-          - name: 'no'
-            percentage: 45.0
-        downloadUrlStatusCodes:
-          type: array
-          items:
-            $ref: '#/components/schemas/NamedPercentage'
     DatasetMetrics:
       type: object
       properties:
@@ -2446,18 +2424,40 @@ components:
             percentage: 45.0
         dcatApCompliance:
           type: boolean
-    DatasetFindability:
-      description: Findability metrics
+    DatasetAccessibility:
+      description: Accessibility metrics
       type: object
       properties:
-        keywordAvailability:
-          type: boolean
-        categoryAvailability:
-          type: boolean
-        spatialAvailability:
-          type: boolean
-        temporalAvailability:
-          type: boolean
+        accessUrlStatusCodes:
+          type: array
+          items:
+            $ref: '#/components/schemas/NamedPercentage'
+          example:
+          - name: 200
+            percentage: 92.0
+          - name: 400
+            percentage: 1.0
+          - name: 404
+            percentage: 1.0
+          - name: 1300
+            percentage: 2.0
+          - name: 405
+            percentage: 3.0
+          - name: 1100
+            percentage: 1.0
+        downloadUrlAvailability:
+          type: array
+          items:
+            $ref: '#/components/schemas/NamedPercentage'
+          example:
+          - name: 'yes'
+            percentage: 55.0
+          - name: 'no'
+            percentage: 45.0
+        downloadUrlStatusCodes:
+          type: array
+          items:
+            $ref: '#/components/schemas/NamedPercentage'
     DatasetContextuality:
       description: Contextuality metrics
       type: object
