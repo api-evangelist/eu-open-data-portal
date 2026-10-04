@@ -1213,6 +1213,9 @@ apis:
   - type: SourceCode
     url: https://gitlab.com/dataeuropa/mqa/reporter
 common:
+- type: CapabilityMap
+  url: capabilities/eu-open-data-portal-capability-edges.yml
+  name: EU Open Data Portal Business Capability Map
 - type: Overlay
   url: overlays/eu-open-data-portal-hub-search-overlay.yaml
 - type: Overlay

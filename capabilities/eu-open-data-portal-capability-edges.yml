@@ -1,0 +1,70 @@
+slug: eu-open-data-portal
+provider: EU Open Data Portal
+generated_by: planning/capability-mapping/scripts/classify_capabilities.py
+model: claude-opus-5
+frame:
+- Software & Technology
+min_confidence: 0.7
+capability_model:
+  source: https://github.com/vincentmakes/turbo-ea-capabilities
+  license: CC-BY-4.0
+  attribution: Turbo EA Capabilities by Vincent Verdet — Turbo EA, https://github.com/vincentmakes/turbo-ea-capabilities,
+    CC BY 4.0
+  notice: NOTICE
+edge_count: 5
+edges:
+- tag: DCAT Resources
+  spec_file: eu-open-data-portal-dcat-resources-api-openapi.yml
+  capability_id: BC-610
+  capability_id_l1: BC-610
+  capability_name: Information & Data Management
+  confidence: 0.8
+  evidence: '"The API simplifies the management of DCAT resources, adhering to the DCAT-AP standard for
+    structured data descriptions." with operations "List DCAT resources of catalogue", "Get catalogue
+    record"'
+  reason: CRUD over dataset metadata records in a data catalogue — this is metadata/data asset cataloguing,
+    i.e. Information & Data Management. The evidence does not clearly single out governance vs architecture
+    vs quality, so no L2 is asserted.
+- tag: Global
+  spec_file: eu-open-data-portal-global-api-openapi.yml
+  capability_id: BC-610.30
+  capability_id_l1: BC-610
+  capability_name: Data Quality Management
+  confidence: 0.78
+  evidence: '"The API is designed to provide actual quality information for datasets." with schemas Findability,
+    Accessibility, Interoperability, Reusability, HistoricScore'
+  reason: Exposes aggregated and historic dataset quality scores (FAIR dimensions) across the corpus —
+    data quality monitoring and reporting. Some chance this is better read as analytics/BI reporting,
+    hence confidence below 0.8.
+- tag: Catalogues
+  spec_file: eu-open-data-portal-catalogues-api-openapi.yml
+  capability_id: BC-610
+  capability_id_l1: BC-610
+  capability_name: Information & Data Management
+  confidence: 0.7
+  evidence: '''Create a catalogue'', ''Create or Update a catalogue'', ''Get historic metrics for all
+    catalogues''; schemas Catalogue, Findability, Interoperability, Reusability'
+  reason: CRUD over DCAT metadata catalogues plus metadata-quality metrics is information/data asset management
+    (cataloguing and stewardship of metadata). Evidence spans both catalogue stewardship and quality scoring,
+    so the L1 is asserted without committing to a single L2.
+- tag: Data Services
+  spec_file: eu-open-data-portal-data-services-api-openapi.yml
+  capability_id: BC-610
+  capability_id_l1: BC-610
+  capability_name: Information & Data Management
+  confidence: 0.7
+  evidence: '"Get a single Data Service", "Create or Update a Data Service", schema DataService in a "Metadata
+    Search Service for the Open Data Portal"'
+  reason: Manages DCAT DataService metadata entries in the portal's metadata index — data asset/metadata
+    cataloguing under Information & Data Management. L2 left null as the surface is pure metadata record
+    CRUD.
+- tag: Dataset Series
+  spec_file: eu-open-data-portal-dataset-series-api-openapi.yml
+  capability_id: BC-610
+  capability_id_l1: BC-610
+  capability_name: Information & Data Management
+  confidence: 0.7
+  evidence: '"Get a single Dataset Series", "Create or Update a Dataset Series" within "Hub-Search ...
+    Metadata Search Service for the Open Data Portal"'
+  reason: Maintains DCAT dataset-series metadata records in the catalogue index — metadata/data asset
+    management. No sub-capability is distinctly evidenced.
