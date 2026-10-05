@@ -1,0 +1,12 @@
+{
+ "url": "https://data.europa.eu/api/hub/search/openapi.yaml",
+ "requested_url": "https://data.europa.eu/api/hub/search/openapi.yaml",
+ "status": 200,
+ "content_type": "application/x-yaml",
+ "bytes": 121171,
+ "sha256": "904a41e1a5f392d610bcb8a16964501526d572dd779ef466f8084a34074b9fb6",
+ "fetched_at": "2026-10-04",
+ "fetched_by": "APIEvangelist-Harvest/1.0 (+https://apievangelist.com)",
+ "match": "equivalent",
+ "note": "Re-fetched from the provider by verify-openapi-sources.py; the provider's current document describes the same operations (Jaccard 1.0), but the bytes differ, so the archive is an earlier or reformatted copy."
+}

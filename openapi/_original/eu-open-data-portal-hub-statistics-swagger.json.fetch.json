@@ -1,0 +1,12 @@
+{
+ "url": "https://data.europa.eu/api/hub/statistics/swagger/",
+ "requested_url": "https://data.europa.eu/api/hub/statistics/swagger/",
+ "status": 200,
+ "content_type": "application/json",
+ "bytes": 1006,
+ "sha256": "f5f26f7032768bf5fe9198338b71dac1f6b3fc40fb7681f30bd58cbe72aab8c5",
+ "fetched_at": "2026-10-04",
+ "fetched_by": "APIEvangelist-Harvest/1.0 (+https://apievangelist.com)",
+ "match": "byte-identical",
+ "note": "Re-fetched from the provider by verify-openapi-sources.py; the archived file is byte-identical to what the provider serves."
+}
