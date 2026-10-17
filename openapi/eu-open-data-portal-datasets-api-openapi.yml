@@ -1200,13 +1200,15 @@ components:
       schema:
         type: string
         pattern: '[a-z,0-9,-,~]+'
-    UsePagedCollection:
-      name: usePagedCollection
+    Limit:
+      name: limit
       in: query
-      description: Set to 'true' to use the legacy PagedCollection format for pagination. By default, the response will use the updated PartialCollectionView format. This parameter is provided for backward compatibility with clients that expect the old format.
       schema:
-        type: boolean
-        default: false
+        type: number
+        format: int64
+        default: 100
+        minimum: 1
+        maximum: 5000
     CatalogueId:
       name: catalogueId
       description: The catalogue id
@@ -1215,6 +1217,14 @@ components:
       schema:
         type: string
         pattern: '[a-z,0-9,-]+'
+    RevisionId:
+      name: revisionId
+      description: The dataset id
+      in: path
+      required: true
+      schema:
+        type: string
+        pattern: '[a-z,0-9,-,~]+'
     Offset:
       name: offset
       in: query
@@ -1223,6 +1233,13 @@ components:
         format: int64
         default: 0
         minimum: 0
+    UsePagedCollection:
+      name: usePagedCollection
+      in: query
+      description: Set to 'true' to use the legacy PagedCollection format for pagination. By default, the response will use the updated PartialCollectionView format. This parameter is provided for backward compatibility with clients that expect the old format.
+      schema:
+        type: boolean
+        default: false
     ValueType:
       name: valueType
       in: query
@@ -1235,23 +1252,6 @@ components:
         - originalIds
         - metadata
         default: uriRefs
-    RevisionId:
-      name: revisionId
-      description: The dataset id
-      in: path
-      required: true
-      schema:
-        type: string
-        pattern: '[a-z,0-9,-,~]+'
-    Limit:
-      name: limit
-      in: query
-      schema:
-        type: number
-        format: int64
-        default: 100
-        minimum: 1
-        maximum: 5000
     datasetId:
       name: id
       in: path
@@ -1296,14 +1296,9 @@ components:
             type: string
             format: binary
   responses:
-    RDFLIST200:
-      description: The list of resource(s)
+    RDF200:
+      description: The resource graph(s)
       content:
-        application/json:
-          schema:
-            type: array
-            items:
-              type: string
         application/rdf+xml:
           schema:
             type: string
@@ -1336,9 +1331,14 @@ components:
           schema:
             type: string
             format: binary
-    RDF200:
-      description: The resource graph(s)
+    RDFLIST200:
+      description: The list of resource(s)
       content:
+        application/json:
+          schema:
+            type: array
+            items:
+              type: string
         application/rdf+xml:
           schema:
             type: string
@@ -1391,6 +1391,30 @@ components:
                       type: string
                     id:
                       type: string
+    BadRequest:
+      description: Validation error / Bad request
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              success:
+                type: boolean
+                default: false
+              message:
+                type: string
+    DatasetSuccess:
+      description: Dataset response object
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              success:
+                type: boolean
+                default: true
+              result:
+                $ref: '#/components/schemas/Dataset'
     DatasetRevisionSuccessId:
       description: Dataset revision response ID
       content:
@@ -1406,30 +1430,6 @@ components:
                 properties:
                   id:
                     type: string
-    BadRequest:
-      description: Validation error / Bad request
-      content:
-        application/json:
-          schema:
-            type: object
-            properties:
-              success:
-                type: boolean
-                default: false
-              message:
-                type: string
-    NotFound:
-      description: Not found
-      content:
-        application/json:
-          schema:
-            type: object
-            properties:
-              success:
-                type: boolean
-                default: false
-              message:
-                type: string
     DatasetSuccessId:
       description: Dataset response ID
       content:
@@ -1457,8 +1457,8 @@ components:
                 default: false
               message:
                 type: string
-    DatasetSuccess:
-      description: Dataset response object
+    NotFound:
+      description: Not found
       content:
         application/json:
           schema:
@@ -1466,9 +1466,9 @@ components:
             properties:
               success:
                 type: boolean
-                default: true
-              result:
-                $ref: '#/components/schemas/Dataset'
+                default: false
+              message:
+                type: string
   headers:
     LocationURIRef:
       description: The final URIRef
@@ -1476,18 +1476,6 @@ components:
         type: string
         format: uri
   schemas:
-    DatasetArray:
-      description: A array of datasets
-      type: object
-      required:
-      - datasets
-      properties:
-        datasets:
-          type: array
-          items:
-            $ref: '#/components/schemas/Dataset'
-          minItems: 1
-          maxItems: 500
     Dataset:
       description: Base model for a dataset
       type: object
@@ -2312,6 +2300,18 @@ components:
           type: array
           items:
             type: string
+    DatasetArray:
+      description: A array of datasets
+      type: object
+      required:
+      - datasets
+      properties:
+        datasets:
+          type: array
+          items:
+            $ref: '#/components/schemas/Dataset'
+          minItems: 1
+          maxItems: 500
     NamedPercentage:
       description: Named percentage
       type: object
@@ -2323,18 +2323,6 @@ components:
           type: number
           format: double
           example: 50.5
-    DatasetFindability:
-      description: Findability metrics
-      type: object
-      properties:
-        keywordAvailability:
-          type: boolean
-        categoryAvailability:
-          type: boolean
-        spatialAvailability:
-          type: boolean
-        temporalAvailability:
-          type: boolean
     DatasetInfo:
       type: object
       properties:
@@ -2348,21 +2336,6 @@ components:
           type: array
           items:
             type: string
-    DatasetMetrics:
-      type: object
-      properties:
-        info:
-          $ref: '#/components/schemas/DatasetInfo'
-        findability:
-          $ref: '#/components/schemas/DatasetFindability'
-        accessibility:
-          $ref: '#/components/schemas/DatasetAccessibility'
-        interoperability:
-          $ref: '#/components/schemas/DatasetInteroperability'
-        resusability:
-          $ref: '#/components/schemas/DatasetReusability'
-        contextuality:
-          $ref: '#/components/schemas/DatasetContextuality'
     DatasetReusability:
       description: Reusability metrics
       type: object
@@ -2390,6 +2363,33 @@ components:
         contactPointAvailability:
           type: boolean
         publisherAvailability:
+          type: boolean
+    DatasetMetrics:
+      type: object
+      properties:
+        info:
+          $ref: '#/components/schemas/DatasetInfo'
+        findability:
+          $ref: '#/components/schemas/DatasetFindability'
+        accessibility:
+          $ref: '#/components/schemas/DatasetAccessibility'
+        interoperability:
+          $ref: '#/components/schemas/DatasetInteroperability'
+        resusability:
+          $ref: '#/components/schemas/DatasetReusability'
+        contextuality:
+          $ref: '#/components/schemas/DatasetContextuality'
+    DatasetFindability:
+      description: Findability metrics
+      type: object
+      properties:
+        keywordAvailability:
+          type: boolean
+        categoryAvailability:
+          type: boolean
+        spatialAvailability:
+          type: boolean
+        temporalAvailability:
           type: boolean
     DatasetInteroperability:
       description: Interoperability metrics
@@ -2424,40 +2424,6 @@ components:
             percentage: 45.0
         dcatApCompliance:
           type: boolean
-    DatasetAccessibility:
-      description: Accessibility metrics
-      type: object
-      properties:
-        accessUrlStatusCodes:
-          type: array
-          items:
-            $ref: '#/components/schemas/NamedPercentage'
-          example:
-          - name: 200
-            percentage: 92.0
-          - name: 400
-            percentage: 1.0
-          - name: 404
-            percentage: 1.0
-          - name: 1300
-            percentage: 2.0
-          - name: 405
-            percentage: 3.0
-          - name: 1100
-            percentage: 1.0
-        downloadUrlAvailability:
-          type: array
-          items:
-            $ref: '#/components/schemas/NamedPercentage'
-          example:
-          - name: 'yes'
-            percentage: 55.0
-          - name: 'no'
-            percentage: 45.0
-        downloadUrlStatusCodes:
-          type: array
-          items:
-            $ref: '#/components/schemas/NamedPercentage'
     DatasetContextuality:
       description: Contextuality metrics
       type: object
@@ -2512,6 +2478,40 @@ components:
                   percentage: 55.0
                 - name: 'no'
                   percentage: 45.0
+    DatasetAccessibility:
+      description: Accessibility metrics
+      type: object
+      properties:
+        accessUrlStatusCodes:
+          type: array
+          items:
+            $ref: '#/components/schemas/NamedPercentage'
+          example:
+          - name: 200
+            percentage: 92.0
+          - name: 400
+            percentage: 1.0
+          - name: 404
+            percentage: 1.0
+          - name: 1300
+            percentage: 2.0
+          - name: 405
+            percentage: 3.0
+          - name: 1100
+            percentage: 1.0
+        downloadUrlAvailability:
+          type: array
+          items:
+            $ref: '#/components/schemas/NamedPercentage'
+          example:
+          - name: 'yes'
+            percentage: 55.0
+          - name: 'no'
+            percentage: 45.0
+        downloadUrlStatusCodes:
+          type: array
+          items:
+            $ref: '#/components/schemas/NamedPercentage'
   securitySchemes:
     ApiKeyAuth:
       type: apiKey

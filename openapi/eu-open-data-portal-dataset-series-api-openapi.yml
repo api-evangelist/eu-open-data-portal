@@ -96,18 +96,6 @@ components:
                 default: false
               message:
                 type: string
-    NotFound:
-      description: Not found
-      content:
-        application/json:
-          schema:
-            type: object
-            properties:
-              success:
-                type: boolean
-                default: false
-              message:
-                type: string
     DatasetSuccessId:
       description: Dataset response ID
       content:
@@ -147,6 +135,18 @@ components:
                 default: true
               result:
                 type: object
+    NotFound:
+      description: Not found
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              success:
+                type: boolean
+                default: false
+              message:
+                type: string
   requestBodies:
     RDFBody:
       required: true

@@ -474,59 +474,6 @@ paths:
         '404':
           description: DCAT resource or its metrics not found
 components:
-  parameters:
-    UsePagedCollection:
-      name: usePagedCollection
-      in: query
-      description: Set to 'true' to use the legacy PagedCollection format for pagination. By default, the response will use the updated PartialCollectionView format. This parameter is provided for backward compatibility with clients that expect the old format.
-      schema:
-        type: boolean
-        default: false
-    CatalogueId:
-      name: catalogueId
-      description: The catalogue id
-      in: path
-      required: true
-      schema:
-        type: string
-        pattern: '[a-z,0-9,-]+'
-    ResourceId:
-      name: resourceId
-      description: The DCAT resource id
-      in: path
-      required: true
-      schema:
-        type: string
-        pattern: '[a-z,0-9,-,~]+'
-    Offset:
-      name: offset
-      in: query
-      schema:
-        type: number
-        format: int64
-        default: 0
-        minimum: 0
-    ValueType:
-      name: valueType
-      in: query
-      description: Return value type. In case of `urifRefs` and `identifiers` Accept header will be ignored and the return type will always be a JSON array
-      schema:
-        type: string
-        enum:
-        - uriRefs
-        - identifiers
-        - originalIds
-        - metadata
-        default: uriRefs
-    Limit:
-      name: limit
-      in: query
-      schema:
-        type: number
-        format: int64
-        default: 100
-        minimum: 1
-        maximum: 5000
   requestBodies:
     RDFBody:
       required: true
@@ -563,15 +510,63 @@ components:
           schema:
             type: string
             format: binary
+  parameters:
+    Limit:
+      name: limit
+      in: query
+      schema:
+        type: number
+        format: int64
+        default: 100
+        minimum: 1
+        maximum: 5000
+    CatalogueId:
+      name: catalogueId
+      description: The catalogue id
+      in: path
+      required: true
+      schema:
+        type: string
+        pattern: '[a-z,0-9,-]+'
+    Offset:
+      name: offset
+      in: query
+      schema:
+        type: number
+        format: int64
+        default: 0
+        minimum: 0
+    ResourceId:
+      name: resourceId
+      description: The DCAT resource id
+      in: path
+      required: true
+      schema:
+        type: string
+        pattern: '[a-z,0-9,-,~]+'
+    UsePagedCollection:
+      name: usePagedCollection
+      in: query
+      description: Set to 'true' to use the legacy PagedCollection format for pagination. By default, the response will use the updated PartialCollectionView format. This parameter is provided for backward compatibility with clients that expect the old format.
+      schema:
+        type: boolean
+        default: false
+    ValueType:
+      name: valueType
+      in: query
+      description: Return value type. In case of `urifRefs` and `identifiers` Accept header will be ignored and the return type will always be a JSON array
+      schema:
+        type: string
+        enum:
+        - uriRefs
+        - identifiers
+        - originalIds
+        - metadata
+        default: uriRefs
   responses:
-    RDFLIST200:
-      description: The list of resource(s)
+    RDF200:
+      description: The resource graph(s)
       content:
-        application/json:
-          schema:
-            type: array
-            items:
-              type: string
         application/rdf+xml:
           schema:
             type: string
@@ -604,9 +599,14 @@ components:
           schema:
             type: string
             format: binary
-    RDF200:
-      description: The resource graph(s)
+    RDFLIST200:
+      description: The list of resource(s)
       content:
+        application/json:
+          schema:
+            type: array
+            items:
+              type: string
         application/rdf+xml:
           schema:
             type: string

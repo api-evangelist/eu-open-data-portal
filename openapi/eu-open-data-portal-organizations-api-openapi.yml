@@ -255,14 +255,15 @@ components:
           schema:
             type: string
   parameters:
-    OrganizationId:
-      name: organizationId
-      description: The organization id
-      in: path
-      required: true
+    Limit:
+      name: limit
+      in: query
       schema:
-        type: string
-        pattern: '[a-z,0-9,-]+'
+        type: number
+        format: int64
+        default: 100
+        minimum: 1
+        maximum: 5000
     Offset:
       name: offset
       in: query
@@ -271,6 +272,14 @@ components:
         format: int64
         default: 0
         minimum: 0
+    OrganizationId:
+      name: organizationId
+      description: The organization id
+      in: path
+      required: true
+      schema:
+        type: string
+        pattern: '[a-z,0-9,-]+'
     ValueType:
       name: valueType
       in: query
@@ -283,15 +292,6 @@ components:
         - originalIds
         - metadata
         default: uriRefs
-    Limit:
-      name: limit
-      in: query
-      schema:
-        type: number
-        format: int64
-        default: 100
-        minimum: 1
-        maximum: 5000
   responses:
     RDFLIST200:
       description: The list of resource(s)
@@ -368,8 +368,8 @@ components:
           schema:
             type: string
             format: binary
-    NotFound:
-      description: Not found
+    InternalServerError:
+      description: Internal Server Error
       content:
         application/json:
           schema:
@@ -380,8 +380,8 @@ components:
                 default: false
               message:
                 type: string
-    InternalServerError:
-      description: Internal Server Error
+    NotFound:
+      description: Not found
       content:
         application/json:
           schema:

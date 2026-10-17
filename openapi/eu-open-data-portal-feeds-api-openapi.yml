@@ -432,6 +432,12 @@ components:
                 default: false
               message:
                 type: string
+    QuerySuccess:
+      description: The query was successfully processed
+      content:
+        application/json:
+          schema:
+            type: object
     BadRequest:
       description: Validation error / Bad request
       content:
@@ -444,12 +450,6 @@ components:
                 default: false
               message:
                 type: string
-    QuerySuccess:
-      description: The query was successfully processed
-      content:
-        application/json:
-          schema:
-            type: object
   securitySchemes:
     ApiKeyAuth:
       type: apiKey

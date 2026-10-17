@@ -46,8 +46,8 @@ components:
                 default: false
               message:
                 type: string
-    BadRequest:
-      description: Validation error / Bad request
+    NotFound:
+      description: Not found
       content:
         application/json:
           schema:
@@ -58,8 +58,8 @@ components:
                 default: false
               message:
                 type: string
-    NotFound:
-      description: Not found
+    BadRequest:
+      description: Validation error / Bad request
       content:
         application/json:
           schema:

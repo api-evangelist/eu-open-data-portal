@@ -428,116 +428,6 @@ paths:
     servers:
     - url: ''
 components:
-  parameters:
-    CatalogueId:
-      name: catalogueId
-      description: The catalogue id
-      in: path
-      required: true
-      schema:
-        type: string
-        pattern: '[a-z,0-9,-]+'
-    Offset:
-      name: offset
-      in: query
-      schema:
-        type: number
-        format: int64
-        default: 0
-        minimum: 0
-    ValueType:
-      name: valueType
-      in: query
-      description: Return value type. In case of `urifRefs` and `identifiers` Accept header will be ignored and the return type will always be a JSON array
-      schema:
-        type: string
-        enum:
-        - uriRefs
-        - identifiers
-        - originalIds
-        - metadata
-        default: uriRefs
-    Limit:
-      name: limit
-      in: query
-      schema:
-        type: number
-        format: int64
-        default: 100
-        minimum: 1
-        maximum: 5000
-    endDate:
-      name: endDate
-      in: query
-      description: End date for which to retrieve the history. If no end date is specified, the currend date is used.
-      schema:
-        type: string
-        format: date
-      example: 2012-11-1
-    startDate:
-      name: startDate
-      in: query
-      description: Start date for which to retrieve the history formatted as ISO
-      required: true
-      schema:
-        type: string
-        format: date
-      example: 1997-8-25
-    filterGlobal:
-      name: filter
-      in: query
-      description: Filter for one more multiple specific dimensions and/or the `score` that should be returned. If present,  the document will contain _only_ the specified Dimensions. If this parameter is missing, the complete document will be returned.
-      required: false
-      style: form
-      explode: false
-      schema:
-        type: array
-        items:
-          type: string
-          enum:
-          - findability
-          - accessibility
-          - interoperability
-          - reusability
-          - contextuality
-          - score
-    catalogueId:
-      name: id
-      in: path
-      description: ID of catalogue to retrieve
-      required: true
-      schema:
-        type: string
-    resolution:
-      name: resolution
-      in: query
-      description: Dimension for which to retrieve the history
-      required: false
-      schema:
-        enum:
-        - year
-        - month
-        - day
-        default: month
-    filter:
-      name: filter
-      in: query
-      description: Filter for one more multiple specific dimensions and/or the `score` and `info` object that should be returned.If present,  the document will contain _only_ the specified Dimensions. If this parameter is missing, the complete document will be returned.
-      required: false
-      style: form
-      explode: false
-      schema:
-        type: array
-        items:
-          type: string
-          enum:
-          - findability
-          - accessibility
-          - interoperability
-          - reusability
-          - contextuality
-          - score
-          - info
   requestBodies:
     RDFBody:
       required: true
@@ -574,6 +464,116 @@ components:
           schema:
             type: string
             format: binary
+  parameters:
+    Limit:
+      name: limit
+      in: query
+      schema:
+        type: number
+        format: int64
+        default: 100
+        minimum: 1
+        maximum: 5000
+    CatalogueId:
+      name: catalogueId
+      description: The catalogue id
+      in: path
+      required: true
+      schema:
+        type: string
+        pattern: '[a-z,0-9,-]+'
+    Offset:
+      name: offset
+      in: query
+      schema:
+        type: number
+        format: int64
+        default: 0
+        minimum: 0
+    ValueType:
+      name: valueType
+      in: query
+      description: Return value type. In case of `urifRefs` and `identifiers` Accept header will be ignored and the return type will always be a JSON array
+      schema:
+        type: string
+        enum:
+        - uriRefs
+        - identifiers
+        - originalIds
+        - metadata
+        default: uriRefs
+    filterGlobal:
+      name: filter
+      in: query
+      description: Filter for one more multiple specific dimensions and/or the `score` that should be returned. If present,  the document will contain _only_ the specified Dimensions. If this parameter is missing, the complete document will be returned.
+      required: false
+      style: form
+      explode: false
+      schema:
+        type: array
+        items:
+          type: string
+          enum:
+          - findability
+          - accessibility
+          - interoperability
+          - reusability
+          - contextuality
+          - score
+    startDate:
+      name: startDate
+      in: query
+      description: Start date for which to retrieve the history formatted as ISO
+      required: true
+      schema:
+        type: string
+        format: date
+      example: 1997-8-25
+    endDate:
+      name: endDate
+      in: query
+      description: End date for which to retrieve the history. If no end date is specified, the currend date is used.
+      schema:
+        type: string
+        format: date
+      example: 2012-11-1
+    resolution:
+      name: resolution
+      in: query
+      description: Dimension for which to retrieve the history
+      required: false
+      schema:
+        enum:
+        - year
+        - month
+        - day
+        default: month
+    filter:
+      name: filter
+      in: query
+      description: Filter for one more multiple specific dimensions and/or the `score` and `info` object that should be returned.If present,  the document will contain _only_ the specified Dimensions. If this parameter is missing, the complete document will be returned.
+      required: false
+      style: form
+      explode: false
+      schema:
+        type: array
+        items:
+          type: string
+          enum:
+          - findability
+          - accessibility
+          - interoperability
+          - reusability
+          - contextuality
+          - score
+          - info
+    catalogueId:
+      name: id
+      in: path
+      description: ID of catalogue to retrieve
+      required: true
+      schema:
+        type: string
   responses:
     RDFLIST200:
       description: The list of resource(s)
@@ -662,18 +662,6 @@ components:
             type: array
             items:
               type: string
-    CatalogueSuccess:
-      description: Catalogue response object
-      content:
-        application/json:
-          schema:
-            type: object
-            properties:
-              success:
-                type: boolean
-                default: true
-              result:
-                $ref: '#/components/schemas/Catalogue'
     BadRequest:
       description: Validation error / Bad request
       content:
@@ -686,8 +674,8 @@ components:
                 default: false
               message:
                 type: string
-    NotFound:
-      description: Not found
+    CatalogueSuccess:
+      description: Catalogue response object
       content:
         application/json:
           schema:
@@ -695,9 +683,9 @@ components:
             properties:
               success:
                 type: boolean
-                default: false
-              message:
-                type: string
+                default: true
+              result:
+                $ref: '#/components/schemas/Catalogue'
     CatalogueSuccessId:
       description: Catalogue response object
       content:
@@ -713,6 +701,18 @@ components:
                 properties:
                   id:
                     type: string
+    NotFound:
+      description: Not found
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              success:
+                type: boolean
+                default: false
+              message:
+                type: string
     InternalServerError:
       description: Internal Server Error
       content:
@@ -891,61 +891,17 @@ components:
                     type: string
             status:
               type: string
-    HistoricNamedPercentages:
-      description: A history of named percentages.
-      type: object
-      additionalProperties:
-        $ref: '#/components/schemas/NamedPercentage'
-      minProperties: 1
-    CatalogueMetrics:
+    NamedPercentage:
+      description: Named percentage
       type: object
       properties:
-        info:
-          $ref: '#/components/schemas/CatalogueInfo'
-        findability:
-          $ref: '#/components/schemas/Findability'
-        accessibility:
-          $ref: '#/components/schemas/Accessibility'
-        interoperability:
-          $ref: '#/components/schemas/Interoperability'
-        resusability:
-          $ref: '#/components/schemas/Reusability'
-        contextuality:
-          $ref: '#/components/schemas/Contextuality'
-        score:
-          description: The aggregated score
+        name:
+          type: string
+          example: 'yes'
+        percentage:
           type: number
-          format: int32
-    HistoricCatalogueMetrics:
-      type: object
-      properties:
-        info:
-          $ref: '#/components/schemas/CatalogueInfo'
-        findability:
-          $ref: '#/components/schemas/HistoricFindability'
-        accessibility:
-          $ref: '#/components/schemas/HistoricAccessibility'
-        interoperability:
-          $ref: '#/components/schemas/HistoricInteroperability'
-        resusability:
-          $ref: '#/components/schemas/HistoricReusability'
-        contextuality:
-          $ref: '#/components/schemas/HistoricContextuality'
-        score:
-          $ref: '#/components/schemas/HistoricScore'
-    CatalogueInfo:
-      type: object
-      properties:
-        id:
-          type: string
-        title:
-          type: string
-        description:
-          type: string
-        spatial:
-          type: string
-        type:
-          type: string
+          format: double
+          example: 50.5
     Violations:
       description: SHACL violations, List of dcat-ap compliance issues
       type: object
@@ -1039,55 +995,6 @@ components:
             point: 55.0
             percentage: 55.0
             max: 80.0
-    Findability:
-      description: Findability metrics
-      type: object
-      properties:
-        keywordAvailability:
-          type: array
-          items:
-            $ref: '#/components/schemas/NamedPercentage'
-          example:
-          - name: 'yes'
-            percentage: 55.0
-          - name: 'no'
-            percentage: 45.0
-        categoryAvailability:
-          type: array
-          items:
-            $ref: '#/components/schemas/NamedPercentage'
-          example:
-          - name: 'yes'
-            percentage: 55.0
-          - name: 'no'
-            percentage: 45.0
-        spatialAvailability:
-          type: array
-          items:
-            $ref: '#/components/schemas/NamedPercentage'
-          example:
-          - name: 'yes'
-            percentage: 55.0
-          - name: 'no'
-            percentage: 45.0
-        temporalAvailability:
-          type: array
-          items:
-            $ref: '#/components/schemas/NamedPercentage'
-          example:
-          - name: 'yes'
-            percentage: 55.0
-          - name: 'no'
-            percentage: 45.0
-        score:
-          description: The aggregated score
-          type: object
-          items:
-            $ref: '#/components/schemas/PointPercentageMax'
-          example:
-            point: 55.0
-            percentage: 55.0
-            max: 80.0
     HistoricScore:
       description: List of name value pairs, where key is the date and value is the score.
       type: object
@@ -1102,90 +1009,21 @@ components:
       - '2020-03-02': 200.0
       - '2020-03-03': 221.0
       - '2020-03-04': 221.0
-    HistoricContextuality:
-      description: Contextuality metrics
+    HistoricCatalogueMetrics:
       type: object
       properties:
-        rightsAvailability:
-          type: array
-          items:
-            $ref: '#/components/schemas/HistoricNamedPercentages'
-          example:
-          - '2020-03-02':
-            - name: 'yes'
-              percentage: 55.0
-            - name: 'no'
-              percentage: 45.0
-          - '2020-03-03':
-            - name: 'yes'
-              percentage: 33.0
-            - name: 'no'
-              percentage: 67.0
-          - '2020-03-04':
-            - name: 'yes'
-              percentage: 82.5
-            - name: 'no'
-              percentage: 17.5
-        byteSizeAvailability:
-          type: array
-          items:
-            $ref: '#/components/schemas/HistoricNamedPercentages'
-          example:
-          - '2020-03-02':
-            - name: 'yes'
-              percentage: 55.0
-            - name: 'no'
-              percentage: 45.0
-          - '2020-03-03':
-            - name: 'yes'
-              percentage: 33.0
-            - name: 'no'
-              percentage: 67.0
-          - '2020-03-04':
-            - name: 'yes'
-              percentage: 82.5
-            - name: 'no'
-              percentage: 17.5
-        dateIssuedAvailability:
-          type: array
-          items:
-            $ref: '#/components/schemas/HistoricNamedPercentages'
-          example:
-          - '2020-03-02':
-            - name: 'yes'
-              percentage: 55.0
-            - name: 'no'
-              percentage: 45.0
-          - '2020-03-03':
-            - name: 'yes'
-              percentage: 33.0
-            - name: 'no'
-              percentage: 67.0
-          - '2020-03-04':
-            - name: 'yes'
-              percentage: 82.5
-            - name: 'no'
-              percentage: 17.5
-        dateModifiedAvailability:
-          type: array
-          items:
-            $ref: '#/components/schemas/HistoricNamedPercentages'
-          example:
-          - '2020-03-02':
-            - name: 'yes'
-              percentage: 55.0
-            - name: 'no'
-              percentage: 45.0
-          - '2020-03-03':
-            - name: 'yes'
-              percentage: 33.0
-            - name: 'no'
-              percentage: 67.0
-          - '2020-03-04':
-            - name: 'yes'
-              percentage: 82.5
-            - name: 'no'
-              percentage: 17.5
+        info:
+          $ref: '#/components/schemas/CatalogueInfo'
+        findability:
+          $ref: '#/components/schemas/HistoricFindability'
+        accessibility:
+          $ref: '#/components/schemas/HistoricAccessibility'
+        interoperability:
+          $ref: '#/components/schemas/HistoricInteroperability'
+        resusability:
+          $ref: '#/components/schemas/HistoricReusability'
+        contextuality:
+          $ref: '#/components/schemas/HistoricContextuality'
         score:
           $ref: '#/components/schemas/HistoricScore'
     HistoricFindability:
@@ -1317,11 +1155,31 @@ components:
             point: 55.0
             percentage: 55.0
             max: 80.0
-    HistoricReusability:
-      description: Reusability metrics
+    HistoricAccessibility:
+      description: Accessibility metrics
       type: object
       properties:
-        licenceAvailability:
+        accessUrlStatusCodes:
+          type: array
+          items:
+            $ref: '#/components/schemas/HistoricNamedPercentages'
+          example:
+          - '2020-03-02':
+            - name: 200
+              percentage: 55.0
+            - name: 404
+              percentage: 45.0
+          - '2020-03-03':
+            - name: 200
+              percentage: 33.0
+            - name: 404
+              percentage: 67.0
+          - '2020-03-04':
+            - name: 200
+              percentage: 82.5
+            - name: 500
+              percentage: 17.5
+        downloadUrlAvailability:
           type: array
           items:
             $ref: '#/components/schemas/HistoricNamedPercentages'
@@ -1341,108 +1199,247 @@ components:
               percentage: 82.5
             - name: 'no'
               percentage: 17.5
-        licenceAlignment:
+        downloadUrlStatusCodes:
           type: array
           items:
             $ref: '#/components/schemas/HistoricNamedPercentages'
           example:
           - '2020-03-02':
-            - name: 'yes'
+            - name: 200
               percentage: 55.0
-            - name: 'no'
+            - name: 404
               percentage: 45.0
           - '2020-03-03':
-            - name: 'yes'
+            - name: 404
               percentage: 33.0
-            - name: 'no'
+            - name: 500
               percentage: 67.0
           - '2020-03-04':
-            - name: 'yes'
+            - name: 200
               percentage: 82.5
-            - name: 'no'
-              percentage: 17.5
-        accessRightsAvailability:
-          type: array
-          items:
-            $ref: '#/components/schemas/HistoricNamedPercentages'
-          example:
-          - '2020-03-02':
-            - name: 'yes'
-              percentage: 55.0
-            - name: 'no'
-              percentage: 45.0
-          - '2020-03-03':
-            - name: 'yes'
-              percentage: 33.0
-            - name: 'no'
-              percentage: 67.0
-          - '2020-03-04':
-            - name: 'yes'
-              percentage: 82.5
-            - name: 'no'
-              percentage: 17.5
-        accessRightsAlignment:
-          type: array
-          items:
-            $ref: '#/components/schemas/HistoricNamedPercentages'
-          example:
-          - '2020-03-02':
-            - name: 'yes'
-              percentage: 55.0
-            - name: 'no'
-              percentage: 45.0
-          - '2020-03-03':
-            - name: 'yes'
-              percentage: 33.0
-            - name: 'no'
-              percentage: 67.0
-          - '2020-03-04':
-            - name: 'yes'
-              percentage: 82.5
-            - name: 'no'
-              percentage: 17.5
-        contactPointAvailability:
-          type: array
-          items:
-            $ref: '#/components/schemas/HistoricNamedPercentages'
-          example:
-          - '2020-03-02':
-            - name: 'yes'
-              percentage: 55.0
-            - name: 'no'
-              percentage: 45.0
-          - '2020-03-03':
-            - name: 'yes'
-              percentage: 33.0
-            - name: 'no'
-              percentage: 67.0
-          - '2020-03-04':
-            - name: 'yes'
-              percentage: 82.5
-            - name: 'no'
-              percentage: 17.5
-        publisherAvailability:
-          type: array
-          items:
-            $ref: '#/components/schemas/HistoricNamedPercentages'
-          example:
-          - '2020-03-02':
-            - name: 'yes'
-              percentage: 55.0
-            - name: 'no'
-              percentage: 45.0
-          - '2020-03-03':
-            - name: 'yes'
-              percentage: 33.0
-            - name: 'no'
-              percentage: 67.0
-          - '2020-03-04':
-            - name: 'yes'
-              percentage: 82.5
-            - name: 'no'
+            - name: 500
               percentage: 17.5
         score:
           $ref: '#/components/schemas/HistoricScore'
+    HistoricNamedPercentages:
+      description: A history of named percentages.
+      type: object
+      additionalProperties:
+        $ref: '#/components/schemas/NamedPercentage'
+      minProperties: 1
+    Findability:
+      description: Findability metrics
+      type: object
+      properties:
+        keywordAvailability:
+          type: array
+          items:
+            $ref: '#/components/schemas/NamedPercentage'
+          example:
+          - name: 'yes'
+            percentage: 55.0
+          - name: 'no'
+            percentage: 45.0
+        categoryAvailability:
+          type: array
+          items:
+            $ref: '#/components/schemas/NamedPercentage'
+          example:
+          - name: 'yes'
+            percentage: 55.0
+          - name: 'no'
+            percentage: 45.0
+        spatialAvailability:
+          type: array
+          items:
+            $ref: '#/components/schemas/NamedPercentage'
+          example:
+          - name: 'yes'
+            percentage: 55.0
+          - name: 'no'
+            percentage: 45.0
+        temporalAvailability:
+          type: array
+          items:
+            $ref: '#/components/schemas/NamedPercentage'
+          example:
+          - name: 'yes'
+            percentage: 55.0
+          - name: 'no'
+            percentage: 45.0
+        score:
+          description: The aggregated score
+          type: object
+          items:
+            $ref: '#/components/schemas/PointPercentageMax'
+          example:
+            point: 55.0
+            percentage: 55.0
+            max: 80.0
+    Interoperability:
+      description: Interoperability metrics
+      type: object
+      properties:
+        formatAvailability:
+          type: array
+          items:
+            $ref: '#/components/schemas/NamedPercentage'
+          example:
+          - name: 'yes'
+            percentage: 55.0
+          - name: 'no'
+            percentage: 45.0
+        mediaTypeAvailability:
+          type: array
+          items:
+            $ref: '#/components/schemas/NamedPercentage'
+          example:
+          - name: 'yes'
+            percentage: 55.0
+          - name: 'no'
+            percentage: 45.0
+        formatMediaTypeAlignment:
+          type: array
+          items:
+            $ref: '#/components/schemas/NamedPercentage'
+          example:
+          - name: 'yes'
+            percentage: 55.0
+          - name: 'no'
+            percentage: 45.0
+        formatMediaTypeNonProprietary:
+          type: array
+          items:
+            $ref: '#/components/schemas/NamedPercentage'
+          example:
+          - name: 'yes'
+            percentage: 55.0
+          - name: 'no'
+            percentage: 45.0
+        formatMediaTypeMachineReadable:
+          type: array
+          items:
+            $ref: '#/components/schemas/NamedPercentage'
+          example:
+          - name: 'yes'
+            percentage: 55.0
+          - name: 'no'
+            percentage: 45.0
+        dcatApCompliance:
+          type: array
+          items:
+            $ref: '#/components/schemas/NamedPercentage'
+          example:
+          - name: 'yes'
+            percentage: 55.0
+          - name: 'no'
+            percentage: 45.0
+        score:
+          description: The aggregated score
+          type: object
+          items:
+            $ref: '#/components/schemas/PointPercentageMax'
+          example:
+            point: 55.0
+            percentage: 55.0
+            max: 80.0
+    CatalogueInfo:
+      type: object
+      properties:
+        id:
+          type: string
+        title:
+          type: string
+        description:
+          type: string
+        spatial:
+          type: string
+        type:
+          type: string
+    CatalogueMetrics:
+      type: object
+      properties:
+        info:
+          $ref: '#/components/schemas/CatalogueInfo'
+        findability:
+          $ref: '#/components/schemas/Findability'
+        accessibility:
+          $ref: '#/components/schemas/Accessibility'
+        interoperability:
+          $ref: '#/components/schemas/Interoperability'
+        resusability:
+          $ref: '#/components/schemas/Reusability'
+        contextuality:
+          $ref: '#/components/schemas/Contextuality'
+        score:
+          description: The aggregated score
+          type: number
+          format: int32
+    PointPercentageMax:
+      description: Point Percentage Max
+      type: object
+      properties:
+        point:
+          type: number
+          format: double
+          example: 50.5
+        percentage:
+          type: number
+          format: double
+          example: 50.5
+        max:
+          type: number
+          format: double
+          example: 80.0
+    Contextuality:
+      description: Contextuality metrics
+      type: object
+      properties:
+        rightsAvailability:
+          type: array
+          items:
+            $ref: '#/components/schemas/NamedPercentage'
+          example:
+          - name: 'yes'
+            percentage: 55.0
+          - name: 'no'
+            percentage: 45.0
+        byteSizeAvailability:
+          type: array
+          items:
+            $ref: '#/components/schemas/NamedPercentage'
+          example:
+          - name: 'yes'
+            percentage: 55.0
+          - name: 'no'
+            percentage: 45.0
+        dateIssuedAvailability:
+          type: array
+          items:
+            $ref: '#/components/schemas/NamedPercentage'
+          example:
+          - name: 'yes'
+            percentage: 55.0
+          - name: 'no'
+            percentage: 45.0
+        dateModifiedAvailability:
+          type: array
+          items:
+            $ref: '#/components/schemas/NamedPercentage'
+          example:
+          - name: 'yes'
+            percentage: 55.0
+          - name: 'no'
+            percentage: 45.0
+        score:
+          description: The aggregated score
+          type: object
+          items:
+            $ref: '#/components/schemas/PointPercentageMax'
+          example:
+            point: 55.0
+            percentage: 55.0
+            max: 80.0
     HistoricInteroperability:
       description: Interoperability metrics
       type: object
@@ -1569,176 +1566,199 @@ components:
               percentage: 17.5
         score:
           $ref: '#/components/schemas/HistoricScore'
-    Interoperability:
-      description: Interoperability metrics
+    HistoricReusability:
+      description: Reusability metrics
       type: object
       properties:
-        formatAvailability:
+        licenceAvailability:
           type: array
           items:
-            $ref: '#/components/schemas/NamedPercentage'
+            $ref: '#/components/schemas/HistoricNamedPercentages'
           example:
-          - name: 'yes'
-            percentage: 55.0
-          - name: 'no'
-            percentage: 45.0
-        mediaTypeAvailability:
+          - '2020-03-02':
+            - name: 'yes'
+              percentage: 55.0
+            - name: 'no'
+              percentage: 45.0
+          - '2020-03-03':
+            - name: 'yes'
+              percentage: 33.0
+            - name: 'no'
+              percentage: 67.0
+          - '2020-03-04':
+            - name: 'yes'
+              percentage: 82.5
+            - name: 'no'
+              percentage: 17.5
+        licenceAlignment:
           type: array
           items:
-            $ref: '#/components/schemas/NamedPercentage'
+            $ref: '#/components/schemas/HistoricNamedPercentages'
           example:
-          - name: 'yes'
-            percentage: 55.0
-          - name: 'no'
-            percentage: 45.0
-        formatMediaTypeAlignment:
+          - '2020-03-02':
+            - name: 'yes'
+              percentage: 55.0
+            - name: 'no'
+              percentage: 45.0
+          - '2020-03-03':
+            - name: 'yes'
+              percentage: 33.0
+            - name: 'no'
+              percentage: 67.0
+          - '2020-03-04':
+            - name: 'yes'
+              percentage: 82.5
+            - name: 'no'
+              percentage: 17.5
+        accessRightsAvailability:
           type: array
           items:
-            $ref: '#/components/schemas/NamedPercentage'
+            $ref: '#/components/schemas/HistoricNamedPercentages'
           example:
-          - name: 'yes'
-            percentage: 55.0
-          - name: 'no'
-            percentage: 45.0
-        formatMediaTypeNonProprietary:
+          - '2020-03-02':
+            - name: 'yes'
+              percentage: 55.0
+            - name: 'no'
+              percentage: 45.0
+          - '2020-03-03':
+            - name: 'yes'
+              percentage: 33.0
+            - name: 'no'
+              percentage: 67.0
+          - '2020-03-04':
+            - name: 'yes'
+              percentage: 82.5
+            - name: 'no'
+              percentage: 17.5
+        accessRightsAlignment:
           type: array
           items:
-            $ref: '#/components/schemas/NamedPercentage'
+            $ref: '#/components/schemas/HistoricNamedPercentages'
           example:
-          - name: 'yes'
-            percentage: 55.0
-          - name: 'no'
-            percentage: 45.0
-        formatMediaTypeMachineReadable:
+          - '2020-03-02':
+            - name: 'yes'
+              percentage: 55.0
+            - name: 'no'
+              percentage: 45.0
+          - '2020-03-03':
+            - name: 'yes'
+              percentage: 33.0
+            - name: 'no'
+              percentage: 67.0
+          - '2020-03-04':
+            - name: 'yes'
+              percentage: 82.5
+            - name: 'no'
+              percentage: 17.5
+        contactPointAvailability:
           type: array
           items:
-            $ref: '#/components/schemas/NamedPercentage'
+            $ref: '#/components/schemas/HistoricNamedPercentages'
           example:
-          - name: 'yes'
-            percentage: 55.0
-          - name: 'no'
-            percentage: 45.0
-        dcatApCompliance:
+          - '2020-03-02':
+            - name: 'yes'
+              percentage: 55.0
+            - name: 'no'
+              percentage: 45.0
+          - '2020-03-03':
+            - name: 'yes'
+              percentage: 33.0
+            - name: 'no'
+              percentage: 67.0
+          - '2020-03-04':
+            - name: 'yes'
+              percentage: 82.5
+            - name: 'no'
+              percentage: 17.5
+        publisherAvailability:
           type: array
           items:
-            $ref: '#/components/schemas/NamedPercentage'
+            $ref: '#/components/schemas/HistoricNamedPercentages'
           example:
-          - name: 'yes'
-            percentage: 55.0
-          - name: 'no'
-            percentage: 45.0
+          - '2020-03-02':
+            - name: 'yes'
+              percentage: 55.0
+            - name: 'no'
+              percentage: 45.0
+          - '2020-03-03':
+            - name: 'yes'
+              percentage: 33.0
+            - name: 'no'
+              percentage: 67.0
+          - '2020-03-04':
+            - name: 'yes'
+              percentage: 82.5
+            - name: 'no'
+              percentage: 17.5
         score:
-          description: The aggregated score
-          type: object
-          items:
-            $ref: '#/components/schemas/PointPercentageMax'
-          example:
-            point: 55.0
-            percentage: 55.0
-            max: 80.0
-    PointPercentageMax:
-      description: Point Percentage Max
-      type: object
-      properties:
-        point:
-          type: number
-          format: double
-          example: 50.5
-        percentage:
-          type: number
-          format: double
-          example: 50.5
-        max:
-          type: number
-          format: double
-          example: 80.0
-    NamedPercentage:
-      description: Named percentage
-      type: object
-      properties:
-        name:
-          type: string
-          example: 'yes'
-        percentage:
-          type: number
-          format: double
-          example: 50.5
-    Contextuality:
+          $ref: '#/components/schemas/HistoricScore'
+    HistoricContextuality:
       description: Contextuality metrics
       type: object
       properties:
         rightsAvailability:
           type: array
           items:
-            $ref: '#/components/schemas/NamedPercentage'
+            $ref: '#/components/schemas/HistoricNamedPercentages'
           example:
-          - name: 'yes'
-            percentage: 55.0
-          - name: 'no'
-            percentage: 45.0
+          - '2020-03-02':
+            - name: 'yes'
+              percentage: 55.0
+            - name: 'no'
+              percentage: 45.0
+          - '2020-03-03':
+            - name: 'yes'
+              percentage: 33.0
+            - name: 'no'
+              percentage: 67.0
+          - '2020-03-04':
+            - name: 'yes'
+              percentage: 82.5
+            - name: 'no'
+              percentage: 17.5
         byteSizeAvailability:
           type: array
           items:
-            $ref: '#/components/schemas/NamedPercentage'
+            $ref: '#/components/schemas/HistoricNamedPercentages'
           example:
-          - name: 'yes'
-            percentage: 55.0
-          - name: 'no'
-            percentage: 45.0
+          - '2020-03-02':
+            - name: 'yes'
+              percentage: 55.0
+            - name: 'no'
+              percentage: 45.0
+          - '2020-03-03':
+            - name: 'yes'
+              percentage: 33.0
+            - name: 'no'
+              percentage: 67.0
+          - '2020-03-04':
+            - name: 'yes'
+              percentage: 82.5
+            - name: 'no'
+              percentage: 17.5
         dateIssuedAvailability:
           type: array
           items:
-            $ref: '#/components/schemas/NamedPercentage'
+            $ref: '#/components/schemas/HistoricNamedPercentages'
           example:
-          - name: 'yes'
-            percentage: 55.0
-          - name: 'no'
-            percentage: 45.0
+          - '2020-03-02':
+            - name: 'yes'
+              percentage: 55.0
+            - name: 'no'
+              percentage: 45.0
+          - '2020-03-03':
+            - name: 'yes'
+              percentage: 33.0
+            - name: 'no'
+              percentage: 67.0
+          - '2020-03-04':
+            - name: 'yes'
+              percentage: 82.5
+            - name: 'no'
+              percentage: 17.5
         dateModifiedAvailability:
           type: array
           items:
-            $ref: '#/components/schemas/NamedPercentage'
-          example:
-          - name: 'yes'
-            percentage: 55.0
-          - name: 'no'
-            percentage: 45.0
-        score:
-          description: The aggregated score
-          type: object
-          items:
-            $ref: '#/components/schemas/PointPercentageMax'
-          example:
-            point: 55.0
-            percentage: 55.0
-            max: 80.0
-    HistoricAccessibility:
-      description: Accessibility metrics
-      type: object
-      properties:
-        accessUrlStatusCodes:
-          type: array
-          items:
-            $ref: '#/components/schemas/HistoricNamedPercentages'
-          example:
-          - '2020-03-02':
-            - name: 200
-              percentage: 55.0
-            - name: 404
-              percentage: 45.0
-          - '2020-03-03':
-            - name: 200
-              percentage: 33.0
-            - name: 404
-              percentage: 67.0
-          - '2020-03-04':
-            - name: 200
-              percentage: 82.5
-            - name: 500
-              percentage: 17.5
-        downloadUrlAvailability:
-          type: array
-          items:
             $ref: '#/components/schemas/HistoricNamedPercentages'
           example:
           - '2020-03-02':
@@ -1755,26 +1775,6 @@ components:
             - name: 'yes'
               percentage: 82.5
             - name: 'no'
-              percentage: 17.5
-        downloadUrlStatusCodes:
-          type: array
-          items:
-            $ref: '#/components/schemas/HistoricNamedPercentages'
-          example:
-          - '2020-03-02':
-            - name: 200
-              percentage: 55.0
-            - name: 404
-              percentage: 45.0
-          - '2020-03-03':
-            - name: 404
-              percentage: 33.0
-            - name: 500
-              percentage: 67.0
-          - '2020-03-04':
-            - name: 200
-              percentage: 82.5
-            - name: 500
               percentage: 17.5
         score:
           $ref: '#/components/schemas/HistoricScore'

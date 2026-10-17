@@ -129,18 +129,12 @@ components:
                 default: false
               message:
                 type: string
-    BadRequest:
-      description: Validation error / Bad request
+    QuerySuccess:
+      description: The query was successfully processed
       content:
         application/json:
           schema:
             type: object
-            properties:
-              success:
-                type: boolean
-                default: false
-              message:
-                type: string
     NotFound:
       description: Not found
       content:
@@ -153,12 +147,18 @@ components:
                 default: false
               message:
                 type: string
-    QuerySuccess:
-      description: The query was successfully processed
+    BadRequest:
+      description: Validation error / Bad request
       content:
         application/json:
           schema:
             type: object
+            properties:
+              success:
+                type: boolean
+                default: false
+              message:
+                type: string
   securitySchemes:
     ApiKeyAuth:
       type: apiKey

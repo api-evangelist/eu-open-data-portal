@@ -548,6 +548,12 @@ components:
                 default: false
               message:
                 type: string
+    QuerySuccess:
+      description: The query was successfully processed
+      content:
+        application/json:
+          schema:
+            type: object
     InternalServerError:
       description: Internal Server Error
       content:
@@ -560,12 +566,6 @@ components:
                 default: false
               message:
                 type: string
-    QuerySuccess:
-      description: The query was successfully processed
-      content:
-        application/json:
-          schema:
-            type: object
   securitySchemes:
     ApiKeyAuth:
       type: apiKey

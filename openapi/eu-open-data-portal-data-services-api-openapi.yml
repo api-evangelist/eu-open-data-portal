@@ -102,6 +102,18 @@ components:
                 default: false
               message:
                 type: string
+    DataServiceSuccess:
+      description: DataService response object
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              success:
+                type: boolean
+                default: true
+              result:
+                $ref: '#/components/schemas/DataService'
     NotFound:
       description: Not found
       content:
@@ -141,18 +153,6 @@ components:
                 default: false
               message:
                 type: string
-    DataServiceSuccess:
-      description: DataService response object
-      content:
-        application/json:
-          schema:
-            type: object
-            properties:
-              success:
-                type: boolean
-                default: true
-              result:
-                $ref: '#/components/schemas/DataService'
   requestBodies:
     RDFBody:
       required: true

@@ -67,35 +67,6 @@ components:
           enum:
           - accepted
       additionalProperties: false
-    JSON-RPCSuccess:
-      description: JSON-RPC Success Response
-      type: object
-      required:
-      - result
-      allOf:
-      - $ref: '#/components/schemas/JSON-RPCBase'
-      - type: object
-        properties:
-          result:
-            description: Depending of the called method, the result can look differently.
-            oneOf:
-            - $ref: '#/components/schemas/refreshScopeResult'
-        additionalProperties: false
-    JSON-RPCBase:
-      description: JSON-RPC Base Schema
-      type: object
-      required:
-      - jsonrpc
-      properties:
-        jsonrpc:
-          description: JSON-RPC Version `2.0`
-          type: string
-          enum:
-          - '2.0'
-        id:
-          description: Optional client side defined correlator.
-          type: string
-      additionalProperties: false
     JSON-RPCError:
       description: JSON-RPC Error Response
       type: object
@@ -163,6 +134,35 @@ components:
                 description: In case of scope 'catalogue' the catalogue id
                 type: string
             additionalProperties: false
+        additionalProperties: false
+    JSON-RPCBase:
+      description: JSON-RPC Base Schema
+      type: object
+      required:
+      - jsonrpc
+      properties:
+        jsonrpc:
+          description: JSON-RPC Version `2.0`
+          type: string
+          enum:
+          - '2.0'
+        id:
+          description: Optional client side defined correlator.
+          type: string
+      additionalProperties: false
+    JSON-RPCSuccess:
+      description: JSON-RPC Success Response
+      type: object
+      required:
+      - result
+      allOf:
+      - $ref: '#/components/schemas/JSON-RPCBase'
+      - type: object
+        properties:
+          result:
+            description: Depending of the called method, the result can look differently.
+            oneOf:
+            - $ref: '#/components/schemas/refreshScopeResult'
         additionalProperties: false
   securitySchemes:
     ApiKeyAuth:

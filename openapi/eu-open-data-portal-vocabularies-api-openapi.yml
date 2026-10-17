@@ -484,44 +484,6 @@ paths:
     servers:
     - url: ''
 components:
-  parameters:
-    VocabularyId:
-      name: vocabularyId
-      description: The vocabulary id
-      in: path
-      required: true
-      schema:
-        type: string
-        pattern: ^[a-z0-9\-~]+$
-    Offset:
-      name: offset
-      in: query
-      schema:
-        type: number
-        format: int64
-        default: 0
-        minimum: 0
-    ValueType:
-      name: valueType
-      in: query
-      description: Return value type. In case of `urifRefs` and `identifiers` Accept header will be ignored and the return type will always be a JSON array
-      schema:
-        type: string
-        enum:
-        - uriRefs
-        - identifiers
-        - originalIds
-        - metadata
-        default: uriRefs
-    Limit:
-      name: limit
-      in: query
-      schema:
-        type: number
-        format: int64
-        default: 100
-        minimum: 1
-        maximum: 5000
   requestBodies:
     RDFBody:
       required: true
@@ -558,6 +520,44 @@ components:
           schema:
             type: string
             format: binary
+  parameters:
+    Limit:
+      name: limit
+      in: query
+      schema:
+        type: number
+        format: int64
+        default: 100
+        minimum: 1
+        maximum: 5000
+    Offset:
+      name: offset
+      in: query
+      schema:
+        type: number
+        format: int64
+        default: 0
+        minimum: 0
+    VocabularyId:
+      name: vocabularyId
+      description: The vocabulary id
+      in: path
+      required: true
+      schema:
+        type: string
+        pattern: ^[a-z0-9\-~]+$
+    ValueType:
+      name: valueType
+      in: query
+      description: Return value type. In case of `urifRefs` and `identifiers` Accept header will be ignored and the return type will always be a JSON array
+      schema:
+        type: string
+        enum:
+        - uriRefs
+        - identifiers
+        - originalIds
+        - metadata
+        default: uriRefs
   responses:
     RDFLIST200:
       description: The list of resource(s)
@@ -634,50 +634,6 @@ components:
           schema:
             type: string
             format: binary
-    VocabularySuccess:
-      description: Vocabulary response
-      content:
-        application/json:
-          schema:
-            type: object
-            properties:
-              datasets:
-                type: array
-                items:
-                  type: object
-                  properties:
-                    success:
-                      type: boolean
-                    status:
-                      type: integer
-                    message:
-                      type: string
-                    id:
-                      type: string
-    VocableSuccess:
-      description: Vocabulary response object
-      content:
-        application/json:
-          schema:
-            type: object
-            properties:
-              success:
-                type: boolean
-                default: true
-              result:
-                $ref: '#/components/schemas/Vocable'
-    NotFound:
-      description: Not found
-      content:
-        application/json:
-          schema:
-            type: object
-            properties:
-              success:
-                type: boolean
-                default: false
-              message:
-                type: string
     BadRequest:
       description: Validation error / Bad request
       content:
@@ -690,7 +646,7 @@ components:
                 default: false
               message:
                 type: string
-    VocabularySuccessId:
+    VocableSuccessId:
       description: Vocabulary response object
       content:
         application/json:
@@ -705,7 +661,7 @@ components:
                 properties:
                   id:
                     type: string
-    VocableSuccessId:
+    VocabularySuccessId:
       description: Vocabulary response object
       content:
         application/json:
@@ -732,6 +688,50 @@ components:
                 default: false
               message:
                 type: string
+    VocabularySuccess:
+      description: Vocabulary response
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              datasets:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    success:
+                      type: boolean
+                    status:
+                      type: integer
+                    message:
+                      type: string
+                    id:
+                      type: string
+    NotFound:
+      description: Not found
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              success:
+                type: boolean
+                default: false
+              message:
+                type: string
+    VocableSuccess:
+      description: Vocabulary response object
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              success:
+                type: boolean
+                default: true
+              result:
+                $ref: '#/components/schemas/Vocable'
   headers:
     LocationURIRef:
       description: The final URIRef
@@ -739,6 +739,16 @@ components:
         type: string
         format: uri
   schemas:
+    Vocabulary:
+      description: A representation of a Vocabulary
+      type: object
+      required:
+      - vocab
+      properties:
+        vocab:
+          type: array
+          items:
+            $ref: '#/components/schemas/Vocable'
     Vocable:
       description: A representation of a vocable
       type: object
@@ -751,16 +761,6 @@ components:
             type: string
         resource:
           type: string
-    Vocabulary:
-      description: A representation of a Vocabulary
-      type: object
-      required:
-      - vocab
-      properties:
-        vocab:
-          type: array
-          items:
-            $ref: '#/components/schemas/Vocable'
   securitySchemes:
     ApiKeyAuth:
       type: apiKey
