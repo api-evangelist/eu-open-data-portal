@@ -20,3 +20,9 @@ paths:
       x-summary-source: derived
       operationId: getReinitDb
       x-operation-id-source: derived
+x-provenance:
+  method: harvested
+  publisher: EU Open Data Portal
+  source: https://data.europa.eu/api/hub/statistics/swagger/
+  note: split by refine-openapis from the provider's own published document, verified by fetch (openapi/_original/*.fetch.json);
+    stamped by stamp-openapi-provenance.py (roadmap#793)
