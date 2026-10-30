@@ -1,4 +1,4 @@
-# EU Open Data Portal (eu-open-data-portal)
+# EU Open Data Portal
 
 <!-- API-EVANGELIST-PROVENANCE:BEGIN -->
 > ### About this repository
@@ -63,217 +63,194 @@
 >
 > Full detail: **[Where this data comes from](https://apievangelist.com/about/where-our-data-comes-from)**
 <!-- API-EVANGELIST-PROVENANCE:END -->
-# EU Open Data Portal
 
 data.europa.eu is the official portal for European open data, operated by the Publications Office of the European Union. It federates roughly 1.9 million dataset records from EU institutions, the national open data portals of the member states and international organisations, and republishes them as DCAT-AP metadata. Six machine-readable APIs sit on top of that corpus: a hub-search metadata search service, a hub-repo DCAT-AP registry for publishers, a Virtuoso SPARQL endpoint, and the Metadata Quality Assurance metrics cache, metrics reporter and SHACL validation services. Read access is public and unauthenticated; publishing into a catalogue requires an EU Login account or a service account issued by the portal team.
 
-**APIs.json:** [https://raw.githubusercontent.com/api-evangelist/eu-open-data-portal/refs/heads/main/apis.yml](https://raw.githubusercontent.com/api-evangelist/eu-open-data-portal/refs/heads/main/apis.yml)
+**Areas:** Government · Open Data · SPARQL · EU · Regulatory · Linked Data · DCAT-AP · Data Quality · Metadata · Catalog
 
-## Tags
+## EU Open Data Portal on APIs.io
 
-- Government
-- Open Data
-- SPARQL
-- EU
-- Regulatory
-- Linked Data
-- DCAT-AP
-- Data Quality
-- Metadata
-- Catalogs
+Everything profiled for EU Open Data Portal is published on APIs.io rather than in this repository. Start at the provider page — **[apis.io/providers/eu-open-data-portal/](https://apis.io/providers/eu-open-data-portal/)** — or go straight to one of the APIs or properties below.
 
-## Timestamps
+### APIs (33)
 
-- **Created:** 2026-04-28
-- **Modified:** 2026-09-07
+- [EU Open Data Portal Statistics API](https://apis.io/apis/eu-open-data-portal/eu-open-data-portal-statistics-api/) — The hub statistics service exposes portal-wide counts over time — datasets per category, per catalogue, per country, per format and per licence — behind a…
+- [EU Open Data Portal SPARQL API](https://apis.io/apis/eu-open-data-portal/eu-open-data-portal-sparql-api/) — The OpenLink Virtuoso SPARQL endpoint for data.europa.eu. Every harvested dataset is stored in its own named graph alongside DCAT-AP controlled…
+- [EU Open Data Portal Action API](https://apis.io/apis/eu-open-data-portal/eu-open-data-portal-action-api-api/) — The action API utilizes the [JSON-RPC 2.0](https://www.jsonrpc.org/specification) specification with the following constraints: * `id` reference needs to be…
+- [EU Open Data Portal Actions API](https://apis.io/apis/eu-open-data-portal/eu-open-data-portal-actions-api/) — The action API utilizes the [JSON-RPC 2.0](https://www.jsonrpc.org/specification) specification with the following constraints: * `id` reference needs to be…
+- [EU Open Data Portal Administration API](https://apis.io/apis/eu-open-data-portal/eu-open-data-portal-administration-api/) — The Administration API from EU Open Data Portal — 5 operation(s) for administration.
+- [EU Open Data Portal Catalogues API](https://apis.io/apis/eu-open-data-portal/eu-open-data-portal-catalogues-api/) — The Catalogues API from EU Open Data Portal — 7 operation(s) for catalogues.
+- [EU Open Data Portal Ckan API](https://apis.io/apis/eu-open-data-portal/eu-open-data-portal-ckan-api/) — The Ckan API from EU Open Data Portal — 3 operation(s) for ckan.
+- [EU Open Data Portal Countries API](https://apis.io/apis/eu-open-data-portal/eu-open-data-portal-countries-api/) — The Countries API from EU Open Data Portal — 4 operation(s) for countries.
+- [EU Open Data Portal Custom Resources API](https://apis.io/apis/eu-open-data-portal/eu-open-data-portal-custom-resources-api/) — **Deprecated !** Will be replaced with the generic DCAT resource API (endpoints will be reused). Any future custom resource definitions must be sub-classed…
+- [EU Open Data Portal Data API](https://apis.io/apis/eu-open-data-portal/eu-open-data-portal-data-api/) — The Data API from EU Open Data Portal — 3 operation(s) for data.
+- [EU Open Data Portal Data Services API](https://apis.io/apis/eu-open-data-portal/eu-open-data-portal-data-services-api/) — The Data Services API from EU Open Data Portal — 1 operation(s) for data services.
+- [EU Open Data Portal Dataset Series API](https://apis.io/apis/eu-open-data-portal/eu-open-data-portal-dataset-series-api/) — The Dataset Series API from EU Open Data Portal — 1 operation(s) for dataset series.
+- [EU Open Data Portal Datasets API](https://apis.io/apis/eu-open-data-portal/eu-open-data-portal-datasets-api/) — **Deprecated !** Please use general DCAT Resources API instead
+- [EU Open Data Portal DCAT Resources API](https://apis.io/apis/eu-open-data-portal/eu-open-data-portal-dcat-resources-api/) — Manage DCAT resources and its sub-classes, except DCAT Catalogues.
+- [EU Open Data Portal Distributions API](https://apis.io/apis/eu-open-data-portal/eu-open-data-portal-distributions-api/) — **Deprecated !** Will be removed completely in the future
+- [EU Open Data Portal Drafts API](https://apis.io/apis/eu-open-data-portal/eu-open-data-portal-drafts-api/) — The Drafts API from EU Open Data Portal — 4 operation(s) for drafts.
+- [EU Open Data Portal Editorial Content API](https://apis.io/apis/eu-open-data-portal/eu-open-data-portal-editorialcontent-api/) — The EditorialContent API from EU Open Data Portal — 3 operation(s) for editorialcontent.
+- [EU Open Data Portal Feeds API](https://apis.io/apis/eu-open-data-portal/eu-open-data-portal-feeds-api/) — The Feeds API from EU Open Data Portal — 3 operation(s) for feeds.
+- [EU Open Data Portal Gazetteer API](https://apis.io/apis/eu-open-data-portal/eu-open-data-portal-gazetteer-api/) — The Gazetteer API from EU Open Data Portal — 1 operation(s) for gazetteer.
+- [EU Open Data Portal Generate API](https://apis.io/apis/eu-open-data-portal/eu-open-data-portal-generate-api/) — The Generate API from EU Open Data Portal — 1 operation(s) for generate.
+- [EU Open Data Portal Global API](https://apis.io/apis/eu-open-data-portal/eu-open-data-portal-global-api/) — The Global API from EU Open Data Portal — 2 operation(s) for global.
+- [EU Open Data Portal Maintenance API](https://apis.io/apis/eu-open-data-portal/eu-open-data-portal-maintenance-api/) — The Maintenance API from EU Open Data Portal — 1 operation(s) for maintenance.
+- [EU Open Data Portal Organizations API](https://apis.io/apis/eu-open-data-portal/eu-open-data-portal-organizations-api/) — The Organizations API from EU Open Data Portal — 3 operation(s) for organizations.
+- [EU Open Data Portal Persistent Identifiers API](https://apis.io/apis/eu-open-data-portal/eu-open-data-portal-persistent-identifiers-api/) — Create persistent identifiers for data artifacts.
+- [EU Open Data Portal Report API](https://apis.io/apis/eu-open-data-portal/eu-open-data-portal-report-api/) — The Report API from EU Open Data Portal — 2 operation(s) for report.
+- [EU Open Data Portal Reports API](https://apis.io/apis/eu-open-data-portal/eu-open-data-portal-reports-api/) — The Reports API from EU Open Data Portal — 1 operation(s) for reports.
+- [EU Open Data Portal Resources API](https://apis.io/apis/eu-open-data-portal/eu-open-data-portal-resources-api/) — The Resources API from EU Open Data Portal — 1 operation(s) for resources.
+- [EU Open Data Portal Search API](https://apis.io/apis/eu-open-data-portal/eu-open-data-portal-search-api/) — The Search API from EU Open Data Portal — 2 operation(s) for search.
+- [EU Open Data Portal Sitemap API](https://apis.io/apis/eu-open-data-portal/eu-open-data-portal-sitemap-api/) — The Sitemap API from EU Open Data Portal — 2 operation(s) for sitemap.
+- [EU Open Data Portal Test API](https://apis.io/apis/eu-open-data-portal/eu-open-data-portal-test-api/) — The Test API from EU Open Data Portal — 1 operation(s) for test.
+- [EU Open Data Portal Translation API](https://apis.io/apis/eu-open-data-portal/eu-open-data-portal-translation-api/) — The Translation API from EU Open Data Portal — 1 operation(s) for translation.
+- [EU Open Data Portal Validation API](https://apis.io/apis/eu-open-data-portal/eu-open-data-portal-validation-api/) — The Validation API from EU Open Data Portal — 1 operation(s) for validation.
+- [EU Open Data Portal Vocabularies API](https://apis.io/apis/eu-open-data-portal/eu-open-data-portal-vocabularies-api/) — The Vocabularies API from EU Open Data Portal — 5 operation(s) for vocabularies.
 
-## APIs
+### Published properties
 
-### EU Open Data Portal Search API (hub-search)
+Each property below is a page on APIs.io carrying the machine-readable artifact and what it says.
 
-The hub-search metadata search service for data.europa.eu. Provides full-text and faceted search over ~1.9 million dataset, data service, dataset series, catalogue, vocabulary and organisation records harvested from EU institutions and national portals, plus Atom/RSS feeds, sitemaps, a gazetteer autocomplete and a CKAN-compatible package API. Read operations are public and unauthenticated; write operations require an API key or JWT bearer token.
+#### MCP servers (1)
 
-- **Human URL:** [https://data.europa.eu/api/hub/search/](https://data.europa.eu/api/hub/search/)
-- **Base URL:** `https://data.europa.eu/api/hub/search`
+Model Context Protocol servers that expose the API to agents.
 
-#### Tags
+- [eu-open-data-portal-mcp.yml](https://apis.io/servers/eu-open-data-portal/eu-open-data-portal-mcp-yml/)
 
-- Search
-- Datasets
-- Catalogues
-- DCAT-AP
-- Open Data
-- CKAN
+#### Agentic access (1)
 
-#### Properties
+Which operations an agent can call, which act, and which need a human in the loop.
 
-- [OpenAPI](openapi/eu-open-data-portal-hub-search-openapi.yaml)
-- [APIReference](https://data.europa.eu/api/hub/search/)
-- [Documentation](https://dataeuropa.gitlab.io/data-provider-manual/api-documentation/)
-- [Overlay](overlays/eu-open-data-portal-hub-search-overlay.yaml)
-- [SourceCode](https://gitlab.com/dataeuropa/hub/search)
-- [Examples](https://gitlab.com/dataeuropa/api-usage-examples)
+- [Eu Open Data Portal Agentic Access](https://apis.io/agentic-access/eu-open-data-portal/eu-open-data-portal-agentic-access/)
 
-### EU Open Data Portal Registry API (hub-repo)
+#### JSON Schema (1)
 
-The piveau hub-repo registry service: the DCAT-AP write surface of data.europa.eu. Manages catalogues, DCAT resources (datasets, data services, dataset series), distributions, drafts, vocabularies, quality metrics and persistent identifiers in the Virtuoso triplestore, in RDF/XML, Turtle, JSON-LD, N-Triples, N-Quads, TriG, TriX and N3. Writes require a catalogue-scoped API key or an EU Login / service-account party token.
+The data models the API reads and writes.
 
-- **Human URL:** [https://data.europa.eu/api/hub/repo/](https://data.europa.eu/api/hub/repo/)
-- **Base URL:** `https://data.europa.eu/api/hub/repo`
+- [EU Open Data Portal Dataset (DCAT-AP)](https://apis.io/schemas/eu-open-data-portal/eu-open-data-portal-dataset/)
 
-#### Tags
+#### JSON-LD (1)
 
-- Registry
-- DCAT-AP
-- RDF
-- Catalogues
-- Publishing
+Linked-data contexts for the provider's vocabulary.
 
-#### Properties
+- [Eu Open Data Portal Context](https://apis.io/jsonld/eu-open-data-portal/eu-open-data-portal-context/)
 
-- [OpenAPI](openapi/eu-open-data-portal-hub-repo-openapi.yaml)
-- [APIReference](https://data.europa.eu/api/hub/repo/)
-- [Documentation](https://dataeuropa.gitlab.io/data-provider-manual/api-documentation/)
-- [Overlay](overlays/eu-open-data-portal-hub-repo-overlay.yaml)
-- [SourceCode](https://gitlab.com/dataeuropa/hub/repo)
-- [ChangeLog](https://gitlab.com/dataeuropa/hub/repo/-/blob/main/CHANGELOG.md)
+#### Collections (5)
 
-### EU Open Data Portal MQA Metrics Cache API
+Postman and Open Collection request collections.
 
-The Metadata Quality Assurance (MQA) metrics cache. Serves DCAT-AP quality scores for every catalogue, country, dataset and distribution across five dimensions — findability, accessibility, interoperability, reusability and contextuality — on a 450-point scale, with historic series, distribution reachability and SHACL violation reports. Read operations are public; admin refresh operations require an API key.
+- [Moved to /providers/eu-open-data-portal/](https://apis.io/collections/eu-open-data-portal/open-eu-open-data-portal-catalogs-api/)
+- [Moved to /providers/eu-open-data-portal/](https://apis.io/collections/eu-open-data-portal/open-eu-open-data-portal-datasets-api/)
+- [Moved to /providers/eu-open-data-portal/](https://apis.io/collections/eu-open-data-portal/open-eu-open-data-portal-distributions-api/)
+- [Moved to /providers/eu-open-data-portal/](https://apis.io/collections/eu-open-data-portal/open-eu-open-data-portal-search/)
+- [Moved to /providers/eu-open-data-portal/](https://apis.io/collections/eu-open-data-portal/open-eu-open-data-portal-vocabularies-api/)
 
-- **Human URL:** [https://data.europa.eu/api/mqa/cache/](https://data.europa.eu/api/mqa/cache/)
-- **Base URL:** `https://data.europa.eu/api/mqa/cache`
+#### Overlays (5)
 
-#### Tags
+OpenAPI overlays, including conversational phrasing for each operation.
 
-- Data Quality
-- MQA
-- DCAT-AP
-- Metrics
+- [Eu Open Data Portal Hub Repo Overlay](https://apis.io/overlays/eu-open-data-portal/eu-open-data-portal-hub-repo-overlay/)
+- [Eu Open Data Portal Hub Search Overlay](https://apis.io/overlays/eu-open-data-portal/eu-open-data-portal-hub-search-overlay/)
+- [Eu Open Data Portal Mqa Metrics Cache Overlay](https://apis.io/overlays/eu-open-data-portal/eu-open-data-portal-mqa-metrics-cache-overlay/)
+- [Eu Open Data Portal Mqa Reporter Overlay](https://apis.io/overlays/eu-open-data-portal/eu-open-data-portal-mqa-reporter-overlay/)
+- [Eu Open Data Portal Mqa Shacl Overlay](https://apis.io/overlays/eu-open-data-portal/eu-open-data-portal-mqa-shacl-overlay/)
 
-#### Properties
+#### Governance rules (1)
 
-- [OpenAPI](openapi/eu-open-data-portal-mqa-metrics-cache-openapi.yaml)
-- [APIReference](https://data.europa.eu/api/mqa/cache/)
-- [Documentation](https://dataeuropa.gitlab.io/data-provider-manual/api-documentation/)
-- [Overlay](overlays/eu-open-data-portal-mqa-metrics-cache-overlay.yaml)
-- [SourceCode](https://gitlab.com/dataeuropa/mqa/cache)
+Spectral rulesets for the provider's contracts.
 
-### EU Open Data Portal SHACL Validation API
+- [EU Open Data Portal — jsonschema rules](https://apis.io/rules/eu-open-data-portal/eu-open-data-portal-jsonschema-spectral-rules/)
 
-A public RDF validation service that runs a submitted DCAT-AP graph against the official DCAT-AP SHACL shapes and returns a SHACL validation report. Supports the DCAT-AP 2.x and 3.x shape models plus customised runs that add range, recommended-field and controlled-vocabulary checks. Unauthenticated, single POST operation.
+#### Security (2)
 
-- **Human URL:** [https://data.europa.eu/api/mqa/shacl/](https://data.europa.eu/api/mqa/shacl/)
-- **Base URL:** `https://data.europa.eu/api/mqa/shacl`
+Authentication, trust centre, and vulnerability disclosure.
 
-#### Tags
+- [Eu Open Data Portal Authentication](https://apis.io/security/eu-open-data-portal/eu-open-data-portal-authentication/)
+- [Eu Open Data Portal Domain Security](https://apis.io/security/eu-open-data-portal/eu-open-data-portal-domain-security/)
 
-- Validation
-- SHACL
-- DCAT-AP
-- RDF
+#### Plans and pricing (1)
 
-#### Properties
+Published plans, tiers and prices.
 
-- [OpenAPI](openapi/eu-open-data-portal-mqa-shacl-openapi.yaml)
-- [APIReference](https://data.europa.eu/api/mqa/shacl/)
-- [Documentation](https://dataeuropa.gitlab.io/data-provider-manual/api-documentation/)
-- [Overlay](overlays/eu-open-data-portal-mqa-shacl-overlay.yaml)
-- [SourceCode](https://gitlab.com/dataeuropa/mqa/validating-shacl)
+- [Eu Open Data Portal Plans Pricing](https://apis.io/plans/eu-open-data-portal/eu-open-data-portal-plans-pricing/)
 
-### EU Open Data Portal MQA Metrics Reporter API
+#### Rate limits (1)
 
-The MQA metrics reporter renders catalogue quality reports for data.europa.eu in a requested language and format, and triggers report generation. Public read operations; the spec ships with an unresolved ${project.version} placeholder in info.version.
+Published request limits.
 
-- **Human URL:** [https://data.europa.eu/api/mqa/reporter/](https://data.europa.eu/api/mqa/reporter/)
-- **Base URL:** `https://data.europa.eu/api/mqa/reporter`
+- [Eu Open Data Portal Rate Limits](https://apis.io/rate-limits/eu-open-data-portal/eu-open-data-portal-rate-limits/)
 
-#### Tags
+#### FinOps (1)
 
-- Data Quality
-- MQA
-- Reporting
+What the API costs to run, by operation.
 
-#### Properties
+- [Eu Open Data Portal Finops](https://apis.io/finops/eu-open-data-portal/eu-open-data-portal-finops/)
 
-- [OpenAPI](openapi/eu-open-data-portal-mqa-reporter-openapi.yaml)
-- [APIReference](https://data.europa.eu/api/mqa/reporter/)
-- [Documentation](https://dataeuropa.gitlab.io/data-provider-manual/api-documentation/)
-- [Overlay](overlays/eu-open-data-portal-mqa-reporter-overlay.yaml)
-- [SourceCode](https://gitlab.com/dataeuropa/mqa/reporter)
+## Where to find this API
 
-### EU Open Data Portal Statistics API
+Links to the company's own pages. This repository publishes no copy of their specifications — the canonical document is theirs and lives at the URLs below.
 
-The hub statistics service exposes portal-wide counts over time — datasets per category, per catalogue, per country, per format and per licence — behind a Swagger 2.0 contract served from a Flask/flask-apispec application. Read operations are public; the maintenance reset operation requires an X-API-KEY header.
-
-- **Human URL:** [https://data.europa.eu/api/hub/statistics/](https://data.europa.eu/api/hub/statistics/)
-- **Base URL:** `https://data.europa.eu/api/hub/statistics`
-
-#### Tags
-
-- Statistics
-- Open Data
-- Reporting
-
-#### Properties
-
-- [Swagger](openapi/eu-open-data-portal-hub-statistics-swagger.json)
-- [APIReference](https://data.europa.eu/api/hub/statistics/)
-- [Documentation](https://dataeuropa.gitlab.io/data-provider-manual/api-documentation/)
-- [SourceCode](https://gitlab.com/dataeuropa/hub/statistics)
-
-### EU Open Data Portal SPARQL API
-
-The OpenLink Virtuoso SPARQL endpoint for data.europa.eu. Every harvested dataset is stored in its own named graph alongside DCAT-AP controlled vocabularies, NUTS codes and MQA quality measurements, and can be queried with SPARQL 1.1 returning HTML, XML, JSON, Turtle, CSV, TSV and other RDF serialisations. Public and unauthenticated; there is no OpenAPI for this surface because the contract is the SPARQL 1.1 protocol itself.
-
-- **Human URL:** [https://data.europa.eu/sparql](https://data.europa.eu/sparql)
-- **Base URL:** `https://data.europa.eu/sparql`
-
-#### Tags
-
-- SPARQL
-- Linked Data
-- RDF
-- Open Data
-
-#### Properties
-
-- [APIReference](https://data.europa.eu/sparql)
-- [Documentation](https://dataeuropa.gitlab.io/data-provider-manual/how-to-search/sparql/)
-- [GettingStarted](https://data.europa.eu/en/about/sparql)
-
-## Common Properties
-
-- [Portal](https://data.europa.eu/)
-- [DeveloperPortal](https://dataeuropa.gitlab.io/data-provider-manual/api-documentation/)
+- [Website](https://data.europa.eu/)
 - [Documentation](https://dataeuropa.gitlab.io/data-provider-manual/)
-- [APIReference](https://data.europa.eu/api/hub/search/)
-- [GettingStarted](https://dataeuropa.gitlab.io/data-provider-manual/api-documentation/)
+- [Getting started](https://dataeuropa.gitlab.io/data-provider-manual/api-documentation/)
+- [API reference](https://data.europa.eu/api/hub/search/)
 - [Support](https://data.europa.eu/en/contact-us)
-- [HelpCenter](https://data.europa.eu/en/faq)
 - [Blog](https://data.europa.eu/en/news-events/news)
-- [TermsOfService](https://data.europa.eu/en/legal-notice)
-- [PrivacyPolicy](https://data.europa.eu/en/legal-notice)
-- [SourceCode](https://gitlab.com/dataeuropa)
-- [LinkedIn](https://www.linkedin.com/company/publications-office-of-the-european-union)
-- [AgenticAccess](agentic-access/eu-open-data-portal-agentic-access.yml)
-- [Authentication](authentication/eu-open-data-portal-authentication.yml)
-- [Conventions](conventions/eu-open-data-portal-conventions.yml)
-- [ErrorCatalog](errors/eu-open-data-portal-problem-types.yml)
-- [Lifecycle](lifecycle/eu-open-data-portal-lifecycle.yml)
-- [ChangeLog](changelog/eu-open-data-portal-changelog.yml)
-- [Conformance](conformance/eu-open-data-portal-conformance.yml)
-- [DataModel](data-model/eu-open-data-portal-data-model.yml)
-- [Packages](packages/eu-open-data-portal-packages.yml)
-- [Vocabulary](vocabulary/eu-open-data-portal-vocabularies.yml)
-- [AgentSkill](skills/_index.yml)
-- [LLMsTxt](llms/eu-open-data-portal-llms.txt)
-- [Plans](plans/eu-open-data-portal-plans-pricing.yml)
-- [RateLimits](rate-limits/eu-open-data-portal-rate-limits.yml)
-- [DomainSecurity](security/eu-open-data-portal-domain-security.yml)
-- [JSONSchema](json-schema/eu-open-data-portal-dataset-schema.json)
-- [JSONLDContext](json-ld/eu-open-data-portal-context.jsonld)
-- [FinOps](finops/eu-open-data-portal-finops.yml)
-- [Rules](rules/eu-open-data-portal-jsonschema-spectral-rules.yml)
+- [Terms of service](https://data.europa.eu/en/legal-notice)
+- [Privacy policy](https://data.europa.eu/en/legal-notice)
 
+## API Evangelist rating
+
+**Kin Score 50.3** — developing · rubric 0.25.0 · scored 2026-10-23
+
+| Facet | Score |
+|---|---|
+| Discoverability | 78.6 |
+| Contract quality | 57.0 |
+| Contract governance | 43.2 |
+| Operational transparency | 21.1 |
+| Developer ergonomics | 58.9 |
+| Access clarity | 21.1 |
+
+**Agent readiness 23.1** — agent-aware
+
+| Agent-readiness dimension | Result |
+|---|---|
+| Spec Presence | yes |
+| Agentic Access | derived (partial credit) |
+| Reversibility Documented | — |
+| MCP Server | — |
+| Auth Clarity | bearer (partial credit) |
+| Idempotency | — |
+| Error Semantics | derived (partial credit) |
+| OpenAPI Examples | documented (partial credit) |
+| Rate Limit Signal | documented (partial credit) |
+| Event Surface Described | — |
+| Agent Skills | derived (partial credit) |
+| Well Known Catalog | — |
+| Consent Identity | — |
+| Agent Card | — |
+| Dry Run Mode | — |
+| Delegated Identity | — |
+| Protected Resource Metadata | — |
+| Dynamic Client Registration | — |
+| Agentic Commerce | — |
+| Pagination Ratio | partial |
+| Operation Distinctiveness | — |
+
+**Regulatory alignment 24.5** — Government & Public Sector
+
+The rubric is published at [github.com/api-evangelist/kin-score](https://github.com/api-evangelist/kin-score). The per-check breakdown behind these numbers — which checks were earned, partial or missed — along with score history and how this provider compares to its peers, is available at [apis.io/providers/eu-open-data-portal/](https://apis.io/providers/eu-open-data-portal/).
+
+## How this profile is made
+
+API Evangelist profiles a company's public API surface the way a developer would find it: the website, developer portal and documentation, the specifications it publishes, its public repositories, and its pricing, status and changelog pages. From that it derives the properties above — contracts split per API, workflows, schemas, collections, governance rules, plans and rate limits — and scores them against the published [Kin Score rubric](https://github.com/api-evangelist/kin-score).
+
+The artifacts are published on [APIs.io](https://apis.io), not in this repository. This repository is the public record for EU Open Data Portal: the place to say something is wrong, missing or out of date, and to ask for a re-score or a removal.
+
+## Open an issue
+
+- **Something about this listing** — a wrong description, a missing API, a stale artifact or a question about the rating: [open an issue on this repository](https://github.com/api-evangelist/eu-open-data-portal/issues/new).
+- **A new API, or one that is not in the catalog yet** — [submit it on APIs.io](https://apis.io/add/).
+- **Anything else** — [the APIs.io inbox](https://github.com/api-search/inbox/issues/new) or [info@apievangelist.com](mailto:info@apievangelist.com).
