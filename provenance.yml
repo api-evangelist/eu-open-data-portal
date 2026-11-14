@@ -11,6 +11,12 @@ artifacts:
   capabilities/eu-open-data-portal-capability-edges.yml:
     method: unknown
     evidence: no authorship recorded
+  certification/observations-2026-11-11.jsonl:
+    method: unknown
+    evidence: no authorship recorded
+  certification/status.yml:
+    method: unknown
+    evidence: no authorship recorded
   changelog/eu-open-data-portal-changelog.yml:
     method: searched
     evidence: declared in the artifact
@@ -19,6 +25,9 @@ artifacts:
     evidence: declared in the artifact
   conventions/eu-open-data-portal-conventions.yml:
     method: searched
+    evidence: declared in the artifact
+  data-license/eu-open-data-portal-data-license.yml:
+    method: harvested
     evidence: declared in the artifact
   data-model/eu-open-data-portal-data-model.yml:
     method: derived
@@ -38,6 +47,9 @@ artifacts:
   heartbeat/2026-11-06.yml:
     method: unknown
     evidence: no authorship recorded
+  heartbeat/2026-11-13.yml:
+    method: unknown
+    evidence: no authorship recorded
   json-ld/eu-open-data-portal-context.jsonld:
     method: unknown
     evidence: no authorship recorded
@@ -47,7 +59,7 @@ artifacts:
   kin/checks-2026-10-23T222754.yml:
     method: generated
     evidence: Kin Score snapshot written by score.rb
-  kin/checks-2026-11-02T082323.yml:
+  kin/checks-2026-11-06T143934.yml:
     method: generated
     evidence: Kin Score snapshot written by score.rb
   kin/score-2026-09-23T000603.yml:
@@ -111,6 +123,9 @@ artifacts:
     method: generated
     evidence: Kin Score snapshot written by score.rb
   kin/score-2026-11-02T082323.yml:
+    method: generated
+    evidence: Kin Score snapshot written by score.rb
+  kin/score-2026-11-06T143934.yml:
     method: generated
     evidence: Kin Score snapshot written by score.rb
   lifecycle/eu-open-data-portal-lifecycle.yml:
@@ -284,6 +299,9 @@ artifacts:
   plans/eu-open-data-portal-plans-pricing.yml:
     method: searched
     evidence: declared in the artifact
+  privacy/eu-open-data-portal-privacy-policy.yml:
+    method: harvested
+    evidence: declared in the artifact
   rate-limits/eu-open-data-portal-rate-limits.yml:
     method: unknown
     evidence: no authorship recorded
@@ -307,6 +325,9 @@ artifacts:
     evidence: declared in the artifact
   skills/eu-open-data-portal-validate-dcat-ap.md:
     method: generated
+    evidence: declared in the artifact
+  terms/eu-open-data-portal-terms-of-service.yml:
+    method: harvested
     evidence: declared in the artifact
   vocabulary/eu-open-data-portal-vocabularies.yml:
     method: generated
